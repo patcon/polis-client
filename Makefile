@@ -2,7 +2,7 @@
 UV_RUN ?= uv run
 
 regenerate: ## Make the generated client code from OpenAPI spec
-	rm -r src/polis_client/generated/
+	rm -rf src/polis_client/generated/
 	openapi-python-client generate --path openapi/polis.yml --output-path src/polis_client/generated/ --overwrite --meta none
 
 # These make tasks allow the default help text to work properly.
