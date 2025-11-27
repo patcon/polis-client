@@ -1,32 +1,151 @@
+---
 openapi: 3.0.1
 info:
   title: Polis
-  termsOfService: 'https://pol.is/tos'
+  termsOfService: https://pol.is/tos
   contact:
     name: The Computational Democracy Project
     email: hello@compdemocracy.org
-    url: 'https://compdemocracy.org/'
+    url: https://compdemocracy.org/
   license:
     name: AGPL 3.0
-    url: 'https://github.com/compdemocracy/polis/blob/dev/LICENSE'
-  version: 4.0.0
+    url: https://github.com/compdemocracy/polis/blob/dev/LICENSE
+  version: 3.0.0
   description: |
     **This is a proposed Polis API.**
     A fuller description will be added later.
 externalDocs:
   description: Find out more about OpenAPI
-  url: 'http://swagger.io'
+  url: http://swagger.io
 servers:
-  - url: /api/v4
+  - url: "{server}/api/v3"
+    variables:
+      server:
+        default: https://pol.is
 paths:
+  /reports:
+    get:
+      tags:
+        - reports
+      operationId: getReport
+      parameters:
+        - name: report_id
+          in: query
+          schema:
+            type: string
+            pattern: ^r?[0-9][a-zA-Z0-9]+$
+      responses:
+        "200":
+          description: An array of comment objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArrayOfReport"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
+  /conversations:
+    get:
+      tags:
+        - conversations
+      operationId: getConversation
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Alphnumeric ID for conversation
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+      responses:
+        "200":
+          description: An array of comment objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Conversation"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
+  /votes:
+    get:
+      tags:
+        - votes
+      operationId: getVotes
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Alphnumeric ID for conversation
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+        - name: pid
+          in: query
+          description: Conversation-specific numeric ID of participant
+          required: false
+          example: 0
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: An array of comment objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArrayOfVote"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
+  /math/pca2:
+    get:
+      tags:
+        - math
+      operationId: getMath
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Alphnumeric ID for conversation
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+      responses:
+        "200":
+          description: An array of comment objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Math"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
   /comments:
     get:
       tags:
-        - comment
+        - comments
       summary: List comments
-      description: >-
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum
-        tristique neque, id sollicitudin tortor sollicitudin vitae.
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+        interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
       operationId: getComments
       parameters:
         - name: conversation_id
@@ -36,7 +155,7 @@ paths:
           example: 2demo
           schema:
             type: string
-            pattern: '^[0-9][a-z0-9]+$'
+            pattern: ^[0-9][a-z0-9]+$
         - name: moderation
           in: query
           description: Whether fetching comments as moderator with additional fields
@@ -45,8 +164,7 @@ paths:
             type: boolean
         - name: include_voting_patterns
           in: query
-          description: >-
-            Whether to include voting pattern fields in additional fields (To
+          description: Whether to include voting pattern fields in additional fields (To
             have effect, requires `moderation` to be `true`)
           schema:
             type: boolean
@@ -57,7 +175,7 @@ paths:
             type: boolean
         - name: mod
           in: query
-          description: 'When supplied, filters for comments with a specific `mod` value'
+          description: When supplied, filters for comments with a specific `mod` value
           required: false
           schema:
             type: integer
@@ -67,7 +185,7 @@ paths:
               - 1
         - name: mod_gt
           in: query
-          description: 'When supplied, filters for `mod` greater than this value'
+          description: When supplied, filters for `mod` greater than this value
           required: false
           schema:
             type: integer
@@ -78,26 +196,117 @@ paths:
           in: query
           schema:
             type: string
-            pattern: '^r?[0-9][a-zA-Z0-9]+$'
+            pattern: ^r?[0-9][a-zA-Z0-9]+$
       responses:
-        '200':
+        "200":
           description: An array of comment objects
           content:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/ArrayOfCommentModVoting'
-                  - $ref: '#/components/schemas/ArrayOfCommentMod'
-                  - $ref: '#/components/schemas/ArrayOfComment'
-        '400':
+                  - $ref: "#/components/schemas/ArrayOfCommentModVoting"
+                  - $ref: "#/components/schemas/ArrayOfCommentMod"
+                  - $ref: "#/components/schemas/ArrayOfComment"
+        "400":
           description: Bad request
           content:
             text/html:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: "#/components/schemas/ApiError"
       security: []
 components:
   schemas:
+    Math:
+      type: object
+      properties:
+        math_tick:
+          type: integer
+
+    Vote:
+      type: object
+      properties:
+        pid:
+          type: integer
+        tid:
+          type: integer
+        vote:
+          type: integer
+          schema:
+            type: integer
+            enum:
+              - -1
+              - 0
+              - 1
+        weight_x_32767:
+          type: integer
+        modified:
+          type: integer
+          description: Unix timestamp of vote modification time
+          format: int64
+          example: 1403054214174
+        conversation_id:
+          type: string
+          pattern: ^[0-9][a-z0-9]+$
+    ArrayOfVote:
+      type: array
+      items:
+        $ref: "#/components/schemas/Vote"
+
+    Conversation:
+      type: object
+      properties:
+        topic:
+          type: string
+        description:
+          type: string
+        is_anon:
+          type: boolean
+        is_active:
+          type: boolean
+        is_draft:
+          type: boolean
+        is_public:
+          type: boolean
+
+        created:
+          type: integer
+          description: Unix timestamp of report creation time
+          format: int64
+          example: 1403054214174
+        modified:
+          type: integer
+          description: Unix timestamp of report modification time
+          format: int64
+          example: 1403054214174
+
+    Report:
+      required:
+        - report_id
+      type: object
+      properties:
+        report_id:
+          type: string
+        created:
+          type: integer
+          description: Unix timestamp of report creation time
+          format: int64
+          example: 1403054214174
+        modified:
+          type: integer
+          description: Unix timestamp of report modification time
+          format: int64
+          example: 1403054214174
+        report_name:
+          type: null
+        mod_level:
+          type: integer
+        conversation_id:
+          type: string
+    ArrayOfReport:
+      type: array
+      items:
+        $ref: "#/components/schemas/Report"
+
     Comment:
       required:
         - txt
@@ -107,7 +316,7 @@ components:
         txt:
           type: string
           description: Body text of the comment
-          example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
         tid:
           type: integer
           description: Numeric ID of comment
@@ -115,7 +324,7 @@ components:
           example: 12
         created:
           type: integer
-          description: Unix timestamp of comment creation
+          description: Unix timestamp of comment creation time
           format: int64
           example: 1403054214174
         is_seed:
@@ -129,7 +338,7 @@ components:
         lang:
           type: string
           description: Language of submitted comment
-          pattern: '^[a-z]{2}$'
+          pattern: ^[a-z]{2}$
           example: en
         pid:
           type: integer
@@ -138,7 +347,7 @@ components:
           example: 0
     CommentMod:
       allOf:
-        - $ref: '#/components/schemas/Comment'
+        - $ref: "#/components/schemas/Comment"
         - type: object
           properties:
             velocity:
@@ -146,9 +355,8 @@ components:
               default: 1
             mod:
               type: integer
-              description: >-
-                Moderation status of comment: moderated _out_ (-1), _not yet_
-                moderated (0), or moderated _in_ (1).
+              description: "Moderation status of comment: moderated _out_ (-1), _not yet_
+                moderated (0), or moderated _in_ (1)."
               enum:
                 - -1
                 - 0
@@ -161,7 +369,7 @@ components:
               example: 2demo
     CommentModVoting:
       allOf:
-        - $ref: '#/components/schemas/CommentMod'
+        - $ref: "#/components/schemas/CommentMod"
         - type: object
           properties:
             agree_count:
@@ -183,15 +391,15 @@ components:
     ArrayOfComment:
       type: array
       items:
-        $ref: '#/components/schemas/Comment'
+        $ref: "#/components/schemas/Comment"
     ArrayOfCommentMod:
       type: array
       items:
-        $ref: '#/components/schemas/CommentMod'
+        $ref: "#/components/schemas/CommentMod"
     ArrayOfCommentModVoting:
       type: array
       items:
-        $ref: '#/components/schemas/CommentModVoting'
+        $ref: "#/components/schemas/CommentModVoting"
     ApiError:
       type: string
       example: polis_err_param_parse_failed_conversation_id

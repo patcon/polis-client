@@ -18,7 +18,7 @@ class CommentMod:
     Attributes:
         txt (str): Body text of the comment Example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         tid (int): Numeric ID of comment Example: 12.
-        created (int | Unset): Unix timestamp of comment creation Example: 1403054214174.
+        created (int | Unset): Unix timestamp of comment creation time Example: 1403054214174.
         is_seed (bool | Unset): Whether comment is a seed comment from moderator Example: True.
         is_meta (bool | Unset): Whether comment has been marked as metadata by moderator
         lang (str | Unset): Language of submitted comment Example: en.
