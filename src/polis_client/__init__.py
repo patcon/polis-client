@@ -1,2 +1,3 @@
-def main() -> None:
-    print("Hello from polis-client!")
+from .client import GeneratedClient, PolisClient
+
+__all__ = ["GeneratedClient", "PolisClient"]
