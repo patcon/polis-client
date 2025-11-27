@@ -9,3 +9,6 @@ uv.lock
 
 # Virtual environments
 .venv
+
+# Experimentation file for development
+debug.py
