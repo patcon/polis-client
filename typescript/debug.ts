@@ -6,7 +6,7 @@ async function main() {
 
   try {
     console.log("Fetching comments…");
-    const comments = await polis.getComments("2demo");
+    const comments = await polis.getComments("2demo", {moderation: true, include_voting_patterns: true});
     console.log("Comments count:", comments?.length);
     console.log("Sample comment:", comments?.[0]);
 

@@ -21,16 +21,16 @@ export class PolisClient {
   // Instance methods — Python style
   // -------------------------------
 
-  async getComments(conversationId: string) {
+  async getComments(conversationId: string, extraQuery: Record<string, any> = {}) {
     const res = await Comments.getComments({
-      query: { conversation_id: conversationId },
+      query: { conversation_id: conversationId, ...extraQuery },
     });
     return res.data;
   }
 
-  async getReport(reportId: string) {
+  async getReport(reportId: string, extraQuery: Record<string, any> = {}) {
     const res = await Reports.getReport({
-      query: { report_id: reportId },
+      query: { report_id: reportId, ...extraQuery },
     });
 
     // Python version extracts the first item; do same here:
@@ -38,16 +38,16 @@ export class PolisClient {
     return Array.isArray(arr) ? arr[0] : arr;
   }
 
-  async getConversation(conversationId: string) {
+  async getConversation(conversationId: string, extraQuery: Record<string, any> = {}) {
     const res = await Conversations.getConversation({
-      query: { conversation_id: conversationId },
+      query: { conversation_id: conversationId, ...extraQuery },
     });
     return res.data;
   }
 
-  async getMath(conversationId: string) {
+  async getMath(conversationId: string, extraQuery: Record<string, any> = {}) {
     const res = await MathAPI.getMath({
-      query: { conversation_id: conversationId },
+      query: { conversation_id: conversationId, ...extraQuery },
     });
     return res.data;
   }
