@@ -1,6 +1,6 @@
-# python-polis-client
+# polis-client-py
 
-This is a stub of a Python client for communicating with a Polis server API.
+An unofficial Python API client for communicating with any Polis servers.
 
 It will start off as read-only, but I intend to add helpers for handling
 POST requests via xid, and maybe jwt.

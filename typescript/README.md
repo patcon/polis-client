@@ -1,5 +1,9 @@
 # polis-client-ts
 
+An unofficial Typescript API client for communicating with any Polis servers.
+
+(Supports running from node or browser.)
+
 To be completed.
 
 ## Usage

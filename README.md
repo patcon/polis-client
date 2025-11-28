@@ -1,6 +1,6 @@
 # polis-clients
 
-OpenAPI-supported client libraries for interacting with Polis servers in Python and Typescript.
+OpenAPI-generated client libraries for interacting with Pol.is servers from Python or Typescript.
 
 ## The Client Libraries
 
