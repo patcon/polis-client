@@ -12,3 +12,7 @@ uv.lock
 
 # Experimentation file for development
 debug.py
+
+# Node environment
+node_modules/
+bun.lock

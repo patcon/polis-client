@@ -1,0 +1,15 @@
+{
+  "name": "polis-client",
+  "module": "typescript/polis_client/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@hey-api/openapi-ts": "^0.88.0",
+    "@types/bun": "latest",
+    "@types/node": "^24.10.1",
+    "tsx": "^4.20.6",
+    "zod": "^4.1.13"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
