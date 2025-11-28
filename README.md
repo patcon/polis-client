@@ -26,3 +26,7 @@ To regenerate, run:
 ```
 uv run make regenerate
 ```
+
+## License
+
+The project is under the terms of the MIT License.
