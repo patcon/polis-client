@@ -11,7 +11,7 @@ async function main() {
     console.log("Sample comment:", comments?.[0]);
 
     console.log("\nFetching report…");
-    const report = await polis.getReport("2demo");
+    const report = await polis.getReport("r68fknmmmyhdpi3sh4ctc");
     console.log("Report:", report);
 
     console.log("\nFetching conversation…");
