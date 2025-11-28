@@ -6,6 +6,12 @@ An unofficial Typescript API client for communicating with any Polis servers.
 
 To be completed.
 
+## Installation
+
+```
+npm install patcon/polis-client#main
+```
+
 ## Usage
 
 See [`debug.py`](debug.py) for now
