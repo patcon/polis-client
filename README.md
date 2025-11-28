@@ -1,33 +1,28 @@
-# python-polis-client
+# polis-clients
 
-This is a stub of a Python client for communicating with a Polis server API.
+OpenAPI-supported client libraries for interacting with Polis servers in Python and Typescript.
 
-It will start off as read-only, but I intend to add helpers for handling
-POST requests via xid, and maybe jwt.
+## The Client Libraries
 
-This will eventually be used in the `red-dwarf` algorithm library,
-doing much of the work of that library's current "data loader".
+### polis-client-py
 
-## Installation
+See: [`README.python.md`](./README.python.md)
 
-```
-uv add git+http://github.com/patcon/polis-client.git@main
-```
+### polis-client-ts
 
-## Usage
-
-See: [`example.ipynb`](/examples.ipynb)
+See: [`README.typescript.md`](./README.typescript.md)
 
 ## Development
 
-This project is structured around an OpenAPI definition at `openapi/polis.yml`.
+Each of these client libraries is composed mostly of code auto-generated
+from the OpenAPI spec available at [`openapi/polis.yml`](./openapi/polis.yml).
 
-(We use `uv`, but you can use any virtualenv or not as a Python environment.)
+As such please do not modify any code in these locations:
+- `src/polis_client/generated/`
+- `typescript/polis_client/generated/`
 
-We have written a thin custom client around the auto-generated client code
-that is built with:
+To regenerate, run:
 
-    $ uv run make regenerate
-
-This command must be run whenever you update the YAML spec file, and
-the generated code committed.
+```
+uv run make regenerate
+```
