@@ -1,0 +1,17 @@
+{
+    "name": "polis-client",
+    "version": "0.0.0",
+    "private": false,
+  
+    "main": "./typescript/dist/index.js",
+    "module": "./typescript/dist/index.js",
+    "types": "./typescript/dist/index.d.ts",
+  
+    "exports": {
+      ".": {
+        "import": "./typescript/dist/index.js",
+        "require": "./typescript/dist/index.js",
+        "types": "./typescript/dist/index.d.ts"
+      }
+    }
+  }

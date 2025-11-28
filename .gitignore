@@ -16,3 +16,4 @@ debug.py
 # Node environment
 node_modules/
 bun.lock
+package-lock.json

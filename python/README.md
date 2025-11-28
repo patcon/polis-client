@@ -11,7 +11,7 @@ doing much of the work of that library's current "data loader".
 ## Installation
 
 ```
-uv add git+https://github.com/patcon/polis-client.git@main#subdirectory=python
+pip install git+https://github.com/patcon/polis-client.git@main#subdirectory=python
 ```
 
 ## Usage
