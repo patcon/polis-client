@@ -14,6 +14,8 @@ npm install github:patcon/polis-client
 
 ## Usage
 
+### Node
+
 ```js
 import { PolisClient } from "polis-client";
 
@@ -45,6 +47,22 @@ const math = await polis.getMath("2demo");
 console.log("Math:", math);
 // Example return:
 // { group-clusters: {...}, base-clusters: {...}, group-aware-consensus: {...}, ... }
+```
+
+### Browser
+
+See: https://jsfiddle.net/w8cjetso/
+
+```js
+// Use an ESM CDN URL pointing to your built file
+import { PolisClient } from "https://cdn.jsdelivr.net/gh/patcon/polis-client@main/typescript/dist/index.js";
+
+const DEFAULT_BASE_URL = "https://pol.is/api/v3";
+const PROXIED_BASE_URL = `https://corsproxy.io/?url=${DEFAULT_BASE_URL}`;
+
+const polis = new PolisClient({ baseUrl: PROXIED_BASE_URL });
+const comments = await polis.getComments("2demo");
+console.log("Comments:", comments);
 ```
 
 ## Development
