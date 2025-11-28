@@ -1,4 +1,4 @@
-import type { Config } from './types.gen';
+import type { Config } from './types.gen.js';
 export type ServerSentEventsOptions<TData = unknown> = Omit<RequestInit, 'method'> & Pick<Config, 'method' | 'responseTransformer' | 'responseValidator'> & {
     /**
      * Fetch API implementation. You can use this option to provide a custom

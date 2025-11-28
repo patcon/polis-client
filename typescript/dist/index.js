@@ -1,8 +1,8 @@
-import { client as GeneratedClient } from "./generated/client.gen";
-import * as Comments from "./generated/sdk.gen";
-import * as Reports from "./generated/sdk.gen";
-import * as Conversations from "./generated/sdk.gen";
-import * as MathAPI from "./generated/sdk.gen";
+import { client as GeneratedClient } from "./generated/client.gen.js";
+import * as Comments from "./generated/sdk.gen.js";
+import * as Reports from "./generated/sdk.gen.js";
+import * as Conversations from "./generated/sdk.gen.js";
+import * as MathAPI from "./generated/sdk.gen.js";
 export const DEFAULT_BASE_URL = "https://pol.is/api/v3";
 export class PolisClient {
     constructor(options) {

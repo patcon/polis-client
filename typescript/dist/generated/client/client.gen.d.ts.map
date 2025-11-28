@@ -1,1 +1,1 @@
-{"version":3,"file":"client.gen.d.ts","sourceRoot":"","sources":["../../../src/polis_client/generated/client/client.gen.ts"],"names":[],"mappings":"AAKA,OAAO,KAAK,EACV,MAAM,EACN,MAAM,EAGP,MAAM,aAAa,CAAC;AAgBrB,eAAO,MAAM,YAAY,GAAI,SAAQ,MAAW,KAAG,MAkRlD,CAAC"}
+{"version":3,"file":"client.gen.d.ts","sourceRoot":"","sources":["../../../src/polis_client/generated/client/client.gen.ts"],"names":[],"mappings":"AAKA,OAAO,KAAK,EACV,MAAM,EACN,MAAM,EAGP,MAAM,gBAAgB,CAAC;AAgBxB,eAAO,MAAM,YAAY,GAAI,SAAQ,MAAW,KAAG,MAkRlD,CAAC"}

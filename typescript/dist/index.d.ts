@@ -4,9 +4,9 @@ export declare class PolisClient {
         baseUrl?: string;
         headers?: Record<string, string>;
     });
-    getComments(conversationId: string): Promise<import("./generated").ArrayOfComment | import("./generated").ArrayOfCommentMod | import("./generated").ArrayOfCommentModVoting | undefined>;
-    getReport(reportId: string): Promise<import("./generated").Report | undefined>;
-    getConversation(conversationId: string): Promise<import("./generated").Conversation | undefined>;
-    getMath(conversationId: string): Promise<import("./generated")._Math | undefined>;
+    getComments(conversationId: string): Promise<import("./generated/types.gen.js").ArrayOfComment | import("./generated/types.gen.js").ArrayOfCommentMod | import("./generated/types.gen.js").ArrayOfCommentModVoting | undefined>;
+    getReport(reportId: string): Promise<import("./generated/types.gen.js").Report | undefined>;
+    getConversation(conversationId: string): Promise<import("./generated/types.gen.js").Conversation | undefined>;
+    getMath(conversationId: string): Promise<import("./generated/types.gen.js")._Math | undefined>;
 }
 //# sourceMappingURL=index.d.ts.map

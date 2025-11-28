@@ -1,5 +1,5 @@
-import type { Client, Options as Options2, TDataShape } from './client';
-import type { GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses } from './types.gen';
+import type { Client, Options as Options2, TDataShape } from './client/index.js';
+import type { GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses } from './types.gen.js';
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
      * You can provide a client instance returned by `createClient()` instead of
@@ -13,14 +13,14 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
      */
     meta?: Record<string, unknown>;
 };
-export declare const getReport: <ThrowOnError extends boolean = false>(options?: Options<GetReportData, ThrowOnError>) => import("./client").RequestResult<GetReportResponses, GetReportErrors, ThrowOnError, "fields">;
-export declare const getConversation: <ThrowOnError extends boolean = false>(options: Options<GetConversationData, ThrowOnError>) => import("./client").RequestResult<GetConversationResponses, GetConversationErrors, ThrowOnError, "fields">;
-export declare const getVotes: <ThrowOnError extends boolean = false>(options: Options<GetVotesData, ThrowOnError>) => import("./client").RequestResult<GetVotesResponses, GetVotesErrors, ThrowOnError, "fields">;
-export declare const getMath: <ThrowOnError extends boolean = false>(options: Options<GetMathData, ThrowOnError>) => import("./client").RequestResult<GetMathResponses, GetMathErrors, ThrowOnError, "fields">;
+export declare const getReport: <ThrowOnError extends boolean = false>(options?: Options<GetReportData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetReportResponses, GetReportErrors, ThrowOnError, "fields">;
+export declare const getConversation: <ThrowOnError extends boolean = false>(options: Options<GetConversationData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetConversationResponses, GetConversationErrors, ThrowOnError, "fields">;
+export declare const getVotes: <ThrowOnError extends boolean = false>(options: Options<GetVotesData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetVotesResponses, GetVotesErrors, ThrowOnError, "fields">;
+export declare const getMath: <ThrowOnError extends boolean = false>(options: Options<GetMathData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetMathResponses, GetMathErrors, ThrowOnError, "fields">;
 /**
  * List comments
  *
  * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
  */
-export declare const getComments: <ThrowOnError extends boolean = false>(options: Options<GetCommentsData, ThrowOnError>) => import("./client").RequestResult<GetCommentsResponses, GetCommentsErrors, ThrowOnError, "fields">;
+export declare const getComments: <ThrowOnError extends boolean = false>(options: Options<GetCommentsData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetCommentsResponses, GetCommentsErrors, ThrowOnError, "fields">;
 //# sourceMappingURL=sdk.gen.d.ts.map

@@ -1,4 +1,4 @@
-import type { BodySerializer, QuerySerializer } from './bodySerializer.gen';
+import type { BodySerializer, QuerySerializer } from './bodySerializer.gen.js';
 export interface PathSerializer {
     path: Record<string, unknown>;
     url: string;

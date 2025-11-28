@@ -1,35 +1,26 @@
 {
   "compilerOptions": {
-    // Emit output
+    // Output
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": false,
     "sourceMap": true,
     "noEmit": false,
 
-    // Module system for published output
-    "module": "ESNext",
+    // Node + ESM
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "ES2020",
 
-    // Runtime compatibility (Node + bundlers)
-    "moduleResolution": "node",
-
-    // Allow bare TS imports
-    "allowImportingTsExtensions": false,
-    "verbatimModuleSyntax": true,
-
-    // Typical library-level strictness
+    // Strictness
     "strict": true,
     "skipLibCheck": true,
 
     // JS interop
-    "allowJs": false,
-
-    // Good optional stricter flags
-    "noUncheckedIndexedAccess": true
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
 
-  // Make TypeScript aware of your code
+  // Include all your source code
   "include": ["src"]
 }

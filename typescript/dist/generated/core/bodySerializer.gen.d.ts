@@ -1,4 +1,4 @@
-import type { ArrayStyle, ObjectStyle, SerializerOptions } from './pathSerializer.gen';
+import type { ArrayStyle, ObjectStyle, SerializerOptions } from './pathSerializer.gen.js';
 export type QuerySerializer = (query: Record<string, unknown>) => string;
 export type BodySerializer = (body: any) => any;
 type QuerySerializerOptionsObject = {

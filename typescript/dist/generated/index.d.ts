@@ -1,3 +1,3 @@
-export type * from './types.gen';
-export * from './sdk.gen';
+export type * from './types.gen.js';
+export * from './sdk.gen.js';
 //# sourceMappingURL=index.d.ts.map

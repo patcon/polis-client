@@ -1,1 +1,1 @@
-{"version":3,"file":"client.gen.js","sourceRoot":"","sources":["../../src/polis_client/generated/client.gen.ts"],"names":[],"mappings":"AAAA,qDAAqD;AAErD,OAAO,EAAmC,YAAY,EAAE,YAAY,EAAE,MAAM,UAAU,CAAC;AAavF,MAAM,CAAC,MAAM,MAAM,GAAG,YAAY,CAAC,YAAY,EAAkB,CAAC,CAAC"}
+{"version":3,"file":"client.gen.js","sourceRoot":"","sources":["../../src/polis_client/generated/client.gen.ts"],"names":[],"mappings":"AAAA,qDAAqD;AAErD,OAAO,EAAmC,YAAY,EAAE,YAAY,EAAE,MAAM,mBAAmB,CAAC;AAahG,MAAM,CAAC,MAAM,MAAM,GAAG,YAAY,CAAC,YAAY,EAAkB,CAAC,CAAC"}
