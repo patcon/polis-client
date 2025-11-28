@@ -1,15 +1,21 @@
 # Make it simpler to change args during `uv run` calls.
 UV_RUN ?= uv run
 
-regenerate: ## Make the generated client code from OpenAPI spec
+regenerate: regenerate-py regenerate-ts ## Regenerate all the client code from OpenAPI spec
+
+regenerate-py: ## Regenerate the Python client code
 	rm -rf src/polis_client/generated/
 	openapi-python-client generate --path openapi/polis.yml --output-path src/polis_client/generated/ --overwrite --meta none
+
+regenerate-ts: ## Regenerate Typescript client code
+	rm -rf typescript/src/polis_client/generated
+	npx --yes @hey-api/openapi-ts --input ./openapi/polis.yml --output typescript/src/polis_client/generated --silent
 
 # These make tasks allow the default help text to work properly.
 %:
 	@true
 
-.PHONY: help codegen
+.PHONY: help regenerate regenerate-py regenerate-ts
 
 help:
 	@echo 'Usage: make <command>'
