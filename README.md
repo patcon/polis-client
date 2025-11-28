@@ -10,6 +10,8 @@ See: [`python/README.md`](./python/README.md)
 
 ### polis-client-ts
 
+Works on either backend server (Node) or frontend client (browser).
+
 See: [`typescript/README.md`](./typescript/README.md)
 
 ## Development
