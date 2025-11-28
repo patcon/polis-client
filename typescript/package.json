@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build-openapi": "openapi-ts --input ../openapi/polis.yml --output src/polis_client/generated --silent",
-    "build": "npm run build-openapi && tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.88.0",
