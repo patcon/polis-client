@@ -2,6 +2,9 @@
   "name": "polis-client",
   "module": "typescript/polis_client/index.ts",
   "type": "module",
+  "scripts": {
+    "build": "openapi-ts --input ./openapi/polis.yml --output typescript/src/polis_client/generated --silent"
+  },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.88.0",
     "@types/bun": "latest",

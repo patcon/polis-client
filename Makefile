@@ -9,7 +9,7 @@ regenerate-py: ## Regenerate the Python client code
 
 regenerate-ts: ## Regenerate Typescript client code
 	rm -rf typescript/src/polis_client/generated
-	npx --yes @hey-api/openapi-ts --input ./openapi/polis.yml --output typescript/src/polis_client/generated --silent
+	npm run build
 
 # These make tasks allow the default help text to work properly.
 %:
