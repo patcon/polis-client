@@ -10,9 +10,6 @@ uv.lock
 # Virtual environments
 .venv
 
-# Experimentation file for development
-debug.py
-
 # Node environment
 node_modules/
 bun.lock

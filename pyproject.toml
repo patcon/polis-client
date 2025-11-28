@@ -2,7 +2,7 @@
 name = "polis-client"
 version = "0.1.0"
 description = "Add your description here"
-readme = "README.md"
+readme = "python/README.md"
 authors = [
     { name = "Patrick Connolly", email = "patrick.c.connolly@gmail.com" }
 ]
@@ -20,3 +20,7 @@ build-backend = "hatchling.build"
 dev = [
     "openapi-python-client>=0.27.1",
 ]
+
+[tool.hatch.build.targets.wheel]
+source-directory = "python"
+packages = ["python/src/polis_client"]
