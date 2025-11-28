@@ -6,11 +6,11 @@ OpenAPI-supported client libraries for interacting with Polis servers in Python 
 
 ### polis-client-py
 
-See: [`README.python.md`](./README.python.md)
+See: [`python/README.md`](./python/README.md)
 
 ### polis-client-ts
 
-See: [`README.typescript.md`](./README.typescript.md)
+See: [`typescript/README.md`](./typescript/README.md)
 
 ## Development
 
@@ -18,7 +18,7 @@ Each of these client libraries is composed mostly of code auto-generated
 from the OpenAPI spec available at [`openapi/polis.yml`](./openapi/polis.yml).
 
 As such please do not modify any code in these locations:
-- `src/polis_client/generated/`
+- `python/src/polis_client/generated/`
 - `typescript/polis_client/generated/`
 
 To regenerate, run:

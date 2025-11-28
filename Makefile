@@ -4,12 +4,12 @@ UV_RUN ?= uv run
 regenerate: regenerate-py regenerate-ts ## Regenerate all the client code from OpenAPI spec
 
 regenerate-py: ## Regenerate the Python client code
-	rm -rf src/polis_client/generated/
-	openapi-python-client generate --path openapi/polis.yml --output-path src/polis_client/generated/ --overwrite --meta none
+	rm -rf python/src/polis_client/generated/
+	cd python && uv run openapi-python-client generate --path ../openapi/polis.yml --output-path src/polis_client/generated/ --overwrite --meta none
 
 regenerate-ts: ## Regenerate Typescript client code
-	rm -rf typescript/src/polis_client/generated
-	npm run build
+	rm -rf typescript/polis_client/generated
+	cd typescript && npm run build
 
 # These make tasks allow the default help text to work properly.
 %:
