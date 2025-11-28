@@ -16,18 +16,18 @@ uv add git+http://github.com/patcon/polis-client.git@main
 
 ## Usage
 
-See: [`example.ipynb`](/examples.ipynb)
+See: [`examples.ipynb`](examples.ipynb)
 
 ## Development
 
-This project is structured around an OpenAPI definition at `openapi/polis.yml`.
+This project is structured around an OpenAPI definition at `../openapi/polis.yml`.
 
 (We use `uv`, but you can use any virtualenv or not as a Python environment.)
 
 We have written a thin custom client around the auto-generated client code
-that is built with:
+that is built (from the repository root) with:
 
-    $ uv run make regenerate
+    $ uv run make regenerate-py
 
 This command must be run whenever you update the YAML spec file, and
 the generated code committed.
