@@ -1,9 +1,10 @@
 {
   "name": "polis-client",
-  "module": "polis_client/index.ts",
+  "module": "src/polis_client/index.ts",
   "type": "module",
   "scripts": {
-    "build": "openapi-ts --input ../openapi/polis.yml --output src/polis_client/generated --silent"
+    "build-openapi": "openapi-ts --input ../openapi/polis.yml --output src/polis_client/generated --silent",
+    "build": "npm run build-openapi && tsc -p tsconfig.json"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.88.0",
