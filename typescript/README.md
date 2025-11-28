@@ -6,6 +6,22 @@ An unofficial Typescript API client for communicating with any Polis servers.
 
 To be completed.
 
+## Features
+
+- [x] GET conversation
+- [x] GET report
+- [x] GET math
+- [x] GET comments
+- [ ] POST comments
+- [x] GET votes
+- [ ] POST votes
+- [ ] GET xids
+- [ ] support for xid "authentication"
+- [ ] support for JWT authentication
+- [ ] simple auto-proxy for browser clients
+- [ ] create new conversations (unauthenticated, via "site_id")
+- [ ] download export CSVs (from report_id)
+
 ## Installation
 
 ```
