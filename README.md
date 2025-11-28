@@ -22,6 +22,8 @@ See: [`example.ipynb`](/examples.ipynb)
 
 This project is structured around an OpenAPI definition at `openapi/polis.yml`.
 
+(We use `uv`, but you can use any virtualenv or not as a Python environment.)
+
 We have written a thin custom client around the auto-generated client code
 that is built with:
 
