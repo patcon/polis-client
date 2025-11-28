@@ -45,6 +45,15 @@ console.log("Comments:", comments);
 //   { txt: "I imagine new businesses...", tid: 0, created: "1403054214174", is_seed: false, is_meta: false, pid: 0 },
 //   ...
 // ]
+//
+// Or for less data returned (like in the raw API response):
+// const comments = await polis.getComments(
+//     "2demo",
+//     {
+//         moderation: false,
+//         include_voting_patterns: false,
+//     }
+// );
 
 // Fetch report
 const report = await polis.getReport("r68fknmmmyhdpi3sh4ctc");
