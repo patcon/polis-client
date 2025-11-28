@@ -19,7 +19,7 @@ from the OpenAPI spec available at [`openapi/polis.yml`](./openapi/polis.yml).
 
 As such please do not modify any code in these locations:
 - `python/src/polis_client/generated/`
-- `typescript/polis_client/generated/`
+- `typescript/src/polis_client/generated/`
 
 To regenerate, run:
 
