@@ -9,7 +9,7 @@ To be completed.
 ## Installation
 
 ```
-npm install patcon/polis-client#main
+npm install github:patcon/polis-client
 ```
 
 ## Usage
