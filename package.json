@@ -2,15 +2,11 @@
     "name": "polis-client",
     "version": "0.0.0",
     "private": false,
-  
+
     "main": "./typescript/dist/index.js",
     "module": "./typescript/dist/index.js",
     "types": "./typescript/dist/index.d.ts",
 
-    "scripts": {
-        "prepare": "npm --prefix typescript run build"  
-    },
-  
     "exports": {
       ".": {
         "import": "./typescript/dist/index.js",

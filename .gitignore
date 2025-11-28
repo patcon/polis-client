@@ -17,3 +17,4 @@ debug.py
 node_modules/
 bun.lock
 package-lock.json
+!typescript/dist

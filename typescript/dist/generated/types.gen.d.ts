@@ -1,0 +1,243 @@
+export type ClientOptions = {
+    baseUrl: `${string}://{server}/api/v3` | (string & {});
+};
+export type _Math = {
+    math_tick?: number;
+};
+export type Vote = {
+    pid?: number;
+    tid?: number;
+    vote?: number;
+    weight_x_32767?: number;
+    /**
+     * Unix timestamp of vote modification time
+     */
+    modified?: number;
+    conversation_id?: string;
+};
+export type ArrayOfVote = Array<Vote>;
+export type Conversation = {
+    topic?: string;
+    description?: string;
+    is_anon?: boolean;
+    is_active?: boolean;
+    is_draft?: boolean;
+    is_public?: boolean;
+    /**
+     * Unix timestamp of report creation time
+     */
+    created?: number;
+    /**
+     * Unix timestamp of report modification time
+     */
+    modified?: number;
+};
+export type Report = {
+    report_id: string;
+    /**
+     * Unix timestamp of report creation time
+     */
+    created?: number;
+    /**
+     * Unix timestamp of report modification time
+     */
+    modified?: number;
+    report_name?: unknown;
+    mod_level?: number;
+    conversation_id?: string;
+};
+export type ArrayOfReport = Array<Report>;
+export type Comment = {
+    /**
+     * Body text of the comment
+     */
+    txt: string;
+    /**
+     * Numeric ID of comment
+     */
+    tid: number;
+    /**
+     * Unix timestamp of comment creation time
+     */
+    created?: number;
+    /**
+     * Whether comment is a seed comment from moderator
+     */
+    is_seed?: boolean;
+    /**
+     * Whether comment has been marked as metadata by moderator
+     */
+    is_meta?: boolean;
+    /**
+     * Language of submitted comment
+     */
+    lang?: string;
+    /**
+     * Conversation-specific numeric ID of participant
+     */
+    pid?: number;
+};
+export type CommentMod = Comment & {
+    velocity?: number;
+    /**
+     * Moderation status of comment: moderated _out_ (-1), _not yet_ moderated (0), or moderated _in_ (1).
+     */
+    mod?: -1 | 0 | 1;
+    active?: boolean;
+    conversation_id?: string;
+};
+export type CommentModVoting = CommentMod & {
+    agree_count?: number;
+    disagree_count?: number;
+    pass_count?: number;
+    count?: number;
+};
+export type ArrayOfComment = Array<Comment>;
+export type ArrayOfCommentMod = Array<CommentMod>;
+export type ArrayOfCommentModVoting = Array<CommentModVoting>;
+export type ApiError = string;
+export type GetReportData = {
+    body?: never;
+    path?: never;
+    query?: {
+        report_id?: string;
+    };
+    url: '/reports';
+};
+export type GetReportErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetReportError = GetReportErrors[keyof GetReportErrors];
+export type GetReportResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: ArrayOfReport;
+};
+export type GetReportResponse = GetReportResponses[keyof GetReportResponses];
+export type GetConversationData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Alphnumeric ID for conversation
+         */
+        conversation_id: string;
+    };
+    url: '/conversations';
+};
+export type GetConversationErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetConversationError = GetConversationErrors[keyof GetConversationErrors];
+export type GetConversationResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: Conversation;
+};
+export type GetConversationResponse = GetConversationResponses[keyof GetConversationResponses];
+export type GetVotesData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Alphnumeric ID for conversation
+         */
+        conversation_id: string;
+        /**
+         * Conversation-specific numeric ID of participant
+         */
+        pid?: number;
+    };
+    url: '/votes';
+};
+export type GetVotesErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetVotesError = GetVotesErrors[keyof GetVotesErrors];
+export type GetVotesResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: ArrayOfVote;
+};
+export type GetVotesResponse = GetVotesResponses[keyof GetVotesResponses];
+export type GetMathData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Alphnumeric ID for conversation
+         */
+        conversation_id: string;
+    };
+    url: '/math/pca2';
+};
+export type GetMathErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetMathError = GetMathErrors[keyof GetMathErrors];
+export type GetMathResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: _Math;
+};
+export type GetMathResponse = GetMathResponses[keyof GetMathResponses];
+export type GetCommentsData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Alphnumeric ID for conversation
+         */
+        conversation_id: string;
+        /**
+         * Whether fetching comments as moderator with additional fields
+         */
+        moderation?: boolean;
+        /**
+         * Whether to include voting pattern fields in additional fields (To have effect, requires `moderation` to be `true`)
+         */
+        include_voting_patterns?: boolean;
+        include_social?: boolean;
+        /**
+         * When supplied, filters for comments with a specific `mod` value
+         */
+        mod?: -1 | 0 | 1;
+        /**
+         * When supplied, filters for `mod` greater than this value
+         */
+        mod_gt?: -1 | 0;
+        report_id?: string;
+    };
+    url: '/comments';
+};
+export type GetCommentsErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetCommentsError = GetCommentsErrors[keyof GetCommentsErrors];
+export type GetCommentsResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: ArrayOfCommentModVoting | ArrayOfCommentMod | ArrayOfComment;
+};
+export type GetCommentsResponse = GetCommentsResponses[keyof GetCommentsResponses];
+//# sourceMappingURL=types.gen.d.ts.map

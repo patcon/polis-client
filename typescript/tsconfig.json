@@ -1,29 +1,35 @@
 {
   "compilerOptions": {
-    // Environment setup & latest features
-    "lib": ["ESNext"],
-    "target": "ESNext",
-    "module": "Preserve",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
+    // Emit output
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "sourceMap": true,
+    "noEmit": false,
 
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    // Module system for published output
+    "module": "ESNext",
+    "target": "ES2020",
+
+    // Runtime compatibility (Node + bundlers)
+    "moduleResolution": "node",
+
+    // Allow bare TS imports
+    "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
 
-    // Best practices
+    // Typical library-level strictness
     "strict": true,
     "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
 
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
-  }
+    // JS interop
+    "allowJs": false,
+
+    // Good optional stricter flags
+    "noUncheckedIndexedAccess": true
+  },
+
+  // Make TypeScript aware of your code
+  "include": ["src"]
 }
