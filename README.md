@@ -24,7 +24,7 @@ As such please do not modify any code in these locations:
 To regenerate, run:
 
 ```
-uv run make regenerate
+make regenerate
 ```
 
 ## License
