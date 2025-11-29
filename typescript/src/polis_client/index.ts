@@ -28,15 +28,16 @@ type ExtraVotesQuery = Omit<VotesQuery, "conversation_id">;
 type ReportQuery = GetReportData["query"];
 type ExtraReportQuery = Omit<ReportQuery, "report_id">;
 
-export const DEFAULT_BASE_URL = "https://pol.is/api/v3";
+export const DEFAULT_BASE_URL = "https://pol.is";
 
 export class PolisClient {
   constructor(options?: { baseUrl?: string; headers?: Record<string, string> }) {
     const { baseUrl = DEFAULT_BASE_URL, headers = {} } = options ?? {};
+    const versionedBaseUrl = `${baseUrl}/api/v3`;
 
     // configure the internal generated client once
     GeneratedClient.setConfig({
-      baseUrl,
+      baseUrl: versionedBaseUrl,
       headers,
     });
   }

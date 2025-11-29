@@ -76,18 +76,18 @@ console.log("Math:", math);
 
 ### Browser
 
-See: https://jsfiddle.net/5wL6xcum/1/
+See: https://jsfiddle.net/patcon/yjq2aebh/latest
 
 ```js
 // Use an ESM CDN URL pointing to your built file
 import { PolisClient } from "https://cdn.jsdelivr.net/gh/patcon/polis-client@main/typescript/dist/index.js";
 
-const DEFAULT_BASE_URL = "https://pol.is/api/v3";
+const DEFAULT_BASE_URL = "https://pol.is";
 const PROXIED_BASE_URL = `https://corsproxy.io/?url=${DEFAULT_BASE_URL}`;
+const CONVO_ID = "2demo";
 
-const convoId = "2demo";
 const polis = new PolisClient({ baseUrl: PROXIED_BASE_URL });
-const comments = await polis.getComments(convoId);
+const comments = await polis.getComments(CONVO_ID);
 console.log("Comments:", comments);
 ```
 
