@@ -12,21 +12,22 @@ async function main() {
     console.log("Comments count:", comments?.length);
     console.log("Sample comment:", comments?.[0]);
 
-    // console.log("\nFetching report…");
-    // const report = await polis.getReport("r68fknmmmyhdpi3sh4ctc");
-    // console.log("Report:", report);
+    console.log("\nFetching report…");
+    const report = await polis.getReport("r68fknmmmyhdpi3sh4ctc");
+    console.log("Report:", report);
 
-    // console.log("\nFetching conversation…");
-    // const convo = await polis.getConversation("2demo");
-    // console.log("Conversation:", convo);
+    console.log("\nFetching conversation…");
+    const convo = await polis.getConversation("2demo");
+    console.log("Conversation:", convo);
 
-    // console.log("\nFetching math…");
-    // const math = await polis.getMath("2demo");
-    // console.log("Math:", math);
+    console.log("\nFetching math…");
+    const math = await polis.getMath("2demo");
+    console.log("Math:", math);
 
   } catch (err) {
     console.error("\n❌ Error during debug run:");
     console.error(err);
+    // @ts-expect-error
     process.exit(1);
   }
 }
