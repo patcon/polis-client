@@ -5,6 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.create_vote_vote import CreateVoteVote
 from ...models.vote import Vote
 from ...types import UNSET, Response, Unset
 
@@ -12,21 +13,34 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     conversation_id: str,
-    pid: int | Unset = UNSET,
+    tid: int,
+    vote: CreateVoteVote,
     xid: str | Unset = UNSET,
+    high_priority: bool | Unset = UNSET,
+    lang: bool | Unset = UNSET,
+    starred: bool | Unset = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
     params["conversation_id"] = conversation_id
 
-    params["pid"] = pid
+    params["tid"] = tid
+
+    json_vote = vote.value
+    params["vote"] = json_vote
 
     params["xid"] = xid
+
+    params["high_priority"] = high_priority
+
+    params["lang"] = lang
+
+    params["starred"] = starred
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
-        "method": "get",
+        "method": "post",
         "url": "/votes",
         "params": params,
     }
@@ -74,14 +88,22 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
+    tid: int,
+    vote: CreateVoteVote,
     xid: str | Unset = UNSET,
+    high_priority: bool | Unset = UNSET,
+    lang: bool | Unset = UNSET,
+    starred: bool | Unset = UNSET,
 ) -> Response[list[Vote] | str]:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
+        tid (int):
+        vote (CreateVoteVote):
         xid (str | Unset):
+        high_priority (bool | Unset):
+        lang (bool | Unset):
+        starred (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -93,8 +115,12 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         conversation_id=conversation_id,
-        pid=pid,
+        tid=tid,
+        vote=vote,
         xid=xid,
+        high_priority=high_priority,
+        lang=lang,
+        starred=starred,
     )
 
     response = client.get_httpx_client().request(
@@ -108,14 +134,22 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
+    tid: int,
+    vote: CreateVoteVote,
     xid: str | Unset = UNSET,
+    high_priority: bool | Unset = UNSET,
+    lang: bool | Unset = UNSET,
+    starred: bool | Unset = UNSET,
 ) -> list[Vote] | str | None:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
+        tid (int):
+        vote (CreateVoteVote):
         xid (str | Unset):
+        high_priority (bool | Unset):
+        lang (bool | Unset):
+        starred (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,8 +162,12 @@ def sync(
     return sync_detailed(
         client=client,
         conversation_id=conversation_id,
-        pid=pid,
+        tid=tid,
+        vote=vote,
         xid=xid,
+        high_priority=high_priority,
+        lang=lang,
+        starred=starred,
     ).parsed
 
 
@@ -137,14 +175,22 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
+    tid: int,
+    vote: CreateVoteVote,
     xid: str | Unset = UNSET,
+    high_priority: bool | Unset = UNSET,
+    lang: bool | Unset = UNSET,
+    starred: bool | Unset = UNSET,
 ) -> Response[list[Vote] | str]:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
+        tid (int):
+        vote (CreateVoteVote):
         xid (str | Unset):
+        high_priority (bool | Unset):
+        lang (bool | Unset):
+        starred (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -156,8 +202,12 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         conversation_id=conversation_id,
-        pid=pid,
+        tid=tid,
+        vote=vote,
         xid=xid,
+        high_priority=high_priority,
+        lang=lang,
+        starred=starred,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -169,14 +219,22 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
+    tid: int,
+    vote: CreateVoteVote,
     xid: str | Unset = UNSET,
+    high_priority: bool | Unset = UNSET,
+    lang: bool | Unset = UNSET,
+    starred: bool | Unset = UNSET,
 ) -> list[Vote] | str | None:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
+        tid (int):
+        vote (CreateVoteVote):
         xid (str | Unset):
+        high_priority (bool | Unset):
+        lang (bool | Unset):
+        starred (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -190,7 +248,11 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             conversation_id=conversation_id,
-            pid=pid,
+            tid=tid,
+            vote=vote,
             xid=xid,
+            high_priority=high_priority,
+            lang=lang,
+            starred=starred,
         )
     ).parsed

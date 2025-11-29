@@ -5,21 +5,18 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.vote import Vote
+from ...models.report import Report
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     conversation_id: str,
-    pid: int | Unset = UNSET,
     xid: str | Unset = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
     params["conversation_id"] = conversation_id
-
-    params["pid"] = pid
 
     params["xid"] = xid
 
@@ -27,7 +24,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/votes",
+        "url": "/participationInit",
         "params": params,
     }
 
@@ -36,16 +33,16 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> list[Vote] | str | None:
+) -> list[Report] | str | None:
     if response.status_code == 200:
         response_200 = []
         _response_200 = response.json()
-        for componentsschemas_array_of_vote_item_data in _response_200:
-            componentsschemas_array_of_vote_item = Vote.from_dict(
-                componentsschemas_array_of_vote_item_data
+        for componentsschemas_array_of_report_item_data in _response_200:
+            componentsschemas_array_of_report_item = Report.from_dict(
+                componentsschemas_array_of_report_item_data
             )
 
-            response_200.append(componentsschemas_array_of_vote_item)
+            response_200.append(componentsschemas_array_of_report_item)
 
         return response_200
 
@@ -61,7 +58,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[list[Vote] | str]:
+) -> Response[list[Report] | str]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -74,13 +71,11 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
     xid: str | Unset = UNSET,
-) -> Response[list[Vote] | str]:
+) -> Response[list[Report] | str]:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
         xid (str | Unset):
 
     Raises:
@@ -88,12 +83,11 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[list[Vote] | str]
+        Response[list[Report] | str]
     """
 
     kwargs = _get_kwargs(
         conversation_id=conversation_id,
-        pid=pid,
         xid=xid,
     )
 
@@ -108,13 +102,11 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
     xid: str | Unset = UNSET,
-) -> list[Vote] | str | None:
+) -> list[Report] | str | None:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
         xid (str | Unset):
 
     Raises:
@@ -122,13 +114,12 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        list[Vote] | str
+        list[Report] | str
     """
 
     return sync_detailed(
         client=client,
         conversation_id=conversation_id,
-        pid=pid,
         xid=xid,
     ).parsed
 
@@ -137,13 +128,11 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
     xid: str | Unset = UNSET,
-) -> Response[list[Vote] | str]:
+) -> Response[list[Report] | str]:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
         xid (str | Unset):
 
     Raises:
@@ -151,12 +140,11 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[list[Vote] | str]
+        Response[list[Report] | str]
     """
 
     kwargs = _get_kwargs(
         conversation_id=conversation_id,
-        pid=pid,
         xid=xid,
     )
 
@@ -169,13 +157,11 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-    pid: int | Unset = UNSET,
     xid: str | Unset = UNSET,
-) -> list[Vote] | str | None:
+) -> list[Report] | str | None:
     """
     Args:
         conversation_id (str):
-        pid (int | Unset):
         xid (str | Unset):
 
     Raises:
@@ -183,14 +169,13 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        list[Vote] | str
+        list[Report] | str
     """
 
     return (
         await asyncio_detailed(
             client=client,
             conversation_id=conversation_id,
-            pid=pid,
             xid=xid,
         )
     ).parsed

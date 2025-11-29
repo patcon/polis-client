@@ -6,43 +6,28 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
-T = TypeVar("T", bound="Math")
+T = TypeVar("T", bound="ParticipationInitNextComment")
 
 
 @_attrs_define
-class Math:
-    """
-    Attributes:
-        math_tick (int | Unset):
-    """
+class ParticipationInitNextComment:
+    """ """
 
-    math_tick: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        math_tick = self.math_tick
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
-        if math_tick is not UNSET:
-            field_dict["math_tick"] = math_tick
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        math_tick = d.pop("math_tick", UNSET)
+        participation_init_next_comment = cls()
 
-        math = cls(
-            math_tick=math_tick,
-        )
-
-        math.additional_properties = d
-        return math
+        participation_init_next_comment.additional_properties = d
+        return participation_init_next_comment
 
     @property
     def additional_keys(self) -> list[str]:

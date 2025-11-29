@@ -18,7 +18,7 @@ export declare class PolisClient {
     getComments(conversationId: string, extraQuery?: ExtraCommentsQuery): Promise<import("./generated/types.gen.js").ArrayOfComment | import("./generated/types.gen.js").ArrayOfCommentMod | import("./generated/types.gen.js").ArrayOfCommentModVoting | undefined>;
     getReport(reportId: string, extraQuery?: ExtraReportQuery): Promise<import("./generated/types.gen.js").Report | undefined>;
     getConversation(conversationId: string, extraQuery?: ExtraConversationQuery): Promise<import("./generated/types.gen.js").Conversation | undefined>;
-    getMath(conversationId: string, extraQuery?: ExtraMathQuery): Promise<import("./generated/types.gen.js")._Math | undefined>;
+    getMath(conversationId: string, extraQuery?: ExtraMathQuery): Promise<import("./generated/types.gen.js").MathV3 | import("./generated/types.gen.js").MathV4 | undefined>;
     getVotes(conversationId: string, extraQuery?: ExtraVotesQuery): Promise<import("./generated/types.gen.js").ArrayOfVote | undefined>;
 }
 export {};

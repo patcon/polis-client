@@ -2,7 +2,7 @@
 
 import { client } from './client.gen.js';
 import type { Client, Options as Options2, TDataShape } from './client/index.js';
-import type { GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses } from './types.gen.js';
+import type { CreateCommentData, CreateCommentErrors, CreateCommentResponses, CreateVoteData, CreateVoteErrors, CreateVoteResponses, GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetInitializationData, GetInitializationErrors, GetInitializationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses } from './types.gen.js';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -18,11 +18,15 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: Record<string, unknown>;
 };
 
+export const getInitialization = <ThrowOnError extends boolean = false>(options: Options<GetInitializationData, ThrowOnError>) => (options.client ?? client).get<GetInitializationResponses, GetInitializationErrors, ThrowOnError>({ url: '/participationInit', ...options });
+
 export const getReport = <ThrowOnError extends boolean = false>(options?: Options<GetReportData, ThrowOnError>) => (options?.client ?? client).get<GetReportResponses, GetReportErrors, ThrowOnError>({ url: '/reports', ...options });
 
 export const getConversation = <ThrowOnError extends boolean = false>(options: Options<GetConversationData, ThrowOnError>) => (options.client ?? client).get<GetConversationResponses, GetConversationErrors, ThrowOnError>({ url: '/conversations', ...options });
 
 export const getVotes = <ThrowOnError extends boolean = false>(options: Options<GetVotesData, ThrowOnError>) => (options.client ?? client).get<GetVotesResponses, GetVotesErrors, ThrowOnError>({ url: '/votes', ...options });
+
+export const createVote = <ThrowOnError extends boolean = false>(options: Options<CreateVoteData, ThrowOnError>) => (options.client ?? client).post<CreateVoteResponses, CreateVoteErrors, ThrowOnError>({ url: '/votes', ...options });
 
 export const getMath = <ThrowOnError extends boolean = false>(options: Options<GetMathData, ThrowOnError>) => (options.client ?? client).get<GetMathResponses, GetMathErrors, ThrowOnError>({ url: '/math/pca2', ...options });
 
@@ -32,3 +36,10 @@ export const getMath = <ThrowOnError extends boolean = false>(options: Options<G
  * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
  */
 export const getComments = <ThrowOnError extends boolean = false>(options: Options<GetCommentsData, ThrowOnError>) => (options.client ?? client).get<GetCommentsResponses, GetCommentsErrors, ThrowOnError>({ url: '/comments', ...options });
+
+/**
+ * Create comment
+ *
+ * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
+ */
+export const createComment = <ThrowOnError extends boolean = false>(options: Options<CreateCommentData, ThrowOnError>) => (options.client ?? client).post<CreateCommentResponses, CreateCommentErrors, ThrowOnError>({ url: '/comments', ...options });

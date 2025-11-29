@@ -1,8 +1,22 @@
 export type ClientOptions = {
     baseUrl: `${string}://{server}/api/v3` | (string & {});
 };
-export type _Math = {
-    math_tick?: number;
+export type MathV3 = {
+    [key: string]: unknown;
+};
+export type MathV4 = {
+    asBufferOfGzippedJson?: {
+        [key: string]: unknown;
+    };
+    asPOJO?: MathV3;
+    asJSON?: string;
+    consensus?: {
+        [key: string]: unknown;
+    };
+    expiration?: number;
+    repness?: {
+        [key: string]: unknown;
+    };
 };
 export type Vote = {
     pid?: number;
@@ -17,12 +31,54 @@ export type Vote = {
 };
 export type ArrayOfVote = Array<Vote>;
 export type Conversation = {
-    topic?: string;
+    auth_needed_to_vote?: string;
+    auth_needed_to_write?: string;
+    auth_opt_allow_3rdparty?: string;
+    auth_opt_fb?: string;
+    auth_opt_tw?: string;
+    bgcolor?: string;
+    context?: string;
+    conversation_id?: string;
+    course_id?: string;
+    dataset_explanation?: string;
     description?: string;
-    is_anon?: boolean;
+    email_domain?: string;
+    help_bgcolor?: string;
+    help_color?: string;
+    help_type?: string;
+    importance_enabled?: boolean;
     is_active?: boolean;
+    is_anon?: boolean;
+    is_curated?: boolean;
+    is_data_open?: boolean;
     is_draft?: boolean;
+    is_mod?: boolean;
+    is_owner?: boolean;
     is_public?: boolean;
+    link_url?: string;
+    need_suzinvite?: string;
+    org_id?: string;
+    owner?: string;
+    owner_sees_participation_stats?: string;
+    ownername?: string;
+    parent_url?: string;
+    participant_count?: string;
+    prioritize_seed?: string;
+    profanity_filter?: string;
+    site_id?: string;
+    socialbtn_type?: string;
+    spam_filter?: string;
+    strict_moderation?: string;
+    style_btn?: string;
+    subscribe_type?: string;
+    topic?: string;
+    translations?: string;
+    treevite_enabled?: boolean;
+    upvotes?: string;
+    use_xid_whitelist?: string;
+    vis_type?: string;
+    write_hint_type?: string;
+    write_type?: string;
     /**
      * Unix timestamp of report creation time
      */
@@ -31,6 +87,26 @@ export type Conversation = {
      * Unix timestamp of report modification time
      */
     modified?: number;
+};
+export type ParticipationInit = {
+    acceptLanguage?: string;
+    conversation?: Conversation;
+    famous?: {
+        [key: string]: unknown;
+    };
+    nextComment?: {
+        [key: string]: unknown;
+    };
+    pca?: MathV4;
+    ptpt?: {
+        [key: string]: unknown;
+    } | null;
+    user?: {
+        [key: string]: unknown;
+    };
+    votes?: Array<{
+        [key: string]: unknown;
+    }>;
 };
 export type Report = {
     report_id: string;
@@ -96,6 +172,35 @@ export type ArrayOfComment = Array<Comment>;
 export type ArrayOfCommentMod = Array<CommentMod>;
 export type ArrayOfCommentModVoting = Array<CommentModVoting>;
 export type ApiError = string;
+export type GetInitializationData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Alphnumeric ID for conversation
+         */
+        conversation_id: string;
+        /**
+         * Conversation-specific external participant ID. When provided, an auth token will be returned.
+         */
+        xid?: string;
+    };
+    url: '/participationInit';
+};
+export type GetInitializationErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetInitializationError = GetInitializationErrors[keyof GetInitializationErrors];
+export type GetInitializationResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: ArrayOfReport;
+};
+export type GetInitializationResponse = GetInitializationResponses[keyof GetInitializationResponses];
 export type GetReportData = {
     body?: never;
     path?: never;
@@ -152,9 +257,13 @@ export type GetVotesData = {
          */
         conversation_id: string;
         /**
-         * Conversation-specific numeric ID of participant
+         * Conversation-specific participant ID
          */
         pid?: number;
+        /**
+         * Conversation-specific external participant ID.
+         */
+        xid?: string;
     };
     url: '/votes';
 };
@@ -172,6 +281,59 @@ export type GetVotesResponses = {
     200: ArrayOfVote;
 };
 export type GetVotesResponse = GetVotesResponses[keyof GetVotesResponses];
+export type CreateVoteData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Conversation ID
+         */
+        conversation_id: string;
+        /**
+         * Conversation-specific statement ID
+         */
+        tid: number;
+        /**
+         * Conversation-specific statement ID
+         */
+        vote: -1 | 0 | 1;
+        /**
+         * Conversation-specific external participant ID
+         */
+        xid?: string;
+        /**
+         * User has marked voted statement as high priority
+         */
+        high_priority?: boolean;
+        /**
+         * UI language of voting user. No longer used in UI.
+         *
+         * @deprecated
+         */
+        lang?: boolean;
+        /**
+         * User has marked voted statement as starred. No longer used in UI.
+         *
+         * @deprecated
+         */
+        starred?: boolean;
+    };
+    url: '/votes';
+};
+export type CreateVoteErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type CreateVoteError = CreateVoteErrors[keyof CreateVoteErrors];
+export type CreateVoteResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: ArrayOfVote;
+};
+export type CreateVoteResponse = CreateVoteResponses[keyof CreateVoteResponses];
 export type GetMathData = {
     body?: never;
     path?: never;
@@ -194,7 +356,7 @@ export type GetMathResponses = {
     /**
      * An array of comment objects
      */
-    200: _Math;
+    200: MathV3 | MathV4;
 };
 export type GetMathResponse = GetMathResponses[keyof GetMathResponses];
 export type GetCommentsData = {
@@ -240,4 +402,45 @@ export type GetCommentsResponses = {
     200: ArrayOfCommentModVoting | ArrayOfCommentMod | ArrayOfComment;
 };
 export type GetCommentsResponse = GetCommentsResponses[keyof GetCommentsResponses];
+export type CreateCommentData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Conversation ID
+         */
+        conversation_id: string;
+        /**
+         * Content of the submitted statement
+         */
+        txt: string;
+        /**
+         * Conversation-specific external participant ID
+         */
+        xid?: string;
+        /**
+         * Whether this statement is a seed statement
+         */
+        is_seed?: boolean;
+        /**
+         * Implicit vote when submitting statement
+         */
+        vote?: -1 | 0 | 1;
+    };
+    url: '/comments';
+};
+export type CreateCommentErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type CreateCommentError = CreateCommentErrors[keyof CreateCommentErrors];
+export type CreateCommentResponses = {
+    /**
+     * An array of comment objects
+     */
+    200: ArrayOfCommentModVoting | ArrayOfCommentMod | ArrayOfComment;
+};
+export type CreateCommentResponse = CreateCommentResponses[keyof CreateCommentResponses];
 //# sourceMappingURL=types.gen.d.ts.map
