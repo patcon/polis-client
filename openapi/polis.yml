@@ -242,9 +242,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "#/components/schemas/MathV3"
-                  - $ref: "#/components/schemas/MathV4"
+                $ref: "#/components/schemas/MathV3"
         "400":
           description: Bad request
           content:
