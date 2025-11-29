@@ -23,6 +23,41 @@ servers:
       server:
         default: https://pol.is
 paths:
+  /participationInit:
+   get:
+      tags:
+        - initialization
+      operationId: getInitialization
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Alphnumeric ID for conversation
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+        - name: xid
+          in: query
+          description: Conversation-specific external participant ID. When provided, an auth token will be returned.
+          required: false
+          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+          schema:
+            type: string
+      responses:
+        "200":
+          description: An array of comment objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArrayOfReport"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
   /reports:
     get:
       tags:
@@ -92,11 +127,87 @@ paths:
             pattern: ^[0-9][a-z0-9]+$
         - name: pid
           in: query
-          description: Conversation-specific numeric ID of participant
+          description: Conversation-specific participant ID
           required: false
-          example: 0
+          example: 42
           schema:
             type: integer
+        - name: xid
+          in: query
+          description: Conversation-specific external participant ID.
+          required: false
+          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+          schema:
+            type: string
+      responses:
+        "200":
+          description: An array of comment objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArrayOfVote"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
+    post:
+      tags:
+        - votes
+      operationId: createVote
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Conversation ID
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+        - name: tid
+          in: query
+          description: Conversation-specific statement ID
+          required: true
+          example: 24
+          schema:
+            type: integer
+        - name: vote
+          in: query
+          description: Conversation-specific statement ID
+          required: true
+          example: -1
+          schema:
+            type: integer
+            enum: [-1, 0, 1]
+        - name: xid
+          in: query
+          description: Conversation-specific external participant ID
+          required: false
+          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+          schema:
+            type: string
+        - name: high_priority
+          in: query
+          description: User has marked voted statement as high priority
+          required: false
+          schema:
+            type: boolean
+        - name: lang
+          in: query
+          description: UI language of voting user. No longer used in UI.
+          deprecated: true
+          required: false
+          schema:
+            type: boolean
+        - name: starred
+          in: query
+          description: User has marked voted statement as starred. No longer used in UI.
+          deprecated: true
+          required: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: An array of comment objects
@@ -131,7 +242,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Math"
+                oneOf:
+                  - $ref: "#/components/schemas/MathV3"
+                  - $ref: "#/components/schemas/MathV4"
         "400":
           description: Bad request
           content:
@@ -214,13 +327,86 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiError"
       security: []
+    post:
+      tags:
+        - comments
+      summary: Create comment
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+        interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
+      operationId: createComment
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Conversation ID
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+        - name: txt
+          in: query
+          description: Content of the submitted statement
+          required: true
+          example: I feel a certain way about this topic.
+          schema:
+            type: string
+        - name: xid
+          in: query
+          description: Conversation-specific external participant ID
+          required: false
+          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+          schema:
+            type: string
+        - name: is_seed
+          in: query
+          description: Whether this statement is a seed statement
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: vote
+          in: query
+          description: Implicit vote when submitting statement
+          schema:
+            type: integer
+            enum: [-1, 0, 1]
+      responses:
+        "200":
+          description: An array of comment objects
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/ArrayOfCommentModVoting"
+                  - $ref: "#/components/schemas/ArrayOfCommentMod"
+                  - $ref: "#/components/schemas/ArrayOfComment"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
 components:
   schemas:
-    Math:
+    MathV3:
+      type: object
+
+    MathV4:
       type: object
       properties:
-        math_tick:
+        asBufferOfGzippedJson:
+          type: object
+        asPOJO:
+          $ref: "#/components/schemas/MathV3"
+        asJSON:
+          type: string
+        consensus:
+          type: object
+        expiration:
           type: integer
+        repness:
+          type: object
 
     Vote:
       type: object
@@ -255,18 +441,104 @@ components:
     Conversation:
       type: object
       properties:
-        topic:
+        auth_needed_to_vote:
+          type: string
+        auth_needed_to_write:
+          type: string
+        auth_opt_allow_3rdparty:
+          type: string
+        auth_opt_fb:
+          type: string
+        auth_opt_tw:
+          type: string
+        bgcolor:
+          type: string
+        context:
+          type: string
+        conversation_id:
+          type: string
+        course_id:
+          type: string
+        # below: created
+        dataset_explanation:
           type: string
         description:
           type: string
-        is_anon:
+        email_domain:
+          type: string
+        help_bgcolor:
+          type: string
+        help_color:
+          type: string
+        help_type:
+          type: string
+        importance_enabled:
           type: boolean
         is_active:
           type: boolean
+        is_anon:
+          type: boolean
+        is_curated:
+          type: boolean
+        is_data_open:
+          type: boolean
         is_draft:
+          type: boolean
+        is_mod:
+          type: boolean
+        is_owner:
           type: boolean
         is_public:
           type: boolean
+        link_url:
+          type: string
+        # below: modified
+        need_suzinvite:
+          type: string
+        org_id:
+          type: string
+        owner:
+          type: string
+        owner_sees_participation_stats:
+          type: string
+        ownername:
+          type: string
+        parent_url:
+          type: string
+        participant_count:
+          type: string
+        prioritize_seed:
+          type: string
+        profanity_filter:
+          type: string
+        site_id:
+          type: string
+        socialbtn_type:
+          type: string
+        spam_filter:
+          type: string
+        strict_moderation:
+          type: string
+        style_btn:
+          type: string
+        subscribe_type:
+          type: string
+        topic:
+          type: string
+        translations:
+          type: string
+        treevite_enabled:
+          type: boolean
+        upvotes:
+          type: string
+        use_xid_whitelist:
+          type: string
+        vis_type:
+          type: string
+        write_hint_type:
+          type: string
+        write_type:
+          type: string
 
         created:
           type: integer
@@ -278,6 +550,29 @@ components:
           description: Unix timestamp of report modification time
           format: int64
           example: 1403054214174
+
+    ParticipationInit:
+      type: object
+      properties:
+        acceptLanguage:
+          type: string
+        conversation:
+          $ref: "#/components/schemas/Conversation"
+        famous:
+          type: object
+        nextComment:
+          type: object
+        pca:
+          $ref: "#/components/schemas/MathV4"
+        ptpt:
+          type: object
+          nullable: true
+        user:
+          type: object
+        votes:
+          type: array
+          items:
+            type: object
 
     Report:
       required:
