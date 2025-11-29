@@ -9,7 +9,7 @@ type VotesQuery = GetVotesData["query"];
 type ExtraVotesQuery = Omit<VotesQuery, "conversation_id">;
 type ReportQuery = GetReportData["query"];
 type ExtraReportQuery = Omit<ReportQuery, "report_id">;
-export declare const DEFAULT_BASE_URL = "https://pol.is/api/v3";
+export declare const DEFAULT_BASE_URL = "https://pol.is";
 export declare class PolisClient {
     constructor(options?: {
         baseUrl?: string;

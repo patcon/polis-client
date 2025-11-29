@@ -4,13 +4,14 @@ import * as Reports from "./generated/sdk.gen.js";
 import * as Conversations from "./generated/sdk.gen.js";
 import * as Math from "./generated/sdk.gen.js";
 import * as Votes from "./generated/sdk.gen.js";
-export const DEFAULT_BASE_URL = "https://pol.is/api/v3";
+export const DEFAULT_BASE_URL = "https://pol.is";
 export class PolisClient {
     constructor(options) {
         const { baseUrl = DEFAULT_BASE_URL, headers = {} } = options ?? {};
+        const versionedBaseUrl = `${baseUrl}/api/v3`;
         // configure the internal generated client once
         GeneratedClient.setConfig({
-            baseUrl,
+            baseUrl: versionedBaseUrl,
             headers,
         });
     }
@@ -24,7 +25,11 @@ export class PolisClient {
             include_voting_patterns: true,
         };
         const res = await Comments.getComments({
-            query: { conversation_id: conversationId, ...extraQuery },
+            query: {
+                conversation_id: conversationId,
+                ...defaultQuery,
+                ...extraQuery,
+            },
         });
         return res.data;
     }
