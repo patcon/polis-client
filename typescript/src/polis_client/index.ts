@@ -3,13 +3,15 @@ import * as Comments from "./generated/sdk.gen.js";
 import * as Reports from "./generated/sdk.gen.js";
 import * as Conversations from "./generated/sdk.gen.js";
 import * as Math from "./generated/sdk.gen.js";
-import * as Votes from "./generated/sdk.gen.js"
+import * as Votes from "./generated/sdk.gen.js";
+import * as Initialization from "./generated/sdk.gen.js";
 import type {
   GetCommentsData,
   GetConversationData,
   GetMathData,
   GetVotesData,
   GetReportData,
+  GetInitializationData,
 } from "./generated/types.gen.js"
 
 
@@ -28,18 +30,56 @@ type ExtraVotesQuery = Omit<VotesQuery, "conversation_id">;
 type ReportQuery = GetReportData["query"];
 type ExtraReportQuery = Omit<ReportQuery, "report_id">;
 
+type InitializationQuery = GetInitializationData["query"];
+type ExtraInitializationQuery = Omit<InitializationQuery, "conversation_id">;
+
 export const DEFAULT_BASE_URL = "https://pol.is";
 
 export class PolisClient {
-  constructor(options?: { baseUrl?: string; headers?: Record<string, string> }) {
-    const { baseUrl = DEFAULT_BASE_URL, headers = {} } = options ?? {};
-    const versionedBaseUrl = `${baseUrl}/api/v3`;
+  private token: string | null = null;
+  private xid?: string;
+  private readonly baseUrl: string;
+
+  constructor(options?: {
+    baseUrl?: string;
+    xid?: string;
+    headers?: Record<string, string>
+  }) {
+    const { baseUrl = DEFAULT_BASE_URL, xid, headers } = options ?? {};
+    this.baseUrl = `${baseUrl}/api/v3`;
+    this.xid = xid;
 
     // configure the internal generated client once
     GeneratedClient.setConfig({
-      baseUrl: versionedBaseUrl,
+      baseUrl: this.baseUrl,
       headers,
     });
+
+    // Request interceptor: inject auth
+    GeneratedClient.interceptors.request.use(async (req, options) => {
+      const conversationId = options.query?.conversation_id as string | undefined;
+
+      // Bail if we're already grabbing a token
+      if (options.url.includes("participationInit")) return req
+
+      // Ensure token before sending request
+      if (!this.token && this.xid && conversationId) {
+        await this.fetchToken(conversationId, this.xid); // lazy token init
+      }
+
+      if (this.token) {
+        req.headers.set("Authorization", `Bearer ${this.token}`);
+      }
+
+      return req;
+    });
+  }
+
+  async fetchToken(conversationId: string, xid: string) {
+    const res = await Initialization.getInitialization({
+      query: { conversation_id: conversationId, xid },
+    });
+    this.token = res.data?.auth?.token ?? null;
   }
 
   // -------------------------------
@@ -89,6 +129,13 @@ export class PolisClient {
 
   async getVotes(conversationId: string, extraQuery: ExtraVotesQuery = {}) {
     const res = await Votes.getVotes({
+      query: { conversation_id: conversationId, ...extraQuery },
+    });
+    return res.data;
+  }
+
+  async getInitialization(conversationId: string, extraQuery: ExtraInitializationQuery = {}) {
+    const res = await Initialization.getInitialization({
       query: { conversation_id: conversationId, ...extraQuery },
     });
     return res.data;

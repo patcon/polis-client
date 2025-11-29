@@ -2,6 +2,7 @@
 import { PolisClient } from "./src/polis_client";
 
 async function main() {
+  // const polis = new PolisClient({ xid: "foobar" });
   const polis = new PolisClient();
 
   try {
@@ -23,6 +24,11 @@ async function main() {
     console.log("\nFetching math…");
     const math = await polis.getMath("2demo");
     console.log("Math:", math);
+
+    console.log("\nFetching participationInit…");
+    const init = await polis.getInitialization("2demo");
+    console.log("ParticipationInit:", init);
+
 
   } catch (err) {
     console.error("\n❌ Error during debug run:");

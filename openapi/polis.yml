@@ -46,11 +46,11 @@ paths:
             type: string
       responses:
         "200":
-          description: An array of comment objects
+          description: A participation interface initialization object
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ArrayOfReport"
+                $ref: "#/components/schemas/ParticipationInit"
         "400":
           description: Bad request
           content:
@@ -571,6 +571,21 @@ components:
           type: array
           items:
             type: object
+        auth:
+          $ref: "#/components/schemas/AuthTokenResponse"
+
+
+    ### Not working with openapi-python-client
+
+    # ParticipationInitAlt:
+    #   anyOf:
+    #     - $ref: "#/components/schemas/ParticipationInit"
+    #     - allOf:
+    #       - $ref: "#/components/schemas/ParticipationInit"
+    #       - type: object
+    #         properties:
+    #           auth:
+    #             $ref: "#/components/schemas/AuthTokenResponse"
 
     Report:
       required:
@@ -693,6 +708,17 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/CommentModVoting"
+
+    AuthTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        token_type:
+          type: string
+        expires_in:
+          type: integer
+
     ApiError:
       type: string
       example: polis_err_param_parse_failed_conversation_id
