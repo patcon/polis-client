@@ -4,16 +4,45 @@ import * as Reports from "./generated/sdk.gen.js";
 import * as Conversations from "./generated/sdk.gen.js";
 import * as Math from "./generated/sdk.gen.js";
 import * as Votes from "./generated/sdk.gen.js";
+import * as Initialization from "./generated/sdk.gen.js";
 export const DEFAULT_BASE_URL = "https://pol.is";
 export class PolisClient {
     constructor(options) {
-        const { baseUrl = DEFAULT_BASE_URL, headers = {} } = options ?? {};
-        const versionedBaseUrl = `${baseUrl}/api/v3`;
+        this.token = null;
+        const { baseUrl = DEFAULT_BASE_URL, xid, headers } = options ?? {};
+        this.baseUrl = `${baseUrl}/api/v3`;
+        this.xid = xid;
         // configure the internal generated client once
         GeneratedClient.setConfig({
-            baseUrl: versionedBaseUrl,
+            baseUrl: this.baseUrl,
             headers,
         });
+        // Request interceptor: inject auth and optional X-Id header
+        GeneratedClient.interceptors.request.use(async (req) => {
+            // Ensure token before sending request
+            if (!this.token) {
+                await this.fetchToken(req.url); // lazy token init
+            }
+            if (this.token) {
+                req.headers.set("Authorization", `Bearer ${this.token}`);
+            }
+            return req;
+        });
+    }
+    async fetchToken(conversationUrl) {
+        // Extract conversationId if needed
+        const conversationId = this.extractConversationId(conversationUrl);
+        const res = await Initialization.getInitialization({
+            query: { conversation_id: conversationId ?? "" },
+        });
+        this.token = res.data?.auth?.token ?? null;
+    }
+    extractConversationId(url) {
+        // crude example: parse conversation_id from query string
+        if (!url)
+            return undefined;
+        const match = url.match(/[?&]conversation_id=([^&]+)/);
+        return match ? decodeURIComponent(match[1]) : undefined;
     }
     // -------------------------------
     // Instance methods — Python style
@@ -55,6 +84,12 @@ export class PolisClient {
     }
     async getVotes(conversationId, extraQuery = {}) {
         const res = await Votes.getVotes({
+            query: { conversation_id: conversationId, ...extraQuery },
+        });
+        return res.data;
+    }
+    async getInitialization(conversationId, extraQuery = {}) {
+        const res = await Initialization.getInitialization({
             query: { conversation_id: conversationId, ...extraQuery },
         });
         return res.data;

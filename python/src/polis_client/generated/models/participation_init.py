@@ -9,6 +9,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.auth_token_response import AuthTokenResponse
     from ..models.conversation import Conversation
     from ..models.math_v4 import MathV4
     from ..models.participation_init_famous import ParticipationInitFamous
@@ -33,6 +34,7 @@ class ParticipationInit:
         ptpt (None | ParticipationInitPtptType0 | Unset):
         user (ParticipationInitUser | Unset):
         votes (list[ParticipationInitVotesItem] | Unset):
+        auth (AuthTokenResponse | Unset):
     """
 
     accept_language: str | Unset = UNSET
@@ -43,6 +45,7 @@ class ParticipationInit:
     ptpt: None | ParticipationInitPtptType0 | Unset = UNSET
     user: ParticipationInitUser | Unset = UNSET
     votes: list[ParticipationInitVotesItem] | Unset = UNSET
+    auth: AuthTokenResponse | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -85,6 +88,10 @@ class ParticipationInit:
                 votes_item = votes_item_data.to_dict()
                 votes.append(votes_item)
 
+        auth: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.auth, Unset):
+            auth = self.auth.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -104,11 +111,14 @@ class ParticipationInit:
             field_dict["user"] = user
         if votes is not UNSET:
             field_dict["votes"] = votes
+        if auth is not UNSET:
+            field_dict["auth"] = auth
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.auth_token_response import AuthTokenResponse
         from ..models.conversation import Conversation
         from ..models.math_v4 import MathV4
         from ..models.participation_init_famous import ParticipationInitFamous
@@ -183,6 +193,13 @@ class ParticipationInit:
 
                 votes.append(votes_item)
 
+        _auth = d.pop("auth", UNSET)
+        auth: AuthTokenResponse | Unset
+        if isinstance(_auth, Unset):
+            auth = UNSET
+        else:
+            auth = AuthTokenResponse.from_dict(_auth)
+
         participation_init = cls(
             accept_language=accept_language,
             conversation=conversation,
@@ -192,6 +209,7 @@ class ParticipationInit:
             ptpt=ptpt,
             user=user,
             votes=votes,
+            auth=auth,
         )
 
         participation_init.additional_properties = d

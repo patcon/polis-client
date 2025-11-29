@@ -1,5 +1,6 @@
 """Contains all the data models used in inputs/outputs"""
 
+from .auth_token_response import AuthTokenResponse
 from .comment import Comment
 from .comment_mod import CommentMod
 from .comment_mod_mod import CommentModMod
@@ -24,6 +25,7 @@ from .report import Report
 from .vote import Vote
 
 __all__ = (
+    "AuthTokenResponse",
     "Comment",
     "CommentMod",
     "CommentModMod",

@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.report import Report
+from ...models.participation_init import ParticipationInit
 from ...types import UNSET, Response, Unset
 
 
@@ -33,16 +33,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> list[Report] | str | None:
+) -> ParticipationInit | str | None:
     if response.status_code == 200:
-        response_200 = []
-        _response_200 = response.json()
-        for componentsschemas_array_of_report_item_data in _response_200:
-            componentsschemas_array_of_report_item = Report.from_dict(
-                componentsschemas_array_of_report_item_data
-            )
-
-            response_200.append(componentsschemas_array_of_report_item)
+        response_200 = ParticipationInit.from_dict(response.json())
 
         return response_200
 
@@ -58,7 +51,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[list[Report] | str]:
+) -> Response[ParticipationInit | str]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -72,7 +65,7 @@ def sync_detailed(
     client: AuthenticatedClient | Client,
     conversation_id: str,
     xid: str | Unset = UNSET,
-) -> Response[list[Report] | str]:
+) -> Response[ParticipationInit | str]:
     """
     Args:
         conversation_id (str):
@@ -83,7 +76,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[list[Report] | str]
+        Response[ParticipationInit | str]
     """
 
     kwargs = _get_kwargs(
@@ -103,7 +96,7 @@ def sync(
     client: AuthenticatedClient | Client,
     conversation_id: str,
     xid: str | Unset = UNSET,
-) -> list[Report] | str | None:
+) -> ParticipationInit | str | None:
     """
     Args:
         conversation_id (str):
@@ -114,7 +107,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        list[Report] | str
+        ParticipationInit | str
     """
 
     return sync_detailed(
@@ -129,7 +122,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient | Client,
     conversation_id: str,
     xid: str | Unset = UNSET,
-) -> Response[list[Report] | str]:
+) -> Response[ParticipationInit | str]:
     """
     Args:
         conversation_id (str):
@@ -140,7 +133,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[list[Report] | str]
+        Response[ParticipationInit | str]
     """
 
     kwargs = _get_kwargs(
@@ -158,7 +151,7 @@ async def asyncio(
     client: AuthenticatedClient | Client,
     conversation_id: str,
     xid: str | Unset = UNSET,
-) -> list[Report] | str | None:
+) -> ParticipationInit | str | None:
     """
     Args:
         conversation_id (str):
@@ -169,7 +162,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        list[Report] | str
+        ParticipationInit | str
     """
 
     return (

@@ -115,6 +115,7 @@ export type ParticipationInit = {
     votes?: Array<{
         [key: string]: unknown;
     }>;
+    auth?: AuthTokenResponse;
 };
 
 export type Report = {
@@ -188,6 +189,12 @@ export type ArrayOfCommentMod = Array<CommentMod>;
 
 export type ArrayOfCommentModVoting = Array<CommentModVoting>;
 
+export type AuthTokenResponse = {
+    token?: string;
+    token_type?: string;
+    expires_in?: number;
+};
+
 export type ApiError = string;
 
 export type GetInitializationData = {
@@ -217,9 +224,9 @@ export type GetInitializationError = GetInitializationErrors[keyof GetInitializa
 
 export type GetInitializationResponses = {
     /**
-     * An array of comment objects
+     * A participation interface initialization object
      */
-    200: ArrayOfReport;
+    200: ParticipationInit;
 };
 
 export type GetInitializationResponse = GetInitializationResponses[keyof GetInitializationResponses];
@@ -402,7 +409,7 @@ export type GetMathResponses = {
     /**
      * An array of comment objects
      */
-    200: MathV3 | MathV4;
+    200: MathV3;
 };
 
 export type GetMathResponse = GetMathResponses[keyof GetMathResponses];
