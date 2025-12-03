@@ -23,8 +23,64 @@ servers:
       server:
         default: https://pol.is
 paths:
+  /conversationUuid:
+    get:
+      tags:
+        - conversations
+      operationId: getConversationUuid
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Alphnumeric ID for conversation
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+      responses:
+        "200":
+          description: CSV with participant and xid columns
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConversationUuid"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
+  /xid/{conversation_uuid}:
+    get:
+      tags:
+        - participants
+      operationId: getXids
+      parameters:
+        - name: conversation_uuid
+          in: path
+          description: UUID for conversation
+          required: true
+          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+          schema:
+            type: string
+            pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+      responses:
+        "200":
+          description: CSV with participant and xid columns
+          content:
+            text/csv:
+              schema:
+                $ref: "#/components/schemas/XidCSV"
+        "400":
+          description: Bad request
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      security: []
   /participationInit:
-   get:
+    get:
       tags:
         - initialization
       operationId: getInitialization
@@ -37,13 +93,6 @@ paths:
           schema:
             type: string
             pattern: ^[0-9][a-z0-9]+$
-        - name: xid
-          in: query
-          description: Conversation-specific external participant ID. When provided, an auth token will be returned.
-          required: false
-          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
-          schema:
-            type: string
       responses:
         "200":
           description: A participation interface initialization object
@@ -387,6 +436,20 @@ paths:
       security: []
 components:
   schemas:
+    ConversationUuid:
+      type: object
+      properties:
+        conversation_uuid:
+          type: string
+
+    XidCSV:
+      type: string
+      example: |
+        participant,xid
+        1,"some-random-string"
+        5,"4880f45f-cc46-4829-b189-577fce9540cb"
+        23,"1234567890"
+
     MathV3:
       type: object
 
