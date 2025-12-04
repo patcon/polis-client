@@ -115,4 +115,4 @@ export class PolisClient {
         return res.data;
     }
 }
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=client.js.map

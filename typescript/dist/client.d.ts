@@ -36,4 +36,4 @@ export declare class PolisClient {
     getInitialization(conversationId: string, extraQuery?: ExtraInitializationQuery): Promise<import("./generated/types.gen.js").ParticipationInit | undefined>;
 }
 export {};
-//# sourceMappingURL=index.d.ts.map
+//# sourceMappingURL=client.d.ts.map
