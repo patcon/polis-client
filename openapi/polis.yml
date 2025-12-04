@@ -54,8 +54,8 @@ paths:
   /xid/{conversation_uuid}:
     get:
       tags:
-        - participants
-      operationId: getXids
+        - conversations
+      operationId: getConversationXids
       parameters:
         - name: conversation_uuid
           in: path

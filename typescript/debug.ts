@@ -44,8 +44,14 @@ async function main() {
     await polisAuth.fetchToken("2demo");
 
     console.log("\nFetching conversation uuid…");
-    const conversationUuid = await polisAuth.getConversationUuid("2demo") ?? {} ;
+    const { conversation_uuid: conversationUuid } = await polisAuth.getConversationUuid("2demo") ?? {};
     console.log(conversationUuid);
+
+    if (conversationUuid) {
+      console.log("\nFetching conversation xids…");
+      const conversationXids = await polisAuth.getConversationXids(conversationUuid);
+      console.log(conversationXids);
+    }
 
   } catch (err) {
     console.error("\n❌ Error during anon debug run:");
