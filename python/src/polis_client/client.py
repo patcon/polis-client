@@ -23,7 +23,6 @@ class PolisClient(GeneratedClient):
         self.xid: str | None = xid
 
         # bind once, then use normally
-        self.get_comments = bind(self, get_comments.sync)
         self.get_conversation = bind(self, get_conversation.sync)
         self.get_math = bind(self, get_math.sync)
         self.get_votes = bind(self, get_votes.sync)
@@ -57,7 +56,25 @@ class PolisClient(GeneratedClient):
         auth_obj = getattr(init, "auth", None)
         token_val = getattr(auth_obj, "token", None) if auth_obj else None
         self.token = token_val
-        
+
         if self.token:
             self._inject_auth()
 
+    def get_comments(
+        self,
+        conversation_id: str,
+        moderation: bool = True,
+        include_voting_patterns: bool = True,
+        **kwargs,
+    ):
+        """
+        Wrapper around the generated get_comments.sync to provide default values
+        for moderation and include_voting_patterns, while still allowing overrides.
+        """
+        return get_comments.sync(
+            client=self,
+            conversation_id=conversation_id,
+            moderation=moderation,
+            include_voting_patterns=include_voting_patterns,
+            **kwargs
+        )
