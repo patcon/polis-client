@@ -6,8 +6,9 @@ from .comment_mod import CommentMod
 from .comment_mod_mod import CommentModMod
 from .comment_mod_voting import CommentModVoting
 from .conversation import Conversation
+from .conversation_uuid import ConversationUuid
 from .create_comment_vote import CreateCommentVote
-from .create_vote_vote import CreateVoteVote
+from .create_vote_body import CreateVoteBody
 from .get_comments_mod import GetCommentsMod
 from .get_comments_mod_gt import GetCommentsModGt
 from .math_v3 import MathV3
@@ -31,8 +32,9 @@ __all__ = (
     "CommentModMod",
     "CommentModVoting",
     "Conversation",
+    "ConversationUuid",
     "CreateCommentVote",
-    "CreateVoteVote",
+    "CreateVoteBody",
     "GetCommentsMod",
     "GetCommentsModGt",
     "MathV3",

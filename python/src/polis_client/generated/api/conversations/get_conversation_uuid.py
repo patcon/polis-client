@@ -5,53 +5,34 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.create_vote_body import CreateVoteBody
-from ...models.vote import Vote
-from ...types import UNSET, Response, Unset
+from ...models.conversation_uuid import ConversationUuid
+from ...types import UNSET, Response
 
 
 def _get_kwargs(
     *,
-    body: CreateVoteBody,
     conversation_id: str,
-    xid: str | Unset = UNSET,
 ) -> dict[str, Any]:
-    headers: dict[str, Any] = {}
-
     params: dict[str, Any] = {}
 
     params["conversation_id"] = conversation_id
 
-    params["xid"] = xid
-
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
-        "method": "post",
-        "url": "/votes",
+        "method": "get",
+        "url": "/conversationUuid",
         "params": params,
     }
 
-    _kwargs["json"] = body.to_dict()
-
-    headers["Content-Type"] = "application/json"
-
-    _kwargs["headers"] = headers
     return _kwargs
 
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> list[Vote] | str | None:
+) -> ConversationUuid | str | None:
     if response.status_code == 200:
-        response_200 = []
-        _response_200 = response.json()
-        for componentsschemas_array_of_vote_item_data in _response_200:
-            componentsschemas_array_of_vote_item = Vote.from_dict(
-                componentsschemas_array_of_vote_item_data
-            )
-
-            response_200.append(componentsschemas_array_of_vote_item)
+        response_200 = ConversationUuid.from_dict(response.json())
 
         return response_200
 
@@ -67,7 +48,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[list[Vote] | str]:
+) -> Response[ConversationUuid | str]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -79,28 +60,22 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
-    body: CreateVoteBody,
     conversation_id: str,
-    xid: str | Unset = UNSET,
-) -> Response[list[Vote] | str]:
+) -> Response[ConversationUuid | str]:
     """
     Args:
         conversation_id (str):
-        xid (str | Unset):
-        body (CreateVoteBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[list[Vote] | str]
+        Response[ConversationUuid | str]
     """
 
     kwargs = _get_kwargs(
-        body=body,
         conversation_id=conversation_id,
-        xid=xid,
     )
 
     response = client.get_httpx_client().request(
@@ -113,57 +88,45 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient | Client,
-    body: CreateVoteBody,
     conversation_id: str,
-    xid: str | Unset = UNSET,
-) -> list[Vote] | str | None:
+) -> ConversationUuid | str | None:
     """
     Args:
         conversation_id (str):
-        xid (str | Unset):
-        body (CreateVoteBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        list[Vote] | str
+        ConversationUuid | str
     """
 
     return sync_detailed(
         client=client,
-        body=body,
         conversation_id=conversation_id,
-        xid=xid,
     ).parsed
 
 
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
-    body: CreateVoteBody,
     conversation_id: str,
-    xid: str | Unset = UNSET,
-) -> Response[list[Vote] | str]:
+) -> Response[ConversationUuid | str]:
     """
     Args:
         conversation_id (str):
-        xid (str | Unset):
-        body (CreateVoteBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[list[Vote] | str]
+        Response[ConversationUuid | str]
     """
 
     kwargs = _get_kwargs(
-        body=body,
         conversation_id=conversation_id,
-        xid=xid,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -174,29 +137,23 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient | Client,
-    body: CreateVoteBody,
     conversation_id: str,
-    xid: str | Unset = UNSET,
-) -> list[Vote] | str | None:
+) -> ConversationUuid | str | None:
     """
     Args:
         conversation_id (str):
-        xid (str | Unset):
-        body (CreateVoteBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        list[Vote] | str
+        ConversationUuid | str
     """
 
     return (
         await asyncio_detailed(
             client=client,
-            body=body,
             conversation_id=conversation_id,
-            xid=xid,
         )
     ).parsed

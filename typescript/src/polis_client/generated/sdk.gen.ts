@@ -2,7 +2,7 @@
 
 import { client } from './client.gen.js';
 import type { Client, Options as Options2, TDataShape } from './client/index.js';
-import type { CreateCommentData, CreateCommentErrors, CreateCommentResponses, CreateVoteData, CreateVoteErrors, CreateVoteResponses, GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetInitializationData, GetInitializationErrors, GetInitializationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses } from './types.gen.js';
+import type { CreateCommentData, CreateCommentErrors, CreateCommentResponses, CreateVoteData, CreateVoteErrors, CreateVoteResponses, GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetConversationUuidData, GetConversationUuidErrors, GetConversationUuidResponses, GetInitializationData, GetInitializationErrors, GetInitializationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses, GetXidsData, GetXidsErrors, GetXidsResponses } from './types.gen.js';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -18,6 +18,10 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: Record<string, unknown>;
 };
 
+export const getConversationUuid = <ThrowOnError extends boolean = false>(options: Options<GetConversationUuidData, ThrowOnError>) => (options.client ?? client).get<GetConversationUuidResponses, GetConversationUuidErrors, ThrowOnError>({ url: '/conversationUuid', ...options });
+
+export const getXids = <ThrowOnError extends boolean = false>(options: Options<GetXidsData, ThrowOnError>) => (options.client ?? client).get<GetXidsResponses, GetXidsErrors, ThrowOnError>({ url: '/xid/{conversation_uuid}', ...options });
+
 export const getInitialization = <ThrowOnError extends boolean = false>(options: Options<GetInitializationData, ThrowOnError>) => (options.client ?? client).get<GetInitializationResponses, GetInitializationErrors, ThrowOnError>({ url: '/participationInit', ...options });
 
 export const getReport = <ThrowOnError extends boolean = false>(options?: Options<GetReportData, ThrowOnError>) => (options?.client ?? client).get<GetReportResponses, GetReportErrors, ThrowOnError>({ url: '/reports', ...options });
@@ -26,7 +30,14 @@ export const getConversation = <ThrowOnError extends boolean = false>(options: O
 
 export const getVotes = <ThrowOnError extends boolean = false>(options: Options<GetVotesData, ThrowOnError>) => (options.client ?? client).get<GetVotesResponses, GetVotesErrors, ThrowOnError>({ url: '/votes', ...options });
 
-export const createVote = <ThrowOnError extends boolean = false>(options: Options<CreateVoteData, ThrowOnError>) => (options.client ?? client).post<CreateVoteResponses, CreateVoteErrors, ThrowOnError>({ url: '/votes', ...options });
+export const createVote = <ThrowOnError extends boolean = false>(options: Options<CreateVoteData, ThrowOnError>) => (options.client ?? client).post<CreateVoteResponses, CreateVoteErrors, ThrowOnError>({
+    url: '/votes',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 export const getMath = <ThrowOnError extends boolean = false>(options: Options<GetMathData, ThrowOnError>) => (options.client ?? client).get<GetMathResponses, GetMathErrors, ThrowOnError>({ url: '/math/pca2', ...options });
 

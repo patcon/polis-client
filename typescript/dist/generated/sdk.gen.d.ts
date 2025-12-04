@@ -1,5 +1,5 @@
 import type { Client, Options as Options2, TDataShape } from './client/index.js';
-import type { CreateCommentData, CreateCommentErrors, CreateCommentResponses, CreateVoteData, CreateVoteErrors, CreateVoteResponses, GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetInitializationData, GetInitializationErrors, GetInitializationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses } from './types.gen.js';
+import type { CreateCommentData, CreateCommentErrors, CreateCommentResponses, CreateVoteData, CreateVoteErrors, CreateVoteResponses, GetCommentsData, GetCommentsErrors, GetCommentsResponses, GetConversationData, GetConversationErrors, GetConversationResponses, GetConversationUuidData, GetConversationUuidErrors, GetConversationUuidResponses, GetInitializationData, GetInitializationErrors, GetInitializationResponses, GetMathData, GetMathErrors, GetMathResponses, GetReportData, GetReportErrors, GetReportResponses, GetVotesData, GetVotesErrors, GetVotesResponses, GetXidsData, GetXidsErrors, GetXidsResponses } from './types.gen.js';
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
      * You can provide a client instance returned by `createClient()` instead of
@@ -13,6 +13,8 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
      */
     meta?: Record<string, unknown>;
 };
+export declare const getConversationUuid: <ThrowOnError extends boolean = false>(options: Options<GetConversationUuidData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetConversationUuidResponses, GetConversationUuidErrors, ThrowOnError, "fields">;
+export declare const getXids: <ThrowOnError extends boolean = false>(options: Options<GetXidsData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetXidsResponses, GetXidsErrors, ThrowOnError, "fields">;
 export declare const getInitialization: <ThrowOnError extends boolean = false>(options: Options<GetInitializationData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetInitializationResponses, GetInitializationErrors, ThrowOnError, "fields">;
 export declare const getReport: <ThrowOnError extends boolean = false>(options?: Options<GetReportData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetReportResponses, GetReportErrors, ThrowOnError, "fields">;
 export declare const getConversation: <ThrowOnError extends boolean = false>(options: Options<GetConversationData, ThrowOnError>) => import("./client/types.gen.js").RequestResult<GetConversationResponses, GetConversationErrors, ThrowOnError, "fields">;

@@ -17,11 +17,15 @@ export class PolisClient {
             baseUrl: this.baseUrl,
             headers,
         });
-        // Request interceptor: inject auth and optional X-Id header
-        GeneratedClient.interceptors.request.use(async (req) => {
+        // Request interceptor: inject auth
+        GeneratedClient.interceptors.request.use(async (req, options) => {
+            const conversationId = options.query?.conversation_id;
+            // Bail if we're already grabbing a token
+            if (options.url.includes("participationInit"))
+                return req;
             // Ensure token before sending request
-            if (!this.token) {
-                await this.fetchToken(req.url); // lazy token init
+            if (!this.token && this.xid && conversationId) {
+                await this.fetchToken(conversationId, this.xid); // lazy token init
             }
             if (this.token) {
                 req.headers.set("Authorization", `Bearer ${this.token}`);
@@ -29,20 +33,11 @@ export class PolisClient {
             return req;
         });
     }
-    async fetchToken(conversationUrl) {
-        // Extract conversationId if needed
-        const conversationId = this.extractConversationId(conversationUrl);
+    async fetchToken(conversationId, xid) {
         const res = await Initialization.getInitialization({
-            query: { conversation_id: conversationId ?? "" },
+            query: { conversation_id: conversationId, xid: xid || this.xid },
         });
         this.token = res.data?.auth?.token ?? null;
-    }
-    extractConversationId(url) {
-        // crude example: parse conversation_id from query string
-        if (!url)
-            return undefined;
-        const match = url.match(/[?&]conversation_id=([^&]+)/);
-        return match ? decodeURIComponent(match[1]) : undefined;
     }
     // -------------------------------
     // Instance methods — Python style
@@ -76,6 +71,12 @@ export class PolisClient {
         });
         return res.data;
     }
+    async getConversationUuid(conversationId) {
+        const res = await Conversations.getConversationUuid({
+            query: { conversation_id: conversationId },
+        });
+        return res.data;
+    }
     async getMath(conversationId, extraQuery = {}) {
         const res = await Math.getMath({
             query: { conversation_id: conversationId, ...extraQuery },
@@ -85,6 +86,13 @@ export class PolisClient {
     async getVotes(conversationId, extraQuery = {}) {
         const res = await Votes.getVotes({
             query: { conversation_id: conversationId, ...extraQuery },
+        });
+        return res.data;
+    }
+    async createVote(conversationId, body) {
+        const res = await Votes.createVote({
+            body,
+            query: { conversation_id: conversationId },
         });
         return res.data;
     }

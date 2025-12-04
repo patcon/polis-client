@@ -79,10 +79,9 @@ export class PolisClient {
     });
   }
 
-  async fetchToken(conversationId: string, xid: string) {
+  async fetchToken(conversationId: string, xid?: string) {
     const res = await Initialization.getInitialization({
-      // xid needed here?
-      query: { conversation_id: conversationId },
+      query: { conversation_id: conversationId, xid: xid || this.xid },
     });
     this.token = res.data?.auth?.token ?? null;
   }
@@ -121,6 +120,13 @@ export class PolisClient {
   async getConversation(conversationId: string, extraQuery: ExtraConversationQuery = {}) {
     const res = await Conversations.getConversation({
       query: { conversation_id: conversationId, ...extraQuery },
+    });
+    return res.data;
+  }
+
+  async getConversationUuid(conversationId: string) {
+    const res = await Conversations.getConversationUuid({
+      query: { conversation_id: conversationId },
     });
     return res.data;
   }

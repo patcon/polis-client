@@ -1,6 +1,10 @@
 export type ClientOptions = {
     baseUrl: `${string}://{server}/api/v3` | (string & {});
 };
+export type ConversationUuid = {
+    conversation_uuid?: string;
+};
+export type XidCsv = string;
 export type MathV3 = {
     [key: string]: unknown;
 };
@@ -178,6 +182,56 @@ export type AuthTokenResponse = {
     expires_in?: number;
 };
 export type ApiError = string;
+export type GetConversationUuidData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Alphnumeric ID for conversation
+         */
+        conversation_id: string;
+    };
+    url: '/conversationUuid';
+};
+export type GetConversationUuidErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetConversationUuidError = GetConversationUuidErrors[keyof GetConversationUuidErrors];
+export type GetConversationUuidResponses = {
+    /**
+     * CSV with participant and xid columns
+     */
+    200: ConversationUuid;
+};
+export type GetConversationUuidResponse = GetConversationUuidResponses[keyof GetConversationUuidResponses];
+export type GetXidsData = {
+    body?: never;
+    path: {
+        /**
+         * UUID for conversation
+         */
+        conversation_uuid: string;
+    };
+    query?: never;
+    url: '/xid/{conversation_uuid}';
+};
+export type GetXidsErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+export type GetXidsError = GetXidsErrors[keyof GetXidsErrors];
+export type GetXidsResponses = {
+    /**
+     * CSV with participant and xid columns
+     */
+    200: XidCsv;
+};
+export type GetXidsResponse = GetXidsResponses[keyof GetXidsResponses];
 export type GetInitializationData = {
     body?: never;
     path?: never;
@@ -187,7 +241,7 @@ export type GetInitializationData = {
          */
         conversation_id: string;
         /**
-         * Conversation-specific external participant ID. When provided, an auth token will be returned.
+         * Conversation-specific external participant ID.
          */
         xid?: string;
     };
@@ -288,7 +342,13 @@ export type GetVotesResponses = {
 };
 export type GetVotesResponse = GetVotesResponses[keyof GetVotesResponses];
 export type CreateVoteData = {
-    body?: never;
+    body: {
+        tid: number;
+        vote: number;
+        high_priority?: boolean;
+        lang?: string;
+        starred?: boolean;
+    };
     path?: never;
     query: {
         /**
@@ -296,33 +356,9 @@ export type CreateVoteData = {
          */
         conversation_id: string;
         /**
-         * Conversation-specific statement ID
-         */
-        tid: number;
-        /**
-         * Conversation-specific statement ID
-         */
-        vote: -1 | 0 | 1;
-        /**
          * Conversation-specific external participant ID
          */
         xid?: string;
-        /**
-         * User has marked voted statement as high priority
-         */
-        high_priority?: boolean;
-        /**
-         * UI language of voting user. No longer used in UI.
-         *
-         * @deprecated
-         */
-        lang?: boolean;
-        /**
-         * User has marked voted statement as starred. No longer used in UI.
-         *
-         * @deprecated
-         */
-        starred?: boolean;
     };
     url: '/votes';
 };
