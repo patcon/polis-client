@@ -12,6 +12,7 @@ debug-py:
 
 regenerate-ts: ## Regenerate Typescript client code
 	rm -rf typescript/polis_client/generated
+	rm -rf typescript/dist
 	cd typescript && npm run build
 
 debug-ts:

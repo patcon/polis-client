@@ -18,16 +18,37 @@ pip install git+https://github.com/patcon/polis-client
 
 See: [`examples.ipynb`](examples.ipynb)
 
+## File Structure
+
+```
+./polis-client/
+├── Makefile                    # Shared: Build scripts
+├── README.md                   # Shared: Main project README
+├── openapi
+│   └── polis.yml               # Shared: OpenAPI spec
+├── pyproject.toml              # Python dependencies
+└── python
+    ├── README.md               # Python client README
+    ├── debug.py                # Messy testing file
+    ├── examples.ipynb          # Primary documentation
+    └── src
+        └── polis_client
+            ├── client.py       # Custom Python thin client
+            └── generated/      # Auto-generated client code
+```
+
 ## Development
 
-This project is structured around an OpenAPI definition at `../openapi/polis.yml`.
+(We use `uv`, but you can use any Python environment.)
 
-(We use `uv`, but you can use any virtualenv or not as a Python environment.)
+This project is structured around an OpenAPI definition at `../openapi/polis.yml`,
+from which most of the code in this repository is auto-generated.
 
 We have written a thin custom client around the auto-generated client code
 that is built (from the repository root) with:
 
     $ uv run make regenerate-py
 
-This command must be run whenever you update the YAML spec file, and
-the generated code committed.
+This command must be run whenever you update the YAML spec file. For legibility
+of commit history, any updates to auto-generated should be committed in a batch
+separate from your own changes. (e.g. "Adding auto-generated code.")

@@ -1,6 +1,6 @@
 {
   "name": "polis-client",
-  "module": "src/polis_client/index.ts",
+  "module": "src/polis_client/client.ts",
   "type": "module",
   "scripts": {
     "debug-ts": "tsx debug.ts",

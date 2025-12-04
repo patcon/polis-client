@@ -3,15 +3,15 @@
     "version": "0.0.0",
     "private": false,
 
-    "main": "./typescript/dist/index.js",
-    "module": "./typescript/dist/index.js",
-    "types": "./typescript/dist/index.d.ts",
+    "main": "./typescript/dist/client.js",
+    "module": "./typescript/dist/client.js",
+    "types": "./typescript/dist/client.d.ts",
 
     "exports": {
       ".": {
-        "import": "./typescript/dist/index.js",
-        "require": "./typescript/dist/index.js",
-        "types": "./typescript/dist/index.d.ts"
+        "import": "./typescript/dist/client.js",
+        "require": "./typescript/dist/client.js",
+        "types": "./typescript/dist/client.d.ts"
       }
     }
   }

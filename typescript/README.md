@@ -91,6 +91,30 @@ const comments = await polis.getComments(CONVO_ID);
 console.log("Comments:", comments);
 ```
 
+## File Structure
+
+```
+./polis-client/
+├── Makefile                    # Shared: Build scripts
+├── README.md                   # Shared: Main project README
+├── openapi
+│   └── polis.yml               # Shared: OpenAPI spec
+├── package.json                # Helper file to assist npm install
+└── typescript
+    ├── README.md               # JS/TS client README
+    ├── debug.ts                # Messy testing file
+    ├── dist/                   # Built JS files for CDN install
+    ├── openapi-ts.config.ts    # Build tool config
+    ├── package.json            # Javascript dependencies
+    ├── src
+    │   └── polis_client
+    │   └── polis_client
+    │       ├── generated/      # Auto-generated client code
+    │       ├── globals.d.ts    # Bugfix
+    │       └── index.ts        # Custom Typescript thin client
+    └── tsconfig.json           # TS config file
+```
+
 ## Development
 
 From the root directory, run

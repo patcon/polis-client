@@ -1,5 +1,5 @@
 // debug.ts
-import { PolisClient } from "./src/polis_client";
+import { PolisClient } from "./src/polis_client/client.ts";
 
 async function main() {
   console.log("Creating an anonymous client…");
