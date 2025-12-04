@@ -1,8 +1,12 @@
-from typing import Optional
+from typing import Optional, cast
+
+from polis_client.generated.models.get_export_file_filename import GetExportFileFilename
+
 from .generated.types import UNSET, Unset
 from .generated.models import CreateVoteBody
 from .generated.client import Client as GeneratedClient, AuthenticatedClient as AuthGeneratedClient
 from .generated.api.comments import get_comments, create_comment
+from .generated.api.exports import get_export_file
 from .generated.api.conversations import (
     get_conversation,
     get_conversation_xids_by_uuid,
@@ -14,6 +18,8 @@ from .generated.api.votes import get_votes, create_vote
 from .generated.api.initialization import get_initialization
 
 DEFAULT_BASE_URL = "https://pol.is/api/v3"
+
+_ALLOWED_EXPORT_FILES: set[str] = set(GetExportFileFilename.__args__) # type: ignore
 
 def bind(client, fn):
     """Return a version of fn with `client` pre-filled."""
@@ -130,3 +136,57 @@ class PolisClient(GeneratedClient):
         if self.xid and not self.token:
             self._ensure_token(conversation_id)
         return create_comment.sync(client=self, conversation_id=conversation_id, **kwargs)
+
+    def get_export_file(
+        self,
+        report_id: str,
+        filename: str = "summary.csv",
+        **kwargs,
+    ) -> str:
+        """
+        Download a CSV export file for a given report_id.
+
+        Supported files:
+            - summary.csv
+            - comments.csv
+            - votes.csv
+            - participant-votes.csv
+            - comment-groups.csv
+
+        Returns raw CSV text.
+        """
+        if filename not in _ALLOWED_EXPORT_FILES:
+            raise ValueError(
+                f"Invalid export file '{filename}'. Must be one of: {sorted(_ALLOWED_EXPORT_FILES)}"
+            )
+
+        result = get_export_file.sync(
+            client=self,
+            report_id=report_id,
+            filename=filename, # type: ignore
+            **kwargs,
+        )
+
+        if result is None:
+            raise RuntimeError(
+                f"Expected CSV text but received None for report_id={report_id} file={filename}"
+            )
+        return result
+
+    def get_full_export(self, report_id: str, **kwargs) -> dict[str, str]:
+        """
+        Download all CSV export files for a given report_id.
+
+        Returns a dictionary mapping each file name to its CSV content:
+            {
+                "summary.csv": "...",
+                "comments.csv": "...",
+                "votes.csv": "...",
+                "participant-votes.csv": "...",
+                "comment-groups.csv": "..."
+            }
+        """
+        exports: dict[str, str] = {}
+        for filename in _ALLOWED_EXPORT_FILES:
+            exports[filename] = self.get_export_file(report_id, filename=filename, **kwargs)
+        return exports
