@@ -54,7 +54,7 @@ async function main() {
     }
 
   } catch (err) {
-    console.error("\n❌ Error during anon debug run:");
+    console.error("\n❌ Error during authenticated xid debug run:");
     console.error(err);
     // @ts-expect-error
     process.exit(1);
