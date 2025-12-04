@@ -1,6 +1,8 @@
 from typing import Optional
-from .generated.client import Client as GeneratedClient
-from .generated.api.comments import get_comments
+from .generated.types import UNSET, Unset
+from .generated.models import CreateVoteBody
+from .generated.client import Client as GeneratedClient, AuthenticatedClient as AuthGeneratedClient
+from .generated.api.comments import get_comments, create_comment
 from .generated.api.conversations import (
     get_conversation,
     get_conversation_xids_by_uuid,
@@ -8,7 +10,7 @@ from .generated.api.conversations import (
 )
 from .generated.api.math import get_math
 from .generated.api.reports import get_report
-from .generated.api.votes import get_votes
+from .generated.api.votes import get_votes, create_vote
 from .generated.api.initialization import get_initialization
 
 DEFAULT_BASE_URL = "https://pol.is/api/v3"
@@ -22,7 +24,10 @@ class PolisClient(GeneratedClient):
         super().__init__(base_url=base_url, **kwargs)
 
         self.token: str | None = None
-        self.xid: str | None = xid
+        self.xid: str | Unset = xid if xid is not None else UNSET
+
+        # Create an internal AuthenticatedClient
+        # self._client = AuthGeneratedClient(base_url=base_url, headers={})
 
         # bind once, then use normally
         self.get_conversation = bind(self, get_conversation.sync)
@@ -43,6 +48,7 @@ class PolisClient(GeneratedClient):
     def _inject_auth(self):
         """Inject Authorization header if a token exists."""
         if self._client:
+            print("FOO")
             if self.token:
                 self._client.headers["Authorization"] = f"Bearer {self.token}"
             else:
@@ -112,3 +118,16 @@ class PolisClient(GeneratedClient):
 
     def get_conversation_xids(self, conversation_id: str):
         return self.get_conversation_xids_by_id(conversation_id)
+
+    def create_vote(self, conversation_id: str, **kwargs):
+        """Ensure token before creating a vote."""
+        if self.xid and not self.token:
+            self._ensure_token(conversation_id)
+
+        return create_vote.sync(client=self, body=CreateVoteBody(conversation_id=conversation_id, **kwargs))
+
+    def create_comment(self, conversation_id: str, **kwargs):
+        """Ensure token before creating a comment."""
+        if self.xid and not self.token:
+            self._ensure_token(conversation_id)
+        return create_comment.sync(client=self, conversation_id=conversation_id, **kwargs)

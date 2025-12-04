@@ -213,22 +213,14 @@ paths:
       tags:
         - votes
       operationId: createVote
-      parameters:
-        - name: conversation_id
-          in: query
-          description: Conversation ID
-          required: true
-          example: 2demo
-          schema:
-            type: string
-            pattern: ^[0-9][a-z0-9]+$
-        - name: xid
-          in: query
-          description: Conversation-specific external participant ID
-          required: false
-          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
-          schema:
-            type: string
+      # parameters:
+      #   - name: xid
+      #     in: query
+      #     description: Conversation-specific external participant ID
+      #     required: false
+      #     example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+      #     schema:
+      #       type: string
       requestBody:
         required: true
         content:
@@ -237,6 +229,8 @@ paths:
               type: object
               required: [tid, vote]
               properties:
+                conversation_id:
+                  type: string
                 tid:
                   type: integer
                 vote:
@@ -253,7 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ArrayOfVote"
+                $ref: "#/components/schemas/NextVote"
         "400":
           description: Bad request
           content:
@@ -458,6 +452,39 @@ components:
           type: integer
         repness:
           type: object
+
+    NextVote:
+      type: object
+      properties:
+        txt:
+          type: string
+        tid:
+          type: integer
+        created:
+          type: integer
+        quote_src_url:
+          type: string
+          nullable: true
+        is_seed:
+          type: boolean
+        is_meta:
+          type: boolean
+        lang:
+          type: string
+        pid:
+          type: integer
+        randomN:
+          type: number
+        remaining:
+          type: integer
+        total:
+          type: integer
+        translations:
+          type: array
+          items:
+            type: object
+        currentPid:
+          type: integer
 
     Vote:
       type: object
