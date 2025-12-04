@@ -215,21 +215,6 @@ paths:
           schema:
             type: string
             pattern: ^[0-9][a-z0-9]+$
-        - name: tid
-          in: query
-          description: Conversation-specific statement ID
-          required: true
-          example: 24
-          schema:
-            type: integer
-        - name: vote
-          in: query
-          description: Conversation-specific statement ID
-          required: true
-          example: -1
-          schema:
-            type: integer
-            enum: [-1, 0, 1]
         - name: xid
           in: query
           description: Conversation-specific external participant ID
@@ -237,26 +222,24 @@ paths:
           example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
           schema:
             type: string
-        - name: high_priority
-          in: query
-          description: User has marked voted statement as high priority
-          required: false
-          schema:
-            type: boolean
-        - name: lang
-          in: query
-          description: UI language of voting user. No longer used in UI.
-          deprecated: true
-          required: false
-          schema:
-            type: boolean
-        - name: starred
-          in: query
-          description: User has marked voted statement as starred. No longer used in UI.
-          deprecated: true
-          required: false
-          schema:
-            type: boolean
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tid, vote]
+              properties:
+                tid:
+                  type: integer
+                vote:
+                  type: integer
+                high_priority:
+                  type: boolean
+                lang:
+                  type: string
+                starred:
+                  type: boolean
       responses:
         "200":
           description: An array of comment objects

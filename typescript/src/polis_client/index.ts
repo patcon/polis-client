@@ -12,6 +12,8 @@ import type {
   GetVotesData,
   GetReportData,
   GetInitializationData,
+  CreateVoteData,
+  CreateCommentData,
 } from "./generated/types.gen.js"
 
 
@@ -26,6 +28,8 @@ type ExtraMathQuery = Omit<MathQuery, "conversation_id">;
 
 type VotesQuery = GetVotesData["query"];
 type ExtraVotesQuery = Omit<VotesQuery, "conversation_id">;
+
+type VoteBody = CreateVoteData["body"];
 
 type ReportQuery = GetReportData["query"];
 type ExtraReportQuery = Omit<ReportQuery, "report_id">;
@@ -77,7 +81,8 @@ export class PolisClient {
 
   async fetchToken(conversationId: string, xid: string) {
     const res = await Initialization.getInitialization({
-      query: { conversation_id: conversationId, xid },
+      // xid needed here?
+      query: { conversation_id: conversationId },
     });
     this.token = res.data?.auth?.token ?? null;
   }
@@ -130,6 +135,14 @@ export class PolisClient {
   async getVotes(conversationId: string, extraQuery: ExtraVotesQuery = {}) {
     const res = await Votes.getVotes({
       query: { conversation_id: conversationId, ...extraQuery },
+    });
+    return res.data;
+  }
+
+  async createVote(conversationId: string, body: VoteBody) {
+    const res = await Votes.createVote({
+      body,
+      query: { conversation_id: conversationId },
     });
     return res.data;
   }
