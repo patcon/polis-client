@@ -77,6 +77,14 @@ export class PolisClient {
         });
         return res.data;
     }
+    async getConversationXids(conversationUuid) {
+        console.log(conversationUuid);
+        const res = await Conversations.getConversationXids({
+            path: { conversation_uuid: conversationUuid },
+        });
+        console.log(res);
+        return res.data;
+    }
     async getMath(conversationId, extraQuery = {}) {
         const res = await Math.getMath({
             query: { conversation_id: conversationId, ...extraQuery },

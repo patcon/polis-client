@@ -27,6 +27,7 @@ export declare class PolisClient {
     getReport(reportId: string, extraQuery?: ExtraReportQuery): Promise<import("./generated/types.gen.js").Report | undefined>;
     getConversation(conversationId: string, extraQuery?: ExtraConversationQuery): Promise<import("./generated/types.gen.js").Conversation | undefined>;
     getConversationUuid(conversationId: string): Promise<import("./generated/types.gen.js").ConversationUuid | undefined>;
+    getConversationXids(conversationUuid: string): Promise<string | undefined>;
     getMath(conversationId: string, extraQuery?: ExtraMathQuery): Promise<import("./generated/types.gen.js").MathV3 | undefined>;
     getVotes(conversationId: string, extraQuery?: ExtraVotesQuery): Promise<import("./generated/types.gen.js").ArrayOfVote | undefined>;
     createVote(conversationId: string, body: VoteBody): Promise<import("./generated/types.gen.js").ArrayOfVote | undefined>;
