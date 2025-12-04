@@ -17,6 +17,7 @@ class CreateVoteBody:
     Attributes:
         tid (int):
         vote (int):
+        conversation_id (str | Unset):
         high_priority (bool | Unset):
         lang (str | Unset):
         starred (bool | Unset):
@@ -24,6 +25,7 @@ class CreateVoteBody:
 
     tid: int
     vote: int
+    conversation_id: str | Unset = UNSET
     high_priority: bool | Unset = UNSET
     lang: str | Unset = UNSET
     starred: bool | Unset = UNSET
@@ -33,6 +35,8 @@ class CreateVoteBody:
         tid = self.tid
 
         vote = self.vote
+
+        conversation_id = self.conversation_id
 
         high_priority = self.high_priority
 
@@ -48,6 +52,8 @@ class CreateVoteBody:
                 "vote": vote,
             }
         )
+        if conversation_id is not UNSET:
+            field_dict["conversation_id"] = conversation_id
         if high_priority is not UNSET:
             field_dict["high_priority"] = high_priority
         if lang is not UNSET:
@@ -64,6 +70,8 @@ class CreateVoteBody:
 
         vote = d.pop("vote")
 
+        conversation_id = d.pop("conversation_id", UNSET)
+
         high_priority = d.pop("high_priority", UNSET)
 
         lang = d.pop("lang", UNSET)
@@ -73,6 +81,7 @@ class CreateVoteBody:
         create_vote_body = cls(
             tid=tid,
             vote=vote,
+            conversation_id=conversation_id,
             high_priority=high_priority,
             lang=lang,
             starred=starred,

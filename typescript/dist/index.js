@@ -104,8 +104,7 @@ export class PolisClient {
     }
     async createVote(conversationId, body) {
         const res = await Votes.createVote({
-            body,
-            query: { conversation_id: conversationId },
+            body: { conversation_id: conversationId, ...body },
         });
         return res.data;
     }

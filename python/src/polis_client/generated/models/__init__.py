@@ -16,6 +16,8 @@ from .math_v4 import MathV4
 from .math_v4_as_buffer_of_gzipped_json import MathV4AsBufferOfGzippedJson
 from .math_v4_consensus import MathV4Consensus
 from .math_v4_repness import MathV4Repness
+from .next_vote import NextVote
+from .next_vote_translations_item import NextVoteTranslationsItem
 from .participation_init import ParticipationInit
 from .participation_init_famous import ParticipationInitFamous
 from .participation_init_next_comment import ParticipationInitNextComment
@@ -42,6 +44,8 @@ __all__ = (
     "MathV4AsBufferOfGzippedJson",
     "MathV4Consensus",
     "MathV4Repness",
+    "NextVote",
+    "NextVoteTranslationsItem",
     "ParticipationInit",
     "ParticipationInitFamous",
     "ParticipationInitNextComment",

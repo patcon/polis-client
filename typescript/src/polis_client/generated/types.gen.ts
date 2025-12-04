@@ -29,6 +29,24 @@ export type MathV4 = {
     };
 };
 
+export type NextVote = {
+    txt?: string;
+    tid?: number;
+    created?: number;
+    quote_src_url?: string | null;
+    is_seed?: boolean;
+    is_meta?: boolean;
+    lang?: string;
+    pid?: number;
+    randomN?: number;
+    remaining?: number;
+    total?: number;
+    translations?: Array<{
+        [key: string]: unknown;
+    }>;
+    currentPid?: number;
+};
+
 export type Vote = {
     pid?: number;
     tid?: number;
@@ -394,6 +412,7 @@ export type GetVotesResponse = GetVotesResponses[keyof GetVotesResponses];
 
 export type CreateVoteData = {
     body: {
+        conversation_id?: string;
         tid: number;
         vote: number;
         high_priority?: boolean;
@@ -401,16 +420,7 @@ export type CreateVoteData = {
         starred?: boolean;
     };
     path?: never;
-    query: {
-        /**
-         * Conversation ID
-         */
-        conversation_id: string;
-        /**
-         * Conversation-specific external participant ID
-         */
-        xid?: string;
-    };
+    query?: never;
     url: '/votes';
 };
 
@@ -427,7 +437,7 @@ export type CreateVoteResponses = {
     /**
      * An array of comment objects
      */
-    200: ArrayOfVote;
+    200: NextVote;
 };
 
 export type CreateVoteResponse = CreateVoteResponses[keyof CreateVoteResponses];
