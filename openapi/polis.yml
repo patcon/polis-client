@@ -93,6 +93,13 @@ paths:
           schema:
             type: string
             pattern: ^[0-9][a-z0-9]+$
+        - name: xid
+          in: query
+          description: Conversation-specific external participant ID.
+          required: false
+          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+          schema:
+            type: string
       responses:
         "200":
           description: A participation interface initialization object

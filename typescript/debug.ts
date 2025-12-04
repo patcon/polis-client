@@ -2,7 +2,7 @@
 import { PolisClient } from "./src/polis_client";
 
 async function main() {
-  // const polis = new PolisClient({ xid: "foobar" });
+  console.log("Creating an anonymous client…");
   const polis = new PolisClient();
 
   try {
@@ -29,9 +29,26 @@ async function main() {
     const init = await polis.getInitialization("2demo");
     console.log("ParticipationInit:", init);
 
+  } catch (err) {
+    console.error("\n❌ Error during anon debug run:");
+    console.error(err);
+    // @ts-expect-error
+    process.exit(1);
+  }
+
+  console.log("Creating an authenticated xid client…");
+  const polisAuth = new PolisClient({ xid: "foobar" });
+
+  try {
+    console.log("Fetching an auth token…");
+    await polisAuth.fetchToken("2demo");
+
+    console.log("\nFetching conversation uuid…");
+    const conversationUuid = await polisAuth.getConversationUuid("2demo") ?? {} ;
+    console.log(conversationUuid);
 
   } catch (err) {
-    console.error("\n❌ Error during debug run:");
+    console.error("\n❌ Error during anon debug run:");
     console.error(err);
     // @ts-expect-error
     process.exit(1);
