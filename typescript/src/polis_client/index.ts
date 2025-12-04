@@ -131,13 +131,20 @@ export class PolisClient {
     return res.data;
   }
 
-  async getConversationXids(conversationUuid: string) {
-    console.log(conversationUuid)
-    const res = await Conversations.getConversationXids({
+  async getConversationXidsByUuid(conversationUuid: string) {
+    const res = await Conversations.getConversationXidsByUuid({
       path: { conversation_uuid: conversationUuid },
     });
-    console.log(res)
     return res.data;
+  }
+
+  async getConversationXidsById(conversationId: string) {
+    const { conversation_uuid: conversationUuid } = await this.getConversationUuid(conversationId) ?? {};
+    return this.getConversationXidsByUuid(conversationUuid!);
+  }
+
+  async getConversationXids(conversationId: string) {
+    return this.getConversationXidsById(conversationId)
   }
 
   async getMath(conversationId: string, extraQuery: ExtraMathQuery = {}) {

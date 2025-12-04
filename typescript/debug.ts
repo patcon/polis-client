@@ -36,22 +36,16 @@ async function main() {
     process.exit(1);
   }
 
-  console.log("Creating an authenticated xid client…");
+  console.log("\n\nCreating an authenticated xid client…");
   const polisAuth = new PolisClient({ xid: "foobar" });
 
   try {
     console.log("Fetching an auth token…");
     await polisAuth.fetchToken("2demo");
 
-    console.log("\nFetching conversation uuid…");
-    const { conversation_uuid: conversationUuid } = await polisAuth.getConversationUuid("2demo") ?? {};
-    console.log(conversationUuid);
-
-    if (conversationUuid) {
-      console.log("\nFetching conversation xids…");
-      const conversationXids = await polisAuth.getConversationXids(conversationUuid);
-      console.log(conversationXids);
-    }
+    console.log("\nFetching CSV of conversation xids…");
+    const conversationXids = await polisAuth.getConversationXids("2demo");
+    console.log(conversationXids);
 
   } catch (err) {
     console.error("\n❌ Error during authenticated xid debug run:");
