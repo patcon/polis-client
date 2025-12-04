@@ -20,3 +20,8 @@ print(math)
 votes = polis.get_votes(conversation_id="2demo", pid=10)
 if isinstance(votes, list) and len(votes) > 0:
     print(votes[0].to_dict())
+
+polis_auth = PolisClient(xid="foobar")
+
+polis_auth._ensure_token(conversation_id="2demo")
+print(polis_auth.token)
