@@ -14,9 +14,9 @@ To be completed.
 - [x] GET comments
 - [ ] POST comments
 - [x] GET votes
-- [ ] POST votes
-- [ ] GET xids
-- [ ] support for xid "authentication"
+- [x] POST votes
+- [x] GET xids
+- [x] support for xid "authentication"
 - [ ] support for JWT authentication
 - [ ] simple auto-proxy for browser clients
 - [ ] create new conversations (unauthenticated, via "site_id")
