@@ -233,7 +233,7 @@ export type GetConversationUuidResponses = {
 
 export type GetConversationUuidResponse = GetConversationUuidResponses[keyof GetConversationUuidResponses];
 
-export type GetConversationXidsData = {
+export type GetConversationXidsByUuidData = {
     body?: never;
     path: {
         /**
@@ -245,23 +245,23 @@ export type GetConversationXidsData = {
     url: '/xid/{conversation_uuid}';
 };
 
-export type GetConversationXidsErrors = {
+export type GetConversationXidsByUuidErrors = {
     /**
      * Bad request
      */
     400: ApiError;
 };
 
-export type GetConversationXidsError = GetConversationXidsErrors[keyof GetConversationXidsErrors];
+export type GetConversationXidsByUuidError = GetConversationXidsByUuidErrors[keyof GetConversationXidsByUuidErrors];
 
-export type GetConversationXidsResponses = {
+export type GetConversationXidsByUuidResponses = {
     /**
      * CSV with participant and xid columns
      */
     200: XidCsv;
 };
 
-export type GetConversationXidsResponse = GetConversationXidsResponses[keyof GetConversationXidsResponses];
+export type GetConversationXidsByUuidResponse = GetConversationXidsByUuidResponses[keyof GetConversationXidsByUuidResponses];
 
 export type GetInitializationData = {
     body?: never;

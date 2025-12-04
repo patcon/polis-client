@@ -77,13 +77,18 @@ export class PolisClient {
         });
         return res.data;
     }
-    async getConversationXids(conversationUuid) {
-        console.log(conversationUuid);
-        const res = await Conversations.getConversationXids({
+    async getConversationXidsByUuid(conversationUuid) {
+        const res = await Conversations.getConversationXidsByUuid({
             path: { conversation_uuid: conversationUuid },
         });
-        console.log(res);
         return res.data;
+    }
+    async getConversationXidsById(conversationId) {
+        const { conversation_uuid: conversationUuid } = await this.getConversationUuid(conversationId) ?? {};
+        return this.getConversationXidsByUuid(conversationUuid);
+    }
+    async getConversationXids(conversationId) {
+        return this.getConversationXidsById(conversationId);
     }
     async getMath(conversationId, extraQuery = {}) {
         const res = await Math.getMath({
