@@ -60,14 +60,15 @@ if isinstance(votes, list) and len(votes) > 0:
 print("Testing the authenticated client...")
 polis_auth = PolisClient(xid="foobar")
 # polis_auth._client = debug_httpx_client
-polis_auth._ensure_token(conversation_id="2demo")
 
 vote = polis_auth.create_vote(conversation_id="2demo", tid=3, vote=1)
 if vote and not isinstance(vote, str):
+    print()
     print(vote.to_dict())
 
 xids = polis_auth.get_conversation_xids(conversation_id="2demo")
 if xids:
+    print()
     print(xids)
 
     import csv
@@ -80,6 +81,8 @@ if xids:
     for row in reader:
         if row["xid"] == "foobar":
             my_pid = row["participant"]
-    my_votes = polis_auth.get_votes(conversation_id="2demo", pid=my_pid)
+    my_votes = polis_auth.get_votes(conversation_id="2demo")
     if my_votes and not isinstance(my_votes, str):
+        print()
+        print("Printing my votes...")
         print([v.to_dict() for v in my_votes])

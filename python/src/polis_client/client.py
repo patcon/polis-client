@@ -48,7 +48,6 @@ class PolisClient(GeneratedClient):
     def _inject_auth(self):
         """Inject Authorization header if a token exists."""
         if self._client:
-            print("FOO")
             if self.token:
                 self._client.headers["Authorization"] = f"Bearer {self.token}"
             else:
