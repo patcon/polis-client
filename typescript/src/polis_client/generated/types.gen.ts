@@ -565,3 +565,37 @@ export type CreateCommentResponses = {
 };
 
 export type CreateCommentResponse = CreateCommentResponses[keyof CreateCommentResponses];
+
+export type GetExportFileData = {
+    body?: never;
+    path: {
+        /**
+         * Report identifier
+         */
+        report_id: string;
+        /**
+         * Which export file to download
+         */
+        filename: 'summary.csv' | 'comments.csv' | 'votes.csv' | 'participant-votes.csv' | 'comment-groups.csv';
+    };
+    query?: never;
+    url: '/reportExport/{report_id}/{filename}';
+};
+
+export type GetExportFileErrors = {
+    /**
+     * Bad request
+     */
+    400: ApiError;
+};
+
+export type GetExportFileError = GetExportFileErrors[keyof GetExportFileErrors];
+
+export type GetExportFileResponses = {
+    /**
+     * CSV file contents
+     */
+    200: string;
+};
+
+export type GetExportFileResponse = GetExportFileResponses[keyof GetExportFileResponses];
