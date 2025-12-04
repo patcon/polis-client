@@ -1,9 +1,11 @@
 from typing import Optional
-
-from polis_client.generated.models.participation_init import ParticipationInit
 from .generated.client import Client as GeneratedClient
 from .generated.api.comments import get_comments
-from .generated.api.conversations import get_conversation
+from .generated.api.conversations import (
+    get_conversation,
+    get_conversation_xids_by_uuid,
+    get_conversation_uuid,
+)
 from .generated.api.math import get_math
 from .generated.api.reports import get_report
 from .generated.api.votes import get_votes
@@ -40,11 +42,15 @@ class PolisClient(GeneratedClient):
 
     def _inject_auth(self):
         """Inject Authorization header if a token exists."""
-        if self.token:
-            self._headers["Authorization"] = f"Bearer {self.token}"
+        if self._client:
+            if self.token:
+                self._client.headers["Authorization"] = f"Bearer {self.token}"
+            else:
+                # optional: remove it if token is gone
+                self._client.headers.pop("Authorization", None)
 
     def _ensure_token(self, conversation_id: str):
-        """Lazy token creation; mirrors TS request interceptor logic."""
+        """Lazy token creation using xid."""
         if self.token:
             return
         if not self.xid:
@@ -57,8 +63,7 @@ class PolisClient(GeneratedClient):
         token_val = getattr(auth_obj, "token", None) if auth_obj else None
         self.token = token_val
 
-        if self.token:
-            self._inject_auth()
+        self._inject_auth()
 
     def get_comments(
         self,
@@ -78,3 +83,32 @@ class PolisClient(GeneratedClient):
             include_voting_patterns=include_voting_patterns,
             **kwargs
         )
+
+    def get_conversation_xids_by_uuid(self, conversation_uuid: str):
+        """Fetch XIDs for a conversation UUID, injecting auth if needed."""
+        # ensure token first if xid is set and token is missing
+        if self.xid and not self.token:
+            # Note: You don’t have the conversation_id here, so we can skip or require it
+            # Alternatively, fetch token earlier when you have conversation_id
+            pass
+
+        return get_conversation_xids_by_uuid.sync(client=self, conversation_uuid=conversation_uuid)
+
+    def get_conversation_xids_by_id(self, conversation_id: str):
+        """
+        Fetch conversation_uuid, then get XIDs.
+        Ensures token is initialized if xid is set.
+        """
+        # lazy token init
+        if self.xid and not self.token:
+            self._ensure_token(conversation_id)
+
+        conv_data = get_conversation_uuid.sync(client=self, conversation_id=conversation_id)
+        conversation_uuid = getattr(conv_data, "conversation_uuid", None)
+        if not conversation_uuid:
+            raise ValueError(f"No conversation_uuid found for {conversation_id}")
+
+        return self.get_conversation_xids_by_uuid(conversation_uuid)
+
+    def get_conversation_xids(self, conversation_id: str):
+        return self.get_conversation_xids_by_id(conversation_id)

@@ -22,6 +22,7 @@ if isinstance(votes, list) and len(votes) > 0:
     print(votes[0].to_dict())
 
 polis_auth = PolisClient(xid="foobar")
-
 polis_auth._ensure_token(conversation_id="2demo")
-print(polis_auth.token)
+xids = polis_auth.get_conversation_xids(conversation_id="2demo")
+if xids:
+    print(xids)
