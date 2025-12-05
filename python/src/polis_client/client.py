@@ -1,10 +1,10 @@
-from typing import Optional, cast
+from typing import Optional, get_args
 
-from polis_client.generated.models.get_export_file_filename import GetExportFileFilename
 
 from .generated.types import UNSET, Unset
 from .generated.models import CreateVoteBody
-from .generated.client import Client as GeneratedClient, AuthenticatedClient as AuthGeneratedClient
+from .generated.models.get_export_file_filename import GetExportFileFilename
+from .generated.client import Client as GeneratedClient
 from .generated.api.comments import get_comments, create_comment
 from .generated.api.exports import get_export_file
 from .generated.api.conversations import (
@@ -19,7 +19,7 @@ from .generated.api.initialization import get_initialization
 
 DEFAULT_BASE_URL = "https://pol.is/api/v3"
 
-_ALLOWED_EXPORT_FILES: set[str] = set(GetExportFileFilename.__args__) # type: ignore
+_ALLOWED_EXPORT_FILES: set[str] = set(get_args(GetExportFileFilename))
 
 def bind(client, fn):
     """Return a version of fn with `client` pre-filled."""

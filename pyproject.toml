@@ -19,6 +19,8 @@ build-backend = "hatchling.build"
 [dependency-groups]
 dev = [
     "openapi-python-client>=0.27.1",
+    "pytest>=9.0.1",
+    "pytest-mock>=3.15.1",
 ]
 
 [tool.hatch.build.targets.wheel]

@@ -5,10 +5,15 @@ regenerate: regenerate-py regenerate-ts ## Regenerate all the client code from O
 
 regenerate-py: ## Regenerate the Python client code
 	rm -rf python/src/polis_client/generated/
-	uv run openapi-python-client generate --path openapi/polis.yml --output-path python/src/polis_client/generated/ --overwrite --meta none
+	$(UV_RUN) openapi-python-client generate --path openapi/polis.yml --output-path python/src/polis_client/generated/ --overwrite --meta none
 
 debug-py:
-	uv run python python/debug.py
+	$(UV_RUN) python python/debug.py
+
+test: test-py ## Run all tests
+
+test-py: ## Run Python tests
+	$(UV_RUN) pytest
 
 regenerate-ts: ## Regenerate Typescript client code
 	rm -rf typescript/polis_client/generated
