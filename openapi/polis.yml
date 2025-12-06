@@ -855,7 +855,7 @@ components:
       type: string
       example: polis_err_param_parse_failed_conversation_id
   securitySchemes:
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
