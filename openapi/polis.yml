@@ -114,6 +114,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiError"
       security: []
+        # Can't use this until bugfix.
+        # See: https://github.com/openapi-generators/openapi-python-client/issues/1372
+        # - {} # Makes auth optional
+        # - bearerAuth: []
   /reports:
     get:
       tags:
@@ -254,7 +258,8 @@ paths:
             text/html:
               schema:
                 $ref: "#/components/schemas/ApiError"
-      security: []
+      security:
+        - bearerAuth: []
   /math/pca2:
     get:
       tags:
@@ -347,10 +352,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ArrayOfCommentModVoting"
-                  - $ref: "#/components/schemas/ArrayOfCommentMod"
-                  - $ref: "#/components/schemas/ArrayOfComment"
+                $ref: "#/components/schemas/ArrayOfComment"
         "400":
           description: Bad request
           content:
@@ -407,17 +409,15 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ArrayOfCommentModVoting"
-                  - $ref: "#/components/schemas/ArrayOfCommentMod"
-                  - $ref: "#/components/schemas/ArrayOfComment"
+                $ref: "#/components/schemas/ArrayOfComment"
         "400":
           description: Bad request
           content:
             text/html:
               schema:
                 $ref: "#/components/schemas/ApiError"
-      security: []
+      security:
+        - bearerAuth: []
   /reportExport/{report_id}/{filename}:
     get:
       tags:
@@ -751,6 +751,12 @@ components:
       required:
         - txt
         - tid
+        - created
+        - quote_src_url
+        - is_seed
+        - is_meta
+        - lang
+        - pid
       type: object
       properties:
         txt:
@@ -767,6 +773,12 @@ components:
           description: Unix timestamp of comment creation time
           format: int64
           example: 1403054214174
+        quote_src_url:
+          type: string
+          nullable: true
+          deprecated: true
+          description: URL for a quoted tweet
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
         is_seed:
           type: boolean
           description: Whether comment is a seed comment from moderator
@@ -785,61 +797,43 @@ components:
           description: Conversation-specific numeric ID of participant
           minimum: 0
           example: 0
-    CommentMod:
-      allOf:
-        - $ref: "#/components/schemas/Comment"
-        - type: object
-          properties:
-            velocity:
-              type: number
-              default: 1
-            mod:
-              type: integer
-              description: "Moderation status of comment: moderated _out_ (-1), _not yet_
-                moderated (0), or moderated _in_ (1)."
-              enum:
-                - -1
-                - 0
-                - 1
-              default: 0
-            active:
-              type: boolean
-            conversation_id:
-              type: string
-              example: 2demo
-    CommentModVoting:
-      allOf:
-        - $ref: "#/components/schemas/CommentMod"
-        - type: object
-          properties:
-            agree_count:
-              type: integer
-              minimum: 0
-              example: 75
-            disagree_count:
-              type: integer
-              minimum: 0
-              example: 29
-            pass_count:
-              type: integer
-              minimum: 0
-              example: 37
-            count:
-              type: integer
-              minimum: 0
-              example: 141
+        # moderation=true
+        velocity:
+          type: number
+          default: 1
+        mod:
+          type: integer
+          description: "Moderation status of comment: moderated _out_ (-1), _not yet_
+            moderated (0), or moderated _in_ (1)."
+          enum:
+            - -1
+            - 0
+            - 1
+          default: 0
+        active:
+          type: boolean
+        # include_voting_patterns=true
+        agree_count:
+          type: integer
+          minimum: 0
+          example: 75
+        disagree_count:
+          type: integer
+          minimum: 0
+          example: 29
+        pass_count:
+          type: integer
+          minimum: 0
+          example: 37
+        count:
+          type: integer
+          minimum: 0
+          example: 141
+
     ArrayOfComment:
       type: array
       items:
         $ref: "#/components/schemas/Comment"
-    ArrayOfCommentMod:
-      type: array
-      items:
-        $ref: "#/components/schemas/CommentMod"
-    ArrayOfCommentModVoting:
-      type: array
-      items:
-        $ref: "#/components/schemas/CommentModVoting"
 
     AuthTokenResponse:
       type: object
@@ -852,8 +846,10 @@ components:
           type: integer
 
     ApiError:
-      type: string
-      example: polis_err_param_parse_failed_conversation_id
+      # Use null to simplify types. In reality returns a string.
+      type: null
+      # type: string
+      example: Bad Request
   securitySchemes:
     bearerAuth:
       type: http
