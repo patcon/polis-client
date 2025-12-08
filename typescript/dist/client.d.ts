@@ -23,7 +23,7 @@ export declare class PolisClient {
         headers?: Record<string, string>;
     });
     fetchToken(conversationId: string, xid?: string): Promise<void>;
-    getComments(conversationId: string, extraQuery?: ExtraCommentsQuery): Promise<import("./generated/types.gen.js").ArrayOfComment | import("./generated/types.gen.js").ArrayOfCommentMod | import("./generated/types.gen.js").ArrayOfCommentModVoting | undefined>;
+    getComments(conversationId: string, extraQuery?: ExtraCommentsQuery): Promise<import("./generated/types.gen.js").ArrayOfComment | undefined>;
     getReport(reportId: string, extraQuery?: ExtraReportQuery): Promise<import("./generated/types.gen.js").Report | undefined>;
     getConversation(conversationId: string, extraQuery?: ExtraConversationQuery): Promise<import("./generated/types.gen.js").Conversation | undefined>;
     getConversationUuid(conversationId: string): Promise<import("./generated/types.gen.js").ConversationUuid | undefined>;

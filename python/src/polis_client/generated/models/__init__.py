@@ -3,8 +3,6 @@
 from .auth_token_response import AuthTokenResponse
 from .comment import Comment
 from .comment_mod import CommentMod
-from .comment_mod_mod import CommentModMod
-from .comment_mod_voting import CommentModVoting
 from .conversation import Conversation
 from .conversation_uuid import ConversationUuid
 from .create_comment_vote import CreateCommentVote
@@ -32,8 +30,6 @@ __all__ = (
     "AuthTokenResponse",
     "Comment",
     "CommentMod",
-    "CommentModMod",
-    "CommentModVoting",
     "Conversation",
     "ConversationUuid",
     "CreateCommentVote",

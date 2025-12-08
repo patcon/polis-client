@@ -171,36 +171,35 @@ export type Comment = {
     /**
      * Unix timestamp of comment creation time
      */
-    created?: number;
+    created: number;
+    /**
+     * URL for a quoted tweet
+     *
+     * @deprecated
+     */
+    quote_src_url: string | null;
     /**
      * Whether comment is a seed comment from moderator
      */
-    is_seed?: boolean;
+    is_seed: boolean;
     /**
      * Whether comment has been marked as metadata by moderator
      */
-    is_meta?: boolean;
+    is_meta: boolean;
     /**
      * Language of submitted comment
      */
-    lang?: string;
+    lang: string;
     /**
      * Conversation-specific numeric ID of participant
      */
-    pid?: number;
-};
-
-export type CommentMod = Comment & {
+    pid: number;
     velocity?: number;
     /**
      * Moderation status of comment: moderated _out_ (-1), _not yet_ moderated (0), or moderated _in_ (1).
      */
     mod?: -1 | 0 | 1;
     active?: boolean;
-    conversation_id?: string;
-};
-
-export type CommentModVoting = CommentMod & {
     agree_count?: number;
     disagree_count?: number;
     pass_count?: number;
@@ -209,17 +208,13 @@ export type CommentModVoting = CommentMod & {
 
 export type ArrayOfComment = Array<Comment>;
 
-export type ArrayOfCommentMod = Array<CommentMod>;
-
-export type ArrayOfCommentModVoting = Array<CommentModVoting>;
-
 export type AuthTokenResponse = {
     token?: string;
     token_type?: string;
     expires_in?: number;
 };
 
-export type ApiError = string;
+export type ApiError = unknown;
 
 export type GetConversationUuidData = {
     body?: never;
@@ -515,7 +510,7 @@ export type GetCommentsResponses = {
     /**
      * An array of comment objects
      */
-    200: ArrayOfCommentModVoting | ArrayOfCommentMod | ArrayOfComment;
+    200: ArrayOfComment;
 };
 
 export type GetCommentsResponse = GetCommentsResponses[keyof GetCommentsResponses];
@@ -561,7 +556,7 @@ export type CreateCommentResponses = {
     /**
      * An array of comment objects
      */
-    200: ArrayOfCommentModVoting | ArrayOfCommentMod | ArrayOfComment;
+    200: ArrayOfComment;
 };
 
 export type CreateCommentResponse = CreateCommentResponses[keyof CreateCommentResponses];

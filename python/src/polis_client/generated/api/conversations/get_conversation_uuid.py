@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -30,14 +30,14 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ConversationUuid | str | None:
+) -> Any | ConversationUuid | None:
     if response.status_code == 200:
         response_200 = ConversationUuid.from_dict(response.json())
 
         return response_200
 
     if response.status_code == 400:
-        response_400 = response.text
+        response_400 = cast(Any, response.text)
         return response_400
 
     if client.raise_on_unexpected_status:
@@ -48,7 +48,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ConversationUuid | str]:
+) -> Response[Any | ConversationUuid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -61,7 +61,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-) -> Response[ConversationUuid | str]:
+) -> Response[Any | ConversationUuid]:
     """
     Args:
         conversation_id (str):
@@ -71,7 +71,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConversationUuid | str]
+        Response[Any | ConversationUuid]
     """
 
     kwargs = _get_kwargs(
@@ -89,7 +89,7 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-) -> ConversationUuid | str | None:
+) -> Any | ConversationUuid | None:
     """
     Args:
         conversation_id (str):
@@ -99,7 +99,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConversationUuid | str
+        Any | ConversationUuid
     """
 
     return sync_detailed(
@@ -112,7 +112,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-) -> Response[ConversationUuid | str]:
+) -> Response[Any | ConversationUuid]:
     """
     Args:
         conversation_id (str):
@@ -122,7 +122,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConversationUuid | str]
+        Response[Any | ConversationUuid]
     """
 
     kwargs = _get_kwargs(
@@ -138,7 +138,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
     conversation_id: str,
-) -> ConversationUuid | str | None:
+) -> Any | ConversationUuid | None:
     """
     Args:
         conversation_id (str):
@@ -148,7 +148,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConversationUuid | str
+        Any | ConversationUuid
     """
 
     return (
