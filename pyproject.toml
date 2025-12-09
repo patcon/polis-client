@@ -26,3 +26,8 @@ dev = [
 [tool.hatch.build.targets.wheel]
 source-directory = "python"
 packages = ["python/src/polis_client"]
+
+[tool.pytest]
+markers = [
+    "live_api: mark a test for live API testing."
+]
