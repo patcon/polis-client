@@ -153,7 +153,7 @@ def test_live_api_get_comments_success(expected_data):
 @pytest.mark.live_api
 def test_live_api_get_comments_nonexistent_convo_id():
     client = PolisClient()
-    with pytest.raises(PolisAPIError):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_comments(conversation_id="non-existent")
 
 @pytest.mark.live_api
@@ -169,7 +169,7 @@ def test_live_api_get_conversation_success(expected_data):
 @pytest.mark.live_api
 def test_live_api_get_conversation_nonexistent_convo_id():
     client = PolisClient()
-    with pytest.raises(PolisAPIError):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_conversation(conversation_id="non-existent")
 
 @pytest.mark.live_api
@@ -186,7 +186,7 @@ def test_live_api_get_math_success(expected_data):
 @pytest.mark.live_api
 def test_live_api_get_math_nonexistent_convo_id():
     client = PolisClient()
-    with pytest.raises(PolisAPIError):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_math(conversation_id="non-existent")
 
 @pytest.mark.live_api
@@ -209,7 +209,7 @@ def test_live_api_get_votes_success(expected_data):
 @pytest.mark.live_api
 def test_live_api_get_votes_nonexistent_convo_id():
     client = PolisClient()
-    with pytest.raises(PolisAPIError):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_votes(conversation_id="non-existent", pid=0)
 
 @pytest.mark.live_api
@@ -232,7 +232,7 @@ def test_live_api_get_report_success(expected_data):
 @pytest.mark.live_api
 def test_live_api_get_report_nonexistent_report_id():
     client = PolisClient()
-    with pytest.raises(PolisAPIError):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_report(report_id="non-existent")
 
 @pytest.mark.live_api
@@ -250,7 +250,7 @@ def test_live_api_get_export_file_success():
 @pytest.mark.live_api
 def test_live_api_get_export_file_nonexistent_report_id():
     client = PolisClient()
-    with pytest.raises(PolisAPIError):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_export_file(
             report_id="non-existent",
             filename="summary.csv",
@@ -290,7 +290,7 @@ def test_live_api_get_full_export_success():
 @pytest.mark.live_api
 def test_live_api_get_full_export_bad_report_id():
     client = PolisClient()
-    with pytest.raises(PolisAPIError):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_full_export(report_id="non-existent")
 
 # @pytest.mark.live_api
