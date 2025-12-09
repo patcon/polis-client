@@ -2,6 +2,7 @@ from polis_client.generated.models.math_v3 import MathV3
 from .generated.client import Client as GeneratedClient
 from .generated.api.comments import get_comments
 from .generated.api.conversations import get_conversation
+from .generated.api.exports import get_export_file
 from .generated.api.math import get_math
 from .generated.api.reports import get_report
 from .generated.api.votes import get_votes
@@ -9,9 +10,12 @@ from .generated.models.comment import Comment
 from .generated.models.conversation import Conversation
 from .generated.models.report import Report
 from .generated.models.vote import Vote
+from .generated.models.get_export_file_filename import GetExportFileFilename
 from .generated.types import Response
 from typing import Any, List, Optional
 
+
+_ALLOWED_EXPORT_FILES: set[str] = {e.value for e in GetExportFileFilename}
 
 class PolisAPIError(Exception):
     """Raised when the Polis API returns an error status code."""
@@ -222,3 +226,86 @@ class PolisClient:
             report_id=report_id,
             **kwargs,
         )
+
+    def get_export_file_raw(
+        self,
+        report_id: str,
+        filename: str = "summary.csv",
+        **kwargs,
+    ) -> Response[str | None]:
+        """
+        Low-level: Get a CSV export file. Returns the full Response object.
+
+        Parsed value is a raw CSV string or None.
+        """
+
+        if filename not in _ALLOWED_EXPORT_FILES:
+            raise ValueError(
+                f"Invalid export file '{filename}'. Must be one of: {sorted(_ALLOWED_EXPORT_FILES)}"
+            )
+
+        return get_export_file.sync_detailed(
+            client=self._client,
+            report_id=report_id,
+            filename=filename,   # type: ignore (because generated type uses Literal[])
+            **kwargs,
+        )
+
+    def get_export_file(
+        self,
+        report_id: str,
+        filename: str = "summary.csv",
+        **kwargs,
+    ) -> str:
+        """
+        High-level helper: Download a CSV export file and return raw CSV text.
+
+        Supported files:
+            - summary.csv
+            - comments.csv
+            - votes.csv
+            - participant-votes.csv
+            - comment-groups.csv
+        """
+
+        response = self.get_export_file_raw(
+            report_id=report_id,
+            filename=filename,
+            **kwargs,
+        )
+
+        # Non-2XX → raise
+        if not (200 <= response.status_code < 300):
+            raise PolisAPIError(response.status_code, response.content)
+
+        if response.parsed is None:
+            raise RuntimeError(
+                f"Expected CSV data but received None (report_id={report_id}, file={filename})"
+            )
+
+        return response.parsed
+
+    def get_full_export(self, report_id: str, **kwargs) -> dict[str, str]:
+        """
+        Download all CSV export files for a given report_id.
+
+        Returns:
+            {
+                "summary.csv": "...",
+                "comments.csv": "...",
+                "votes.csv": "...",
+                "participant-votes.csv": "...",
+                "comment-groups.csv": "..."
+            }
+        """
+
+        exports: dict[str, str] = {}
+
+        for filename in _ALLOWED_EXPORT_FILES:
+            exports[filename] = self.get_export_file(
+                report_id=report_id,
+                filename=filename,
+                **kwargs,
+            )
+
+        return exports

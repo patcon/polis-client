@@ -235,6 +235,64 @@ def test_live_api_get_report_nonexistent_report_id():
     with pytest.raises(PolisAPIError):
         client.get_report(report_id="non-existent")
 
+@pytest.mark.live_api
+def test_live_api_get_export_file_success():
+    client = PolisClient()
+
+    csv_text = client.get_export_file(
+        report_id="r49xtpmxk2mjmkpyhwuau",
+        filename="summary.csv",
+    )
+
+    assert isinstance(csv_text, str)
+    assert csv_text.strip() != ""
+
+@pytest.mark.live_api
+def test_live_api_get_export_file_nonexistent_report_id():
+    client = PolisClient()
+    with pytest.raises(PolisAPIError):
+        client.get_export_file(
+            report_id="non-existent",
+            filename="summary.csv",
+        )
+
+@pytest.mark.live_api
+def test_live_api_get_export_file_invalid_filename():
+    client = PolisClient()
+    with pytest.raises(ValueError):
+        client.get_export_file(
+            report_id="r49xtpmxk2mjmkpyhwuau",
+            filename="wrong.csv",
+        )
+
+
+@pytest.mark.live_api
+def test_live_api_get_full_export_success():
+    client = PolisClient()
+    exports = client.get_full_export(report_id="r49xtpmxk2mjmkpyhwuau")
+
+    # Ensure correct shape
+    assert isinstance(exports, dict)
+    assert set(exports.keys()) == {
+        "summary.csv",
+        "comments.csv",
+        "votes.csv",
+        "participant-votes.csv",
+        "comment-groups.csv",
+    }
+
+    # Ensure each file is populated
+    for _, content in exports.items():
+        assert isinstance(content, str)
+        assert content.strip() != ""
+
+
+@pytest.mark.live_api
+def test_live_api_get_full_export_bad_report_id():
+    client = PolisClient()
+    with pytest.raises(PolisAPIError):
+        client.get_full_export(report_id="non-existent")
+
 # @pytest.mark.live_api
 # def test_live_api_get_initialization_success():
 #     client = PolisClient()
