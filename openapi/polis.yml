@@ -488,6 +488,59 @@ components:
 
     MathV3:
       type: object
+      properties:
+        base-clusters:
+          type: object
+        comment-priorities:
+          type: object
+        consensus:
+          type: object
+        group-aware-consensus:
+          type: object
+        group-clusters:
+          type: array
+          items:
+            type: object
+        group-votes:
+          type: object
+        in-conv:
+          type: array
+          items:
+            type: integer
+        lastModTimestamp:
+          type: null
+        lastVoteTimestamp:
+          type: integer
+        math_tick:
+          type: integer
+        meta-tids:
+          type: array
+          items:
+            type: integer
+        mod-in:
+          type: array
+          items:
+            type: integer
+        mod-out:
+          type: array
+          items:
+            type: integer
+        n:
+          type: integer
+        n-cmts:
+          type: integer
+        pca:
+          type: object
+        repness:
+          type: object
+        tids:
+          type: array
+          items:
+            type: integer
+        user-vote-counts:
+          type: object
+        votes-base:
+          type: object
 
     MathV4:
       type: object
