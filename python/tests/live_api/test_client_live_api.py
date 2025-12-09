@@ -99,7 +99,15 @@ def expected_data():
                 "tids",
                 "user-vote-counts",
                 "votes-base",
-            }
+            },
+            "first_vote": {
+                'pid': 0,
+                'tid': 0,
+                'vote': 0,
+                'weight_x_32767': 0,
+                'modified': '1403054214196',
+                'conversation_id': '2demo',
+            },
         }
     }
 
@@ -157,42 +165,35 @@ def test_live_api_get_math_nonexistent_convo_id():
     with pytest.raises(PolisAPIError):
         client.get_math(conversation_id="non-existent")
 
-# @pytest.mark.live_api
-# def test_live_api_get_votes_no_pid_success():
-#     client = PolisClient()
-#     result = client.get_votes(conversation_id="2demo")
+@pytest.mark.live_api
+def test_live_api_get_votes_no_pid_success():
+    client = PolisClient()
+    votes = client.get_votes(conversation_id="2demo")
 
-#     assert result == []
+    assert votes == []
 
-# @pytest.mark.live_api
-# def test_live_api_get_votes_success():
-#     client = PolisClient()
-#     result = client.get_votes(conversation_id="2demo", pid=0)
+@pytest.mark.live_api
+def test_live_api_get_votes_success(expected_data):
+    expected_first_vote = expected_data["2demo"]["first_vote"]
 
-#     expected_first_vote = {
-#         'pid': 0,
-#         'tid': 0,
-#         'vote': 0,
-#         'weight_x_32767': 0,
-#         'modified': '1403054214196',
-#         'conversation_id': '2demo',
-#     }
+    client = PolisClient()
+    votes = client.get_votes(conversation_id="2demo", pid=0)
 
-#     assert len(result) > 0
-#     assert result[0].to_dict() == expected_first_vote
+    assert votes is not None
+    assert votes[0].to_dict() == expected_first_vote
 
-# @pytest.mark.live_api
-# def test_live_api_get_votes_nonexistent_convo_id():
-#     client = PolisClient()
-#     with pytest.raises(APIError, match="Unexpected status 400 for get_votes"):
-#         client.get_votes(conversation_id="non-existent", pid=0)
+@pytest.mark.live_api
+def test_live_api_get_votes_nonexistent_convo_id():
+    client = PolisClient()
+    with pytest.raises(PolisAPIError):
+        client.get_votes(conversation_id="non-existent", pid=0)
 
-# @pytest.mark.live_api
-# def test_live_api_get_votes_nonexistent_pid():
-#     client = PolisClient()
-#     result = client.get_votes(conversation_id="2demo", pid=10000)
+@pytest.mark.live_api
+def test_live_api_get_votes_nonexistent_pid():
+    client = PolisClient()
+    votes = client.get_votes(conversation_id="2demo", pid=10000)
 
-#     assert result == []
+    assert votes == []
 
 # @pytest.mark.live_api
 # def test_live_api_get_initialization_success():
