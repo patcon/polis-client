@@ -3,6 +3,12 @@ UV_RUN ?= uv run
 
 regenerate: regenerate-py regenerate-ts ## Regenerate all the client code from OpenAPI spec
 
+commit-generated: regenerate
+	git add python/src/polis_client/generated/
+	git add typescript/dist/
+	git add typescript/src/polis_client/generated/
+	git commit -m "Adding auto-generated files."
+
 regenerate-py: ## Regenerate the Python client code
 	rm -rf python/src/polis_client/generated/
 	$(UV_RUN) openapi-python-client generate --path openapi/polis.yml --output-path python/src/polis_client/generated/ --overwrite --meta none

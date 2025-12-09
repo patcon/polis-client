@@ -78,6 +78,28 @@ def expected_data():
                 'created': '1403054152585',
                 'modified': '1764981306417000',
             },
+            "math_keys": {
+                "base-clusters",
+                "comment-priorities",
+                "consensus",
+                "group-aware-consensus",
+                "group-clusters",
+                "group-votes",
+                "in-conv",
+                "lastModTimestamp",
+                "lastVoteTimestamp",
+                "math_tick",
+                "meta-tids",
+                "mod-in",
+                "mod-out",
+                "n",
+                "n-cmts",
+                "pca",
+                "repness",
+                "tids",
+                "user-vote-counts",
+                "votes-base",
+            }
         }
     }
 
@@ -86,13 +108,13 @@ def test_live_api_get_comments_success(expected_data):
     expected_first_comment = expected_data["2demo"]["first_comment"]
 
     client = PolisClient()
-    result = client.get_comments(conversation_id="2demo")
+    comments = client.get_comments(conversation_id="2demo")
 
-    assert result is not None
-    if result:
-        assert all(isinstance(item, Comment) for item in result)  
+    assert comments is not None
+    if comments:
+        assert all(isinstance(item, Comment) for item in comments)  
 
-    actual_first_comment = result[0]
+    actual_first_comment = comments[0]
     assert isinstance(actual_first_comment, Comment)
     assert actual_first_comment.to_dict() == expected_first_comment
 
@@ -107,10 +129,10 @@ def test_live_api_get_conversation_success(expected_data):
     expected_conversation = expected_data["2demo"]["conversation"]
 
     client = PolisClient()
-    result = client.get_conversation(conversation_id="2demo")
+    convo = client.get_conversation(conversation_id="2demo")
 
-    assert isinstance(result, Conversation)
-    assert result.to_dict() == expected_conversation
+    assert isinstance(convo, Conversation)
+    assert convo.to_dict() == expected_conversation
 
 @pytest.mark.live_api
 def test_live_api_get_conversation_nonexistent_convo_id():
@@ -118,42 +140,22 @@ def test_live_api_get_conversation_nonexistent_convo_id():
     with pytest.raises(PolisAPIError):
         client.get_conversation(conversation_id="non-existent")
 
-# @pytest.mark.live_api
-# def test_live_api_get_math_success():
-#     client = PolisClient()
-#     result = client.get_math(conversation_id="2demo")
+@pytest.mark.live_api
+def test_live_api_get_math_success(expected_data):
+    expected_math_keys = expected_data["2demo"]["math_keys"]
 
-#     expected_math_keys = [
-#         "base-clusters",
-#         "comment-priorities",
-#         "consensus",
-#         "group-aware-consensus",
-#         "group-clusters",
-#         "group-votes",
-#         "in-conv",
-#         "lastModTimestamp",
-#         "lastVoteTimestamp",
-#         "math_tick",
-#         "meta-tids",
-#         "mod-in",
-#         "mod-out",
-#         "n",
-#         "n-cmts",
-#         "pca",
-#         "repness",
-#         "tids",
-#         "user-vote-counts",
-#         "votes-base",
-#     ]
+    client = PolisClient()
+    math = client.get_math(conversation_id="2demo")
 
-#     assert len(expected_math_keys) == len(result.to_dict().keys())
-#     assert sorted(expected_math_keys) == sorted(result.to_dict().keys())
+    assert math is not None
+    if math:
+        assert sorted(expected_math_keys) == sorted(math.to_dict())
 
-# @pytest.mark.live_api
-# def test_live_api_get_math_nonexistent_convo_id():
-#     client = PolisClient()
-#     with pytest.raises(APIError, match="Unexpected status 400 for get_math"):
-#         client.get_math(conversation_id="non-existent")
+@pytest.mark.live_api
+def test_live_api_get_math_nonexistent_convo_id():
+    client = PolisClient()
+    with pytest.raises(PolisAPIError):
+        client.get_math(conversation_id="non-existent")
 
 # @pytest.mark.live_api
 # def test_live_api_get_votes_no_pid_success():
