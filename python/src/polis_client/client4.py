@@ -30,13 +30,24 @@ class PolisAPIError(Exception):
 class PolisClient:
     """Simple Polis API client wrapper around generated client code."""
 
-    def __init__(self, base_url: str = "https://pol.is/api/v3"):
-        """Initialize the Polis client.
+    def __init__(self, base_url: str = "https://pol.is"):
+        """
+        Initialize the Polis client.
 
         Args:
-            base_url: Base URL for the Polis API. Defaults to https://pol.is/api/v3
+            base_url: Base URL for the Polis API. Can be:
+                - "https://pol.is"
+                - "https://pol.is/"
+                - "https://pol.is/api/v3"
         """
-        self._client = GeneratedClient(base_url=base_url)
+        # Normalize: remove trailing slash
+        base = base_url.rstrip("/")
+
+        # If it already ends with /api/v3, keep it as-is
+        if not base.endswith("/api/v3"):
+            base = f"{base}/api/v3"
+
+        self._client = GeneratedClient(base_url=base)
 
     def get_comments(self, **kwargs) -> Optional[List[Comment]]:
         """Get comments for a conversation, returning parsed Comment objects or raising on error.
