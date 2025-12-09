@@ -108,7 +108,31 @@ def expected_data():
                 'modified': '1403054214196',
                 'conversation_id': '2demo',
             },
-        }
+        },
+        "r49xtpmxk2mjmkpyhwuau": {
+            "report": {
+                "report_id": "r49xtpmxk2mjmkpyhwuau",
+                "created": "1501757120502",
+                "modified": "1501757120502",
+                "label_x_neg": None,
+                "label_y_neg": None,
+                "label_y_pos": None,
+                "label_x_pos": None,
+                "label_group_0": None,
+                "label_group_1": None,
+                "label_group_2": None,
+                "label_group_3": None,
+                "label_group_4": None,
+                "label_group_5": None,
+                "label_group_6": None,
+                "label_group_7": None,
+                "label_group_8": None,
+                "label_group_9": None,
+                "report_name": None,
+                "mod_level": -2,
+                "conversation_id": "5psrv8bm2a"
+            },
+        },
     }
 
 @pytest.mark.live_api
@@ -194,6 +218,22 @@ def test_live_api_get_votes_nonexistent_pid():
     votes = client.get_votes(conversation_id="2demo", pid=10000)
 
     assert votes == []
+
+@pytest.mark.live_api
+def test_live_api_get_report_success(expected_data):
+    expected_report = expected_data["r49xtpmxk2mjmkpyhwuau"]["report"]
+
+    client = PolisClient()
+    report = client.get_report(report_id="r49xtpmxk2mjmkpyhwuau")
+
+    assert report is not None
+    assert report.to_dict() == expected_report
+
+@pytest.mark.live_api
+def test_live_api_get_report_nonexistent_report_id():
+    client = PolisClient()
+    with pytest.raises(PolisAPIError):
+        client.get_report(report_id="non-existent")
 
 # @pytest.mark.live_api
 # def test_live_api_get_initialization_success():

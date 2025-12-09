@@ -3,9 +3,11 @@ from .generated.client import Client as GeneratedClient
 from .generated.api.comments import get_comments
 from .generated.api.conversations import get_conversation
 from .generated.api.math import get_math
+from .generated.api.reports import get_report
 from .generated.api.votes import get_votes
 from .generated.models.comment import Comment
 from .generated.models.conversation import Conversation
+from .generated.models.report import Report
 from .generated.models.vote import Vote
 from .generated.types import Response
 from typing import Any, List, Optional
@@ -167,5 +169,45 @@ class PolisClient:
         return get_votes.sync_detailed(
             client=self._client,
             conversation_id=conversation_id,
+            **kwargs,
+        )
+
+    def get_report(
+        self,
+        report_id: str,
+        **kwargs,
+    ) -> Optional[Report]:
+        """
+        Get the report for a conversation, collapsing the returned list into a single object.
+
+        Returns:
+            Report object if successful, or None if no data.
+        """
+        response = self.get_report_raw(report_id=report_id, **kwargs)
+
+        if not (200 <= response.status_code < 300):
+            raise PolisAPIError(response.status_code, response.content)
+
+        data = response.parsed
+
+        if data is None:
+            return None
+
+        # The API returns a list, but we want a single object.
+        if isinstance(data, list):
+            if len(data) == 0:
+                return None
+            if len(data) >= 1:
+                return data[0]
+
+    def get_report_raw(
+        self,
+        report_id: str,
+        **kwargs,
+    ) -> Response[Any | List[Report]]:
+        """Get the report for a conversation, returning full Response object."""
+        return get_report.sync_detailed(
+            client=self._client,
+            report_id=report_id,
             **kwargs,
         )
