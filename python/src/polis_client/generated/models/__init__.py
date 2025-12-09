@@ -11,6 +11,16 @@ from .get_comments_mod import GetCommentsMod
 from .get_comments_mod_gt import GetCommentsModGt
 from .get_export_file_filename import GetExportFileFilename
 from .math_v3 import MathV3
+from .math_v3_base_clusters import MathV3BaseClusters
+from .math_v3_comment_priorities import MathV3CommentPriorities
+from .math_v3_consensus import MathV3Consensus
+from .math_v3_group_aware_consensus import MathV3GroupAwareConsensus
+from .math_v3_group_clusters_item import MathV3GroupClustersItem
+from .math_v3_group_votes import MathV3GroupVotes
+from .math_v3_pca import MathV3Pca
+from .math_v3_repness import MathV3Repness
+from .math_v3_user_vote_counts import MathV3UserVoteCounts
+from .math_v3_votes_base import MathV3VotesBase
 from .math_v4 import MathV4
 from .math_v4_as_buffer_of_gzipped_json import MathV4AsBufferOfGzippedJson
 from .math_v4_consensus import MathV4Consensus
@@ -38,6 +48,16 @@ __all__ = (
     "GetCommentsModGt",
     "GetExportFileFilename",
     "MathV3",
+    "MathV3BaseClusters",
+    "MathV3CommentPriorities",
+    "MathV3Consensus",
+    "MathV3GroupAwareConsensus",
+    "MathV3GroupClustersItem",
+    "MathV3GroupVotes",
+    "MathV3Pca",
+    "MathV3Repness",
+    "MathV3UserVoteCounts",
+    "MathV3VotesBase",
     "MathV4",
     "MathV4AsBufferOfGzippedJson",
     "MathV4Consensus",

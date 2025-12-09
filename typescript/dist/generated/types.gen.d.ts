@@ -6,7 +6,46 @@ export type ConversationUuid = {
 };
 export type XidCsv = string;
 export type MathV3 = {
-    [key: string]: unknown;
+    'base-clusters'?: {
+        [key: string]: unknown;
+    };
+    'comment-priorities'?: {
+        [key: string]: unknown;
+    };
+    consensus?: {
+        [key: string]: unknown;
+    };
+    'group-aware-consensus'?: {
+        [key: string]: unknown;
+    };
+    'group-clusters'?: Array<{
+        [key: string]: unknown;
+    }>;
+    'group-votes'?: {
+        [key: string]: unknown;
+    };
+    'in-conv'?: Array<number>;
+    lastModTimestamp?: unknown;
+    lastVoteTimestamp?: number;
+    math_tick?: number;
+    'meta-tids'?: Array<number>;
+    'mod-in'?: Array<number>;
+    'mod-out'?: Array<number>;
+    n?: number;
+    'n-cmts'?: number;
+    pca?: {
+        [key: string]: unknown;
+    };
+    repness?: {
+        [key: string]: unknown;
+    };
+    tids?: Array<number>;
+    'user-vote-counts'?: {
+        [key: string]: unknown;
+    };
+    'votes-base'?: {
+        [key: string]: unknown;
+    };
 };
 export type MathV4 = {
     asBufferOfGzippedJson?: {
