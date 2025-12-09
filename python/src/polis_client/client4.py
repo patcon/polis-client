@@ -115,17 +115,7 @@ class PolisClient:
         )
 
     def get_math(self, conversation_id: str, **kwargs) -> Optional[Any | MathV3]:
-        """Get conversation details, returning parsed Conversation object or raising on error.
-
-        Args:
-            conversation_id: The conversation ID to get details for
-
-        Returns:
-            Conversation object if successful, None if no data
-
-        Raises:
-            PolisAPIError: If the API returns a non-2XX status code
-            httpx.TimeoutException: If the request times out
+        """
         """
         response = self.get_math_raw(conversation_id, **kwargs)
 
