@@ -1,4 +1,5 @@
 from polis_client.generated.api.comments import create_comment
+from polis_client.generated.api.conversations import get_conversation_uuid, get_conversation_xids_by_uuid
 from polis_client.generated.api.initialization import get_initialization
 from polis_client.generated.models.create_comment_body import CreateCommentBody
 from polis_client.generated.models.create_vote_body import CreateVoteBody
@@ -22,6 +23,8 @@ from typing import Any, List, Optional
 import time
 import base64
 import json
+import csv
+import io
 
 
 _ALLOWED_EXPORT_FILES: set[str] = {e.value for e in GetExportFileFilename}
@@ -388,6 +391,26 @@ class PolisClient:
             xid=self._xid,
             **kwargs,
         )
+
+    def get_xids(self, conversation_id: str):
+        """
+        Fetch conversation_uuid, then get XIDs.
+        Ensures token is initialized if xid is set.
+        """
+        self._update_last_conversation_id(conversation_id)
+        self._maybe_refresh_token()
+
+        conv_data = get_conversation_uuid.sync(client=self._client, conversation_id=conversation_id)
+        conversation_uuid = getattr(conv_data, "conversation_uuid", None)
+        if not conversation_uuid:
+            raise ValueError(f"No conversation_uuid found for {conversation_id}")
+
+        xids_csv = get_conversation_xids_by_uuid.sync(client=self._client, conversation_uuid=conversation_uuid)
+
+        reader = csv.DictReader(io.StringIO(xids_csv))
+        xid_rows = list(reader)
+
+        return xid_rows
 
     def get_export_file_raw(
         self,
