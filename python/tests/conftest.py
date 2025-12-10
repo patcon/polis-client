@@ -29,5 +29,5 @@ def server_profile(request):
 
 @pytest.fixture
 def client(server_profile):
-    from polis_client.client4 import PolisClient
+    from polis_client.client import PolisClient
     return PolisClient(base_url=server_profile["base_url"])

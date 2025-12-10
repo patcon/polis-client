@@ -1,4 +1,4 @@
-from polis_client.client4 import PolisClient
+from polis_client.client import PolisClient
 
 polis = PolisClient()
 

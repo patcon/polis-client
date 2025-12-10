@@ -3,7 +3,7 @@ from polis_client.generated.models.conversation import Conversation
 import pytest
 import json
 from pathlib import Path
-from polis_client.client4 import PolisAPIError
+from polis_client.client import PolisAPIError
 
 @pytest.fixture
 def expected_data(server_profile):
