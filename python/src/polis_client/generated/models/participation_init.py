@@ -30,7 +30,7 @@ class ParticipationInit:
         conversation (Conversation | Unset):
         famous (ParticipationInitFamous | Unset):
         next_comment (ParticipationInitNextComment | Unset):
-        pca (MathV4 | Unset):
+        pca (MathV4 | str | Unset):
         ptpt (None | ParticipationInitPtptType0 | Unset):
         user (ParticipationInitUser | Unset):
         votes (list[ParticipationInitVotesItem] | Unset):
@@ -41,7 +41,7 @@ class ParticipationInit:
     conversation: Conversation | Unset = UNSET
     famous: ParticipationInitFamous | Unset = UNSET
     next_comment: ParticipationInitNextComment | Unset = UNSET
-    pca: MathV4 | Unset = UNSET
+    pca: MathV4 | str | Unset = UNSET
     ptpt: None | ParticipationInitPtptType0 | Unset = UNSET
     user: ParticipationInitUser | Unset = UNSET
     votes: list[ParticipationInitVotesItem] | Unset = UNSET
@@ -49,6 +49,7 @@ class ParticipationInit:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.math_v4 import MathV4
         from ..models.participation_init_ptpt_type_0 import ParticipationInitPtptType0
 
         accept_language = self.accept_language
@@ -65,9 +66,13 @@ class ParticipationInit:
         if not isinstance(self.next_comment, Unset):
             next_comment = self.next_comment.to_dict()
 
-        pca: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.pca, Unset):
+        pca: dict[str, Any] | str | Unset
+        if isinstance(self.pca, Unset):
+            pca = UNSET
+        elif isinstance(self.pca, MathV4):
             pca = self.pca.to_dict()
+        else:
+            pca = self.pca
 
         ptpt: dict[str, Any] | None | Unset
         if isinstance(self.ptpt, Unset):
@@ -153,12 +158,20 @@ class ParticipationInit:
         else:
             next_comment = ParticipationInitNextComment.from_dict(_next_comment)
 
-        _pca = d.pop("pca", UNSET)
-        pca: MathV4 | Unset
-        if isinstance(_pca, Unset):
-            pca = UNSET
-        else:
-            pca = MathV4.from_dict(_pca)
+        def _parse_pca(data: object) -> MathV4 | str | Unset:
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                pca_type_0 = MathV4.from_dict(data)
+
+                return pca_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(MathV4 | str | Unset, data)
+
+        pca = _parse_pca(d.pop("pca", UNSET))
 
         def _parse_ptpt(data: object) -> None | ParticipationInitPtptType0 | Unset:
             if data is None:

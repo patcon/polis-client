@@ -31,6 +31,7 @@ export const getConversation = <ThrowOnError extends boolean = false>(options: O
 export const getVotes = <ThrowOnError extends boolean = false>(options: Options<GetVotesData, ThrowOnError>) => (options.client ?? client).get<GetVotesResponses, GetVotesErrors, ThrowOnError>({ url: '/votes', ...options });
 
 export const createVote = <ThrowOnError extends boolean = false>(options: Options<CreateVoteData, ThrowOnError>) => (options.client ?? client).post<CreateVoteResponses, CreateVoteErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/votes',
     ...options,
     headers: {
@@ -53,7 +54,15 @@ export const getComments = <ThrowOnError extends boolean = false>(options: Optio
  *
  * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
  */
-export const createComment = <ThrowOnError extends boolean = false>(options: Options<CreateCommentData, ThrowOnError>) => (options.client ?? client).post<CreateCommentResponses, CreateCommentErrors, ThrowOnError>({ url: '/comments', ...options });
+export const createComment = <ThrowOnError extends boolean = false>(options: Options<CreateCommentData, ThrowOnError>) => (options.client ?? client).post<CreateCommentResponses, CreateCommentErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/comments',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Download report CSV export

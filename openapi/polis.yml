@@ -114,6 +114,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiError"
       security: []
+        # Can't use this until bugfix.
+        # See: https://github.com/openapi-generators/openapi-python-client/issues/1372
+        # - {} # Makes auth optional
+        # - bearerAuth: []
   /reports:
     get:
       tags:
@@ -227,7 +231,7 @@ paths:
           application/json:
             schema:
               type: object
-              required: [tid, vote]
+              required: [conversation_id, tid, vote]
               properties:
                 conversation_id:
                   type: string
@@ -254,7 +258,8 @@ paths:
             text/html:
               schema:
                 $ref: "#/components/schemas/ApiError"
-      security: []
+      security:
+        - bearerAuth: []
   /math/pca2:
     get:
       tags:
@@ -347,10 +352,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ArrayOfCommentModVoting"
-                  - $ref: "#/components/schemas/ArrayOfCommentMod"
-                  - $ref: "#/components/schemas/ArrayOfComment"
+                $ref: "#/components/schemas/ArrayOfComment"
         "400":
           description: Bad request
           content:
@@ -365,59 +367,38 @@ paths:
       description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
         interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
       operationId: createComment
-      parameters:
-        - name: conversation_id
-          in: query
-          description: Conversation ID
-          required: true
-          example: 2demo
-          schema:
-            type: string
-            pattern: ^[0-9][a-z0-9]+$
-        - name: txt
-          in: query
-          description: Content of the submitted statement
-          required: true
-          example: I feel a certain way about this topic.
-          schema:
-            type: string
-        - name: xid
-          in: query
-          description: Conversation-specific external participant ID
-          required: false
-          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
-          schema:
-            type: string
-        - name: is_seed
-          in: query
-          description: Whether this statement is a seed statement
-          required: false
-          schema:
-            type: boolean
-            default: false
-        - name: vote
-          in: query
-          description: Implicit vote when submitting statement
-          schema:
-            type: integer
-            enum: [-1, 0, 1]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [conversation_id, txt]
+              properties:
+                conversation_id:
+                  type: string
+                txt:
+                  type: string
+                is_seed:
+                  type: boolean
+                vote:
+                  type: integer
+                  enum: [-1, 0, 1]
       responses:
         "200":
           description: An array of comment objects
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ArrayOfCommentModVoting"
-                  - $ref: "#/components/schemas/ArrayOfCommentMod"
-                  - $ref: "#/components/schemas/ArrayOfComment"
+                $ref: "#/components/schemas/ArrayOfComment"
         "400":
           description: Bad request
           content:
             text/html:
               schema:
                 $ref: "#/components/schemas/ApiError"
-      security: []
+      security:
+        - bearerAuth: []
   /reportExport/{report_id}/{filename}:
     get:
       tags:
@@ -488,6 +469,59 @@ components:
 
     MathV3:
       type: object
+      properties:
+        base-clusters:
+          type: object
+        comment-priorities:
+          type: object
+        consensus:
+          type: object
+        group-aware-consensus:
+          type: object
+        group-clusters:
+          type: array
+          items:
+            type: object
+        group-votes:
+          type: object
+        in-conv:
+          type: array
+          items:
+            type: integer
+        lastModTimestamp:
+          type: null
+        lastVoteTimestamp:
+          type: integer
+        math_tick:
+          type: integer
+        meta-tids:
+          type: array
+          items:
+            type: integer
+        mod-in:
+          type: array
+          items:
+            type: integer
+        mod-out:
+          type: array
+          items:
+            type: integer
+        n:
+          type: integer
+        n-cmts:
+          type: integer
+        pca:
+          type: object
+        repness:
+          type: object
+        tids:
+          type: array
+          items:
+            type: integer
+        user-vote-counts:
+          type: object
+        votes-base:
+          type: object
 
     MathV4:
       type: object
@@ -693,7 +727,10 @@ components:
         nextComment:
           type: object
         pca:
-          $ref: "#/components/schemas/MathV4"
+          oneOf:
+            - $ref: "#/components/schemas/MathV4"
+            # Old Polis servers.
+            - type: string
         ptpt:
           type: object
           nullable: true
@@ -751,6 +788,12 @@ components:
       required:
         - txt
         - tid
+        - created
+        - quote_src_url
+        - is_seed
+        - is_meta
+        - lang
+        - pid
       type: object
       properties:
         txt:
@@ -767,6 +810,12 @@ components:
           description: Unix timestamp of comment creation time
           format: int64
           example: 1403054214174
+        quote_src_url:
+          type: string
+          nullable: true
+          deprecated: true
+          description: URL for a quoted tweet
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
         is_seed:
           type: boolean
           description: Whether comment is a seed comment from moderator
@@ -785,61 +834,43 @@ components:
           description: Conversation-specific numeric ID of participant
           minimum: 0
           example: 0
-    CommentMod:
-      allOf:
-        - $ref: "#/components/schemas/Comment"
-        - type: object
-          properties:
-            velocity:
-              type: number
-              default: 1
-            mod:
-              type: integer
-              description: "Moderation status of comment: moderated _out_ (-1), _not yet_
-                moderated (0), or moderated _in_ (1)."
-              enum:
-                - -1
-                - 0
-                - 1
-              default: 0
-            active:
-              type: boolean
-            conversation_id:
-              type: string
-              example: 2demo
-    CommentModVoting:
-      allOf:
-        - $ref: "#/components/schemas/CommentMod"
-        - type: object
-          properties:
-            agree_count:
-              type: integer
-              minimum: 0
-              example: 75
-            disagree_count:
-              type: integer
-              minimum: 0
-              example: 29
-            pass_count:
-              type: integer
-              minimum: 0
-              example: 37
-            count:
-              type: integer
-              minimum: 0
-              example: 141
+        # moderation=true
+        velocity:
+          type: number
+          default: 1
+        mod:
+          type: integer
+          description: "Moderation status of comment: moderated _out_ (-1), _not yet_
+            moderated (0), or moderated _in_ (1)."
+          enum:
+            - -1
+            - 0
+            - 1
+          default: 0
+        active:
+          type: boolean
+        # include_voting_patterns=true
+        agree_count:
+          type: integer
+          minimum: 0
+          example: 75
+        disagree_count:
+          type: integer
+          minimum: 0
+          example: 29
+        pass_count:
+          type: integer
+          minimum: 0
+          example: 37
+        count:
+          type: integer
+          minimum: 0
+          example: 141
+
     ArrayOfComment:
       type: array
       items:
         $ref: "#/components/schemas/Comment"
-    ArrayOfCommentMod:
-      type: array
-      items:
-        $ref: "#/components/schemas/CommentMod"
-    ArrayOfCommentModVoting:
-      type: array
-      items:
-        $ref: "#/components/schemas/CommentModVoting"
 
     AuthTokenResponse:
       type: object
@@ -852,10 +883,12 @@ components:
           type: integer
 
     ApiError:
-      type: string
-      example: polis_err_param_parse_failed_conversation_id
+      # Use null to simplify types. In reality returns a string.
+      type: null
+      # type: string
+      example: Bad Request
   securitySchemes:
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

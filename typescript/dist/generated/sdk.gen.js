@@ -7,6 +7,7 @@ export const getReport = (options) => (options?.client ?? client).get({ url: '/r
 export const getConversation = (options) => (options.client ?? client).get({ url: '/conversations', ...options });
 export const getVotes = (options) => (options.client ?? client).get({ url: '/votes', ...options });
 export const createVote = (options) => (options.client ?? client).post({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/votes',
     ...options,
     headers: {
@@ -26,7 +27,15 @@ export const getComments = (options) => (options.client ?? client).get({ url: '/
  *
  * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
  */
-export const createComment = (options) => (options.client ?? client).post({ url: '/comments', ...options });
+export const createComment = (options) => (options.client ?? client).post({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/comments',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 /**
  * Download report CSV export
  *

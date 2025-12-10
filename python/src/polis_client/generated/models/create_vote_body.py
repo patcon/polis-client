@@ -15,28 +15,28 @@ T = TypeVar("T", bound="CreateVoteBody")
 class CreateVoteBody:
     """
     Attributes:
+        conversation_id (str):
         tid (int):
         vote (int):
-        conversation_id (str | Unset):
         high_priority (bool | Unset):
         lang (str | Unset):
         starred (bool | Unset):
     """
 
+    conversation_id: str
     tid: int
     vote: int
-    conversation_id: str | Unset = UNSET
     high_priority: bool | Unset = UNSET
     lang: str | Unset = UNSET
     starred: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        conversation_id = self.conversation_id
+
         tid = self.tid
 
         vote = self.vote
-
-        conversation_id = self.conversation_id
 
         high_priority = self.high_priority
 
@@ -48,12 +48,11 @@ class CreateVoteBody:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
+                "conversation_id": conversation_id,
                 "tid": tid,
                 "vote": vote,
             }
         )
-        if conversation_id is not UNSET:
-            field_dict["conversation_id"] = conversation_id
         if high_priority is not UNSET:
             field_dict["high_priority"] = high_priority
         if lang is not UNSET:
@@ -66,11 +65,11 @@ class CreateVoteBody:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
+        conversation_id = d.pop("conversation_id")
+
         tid = d.pop("tid")
 
         vote = d.pop("vote")
-
-        conversation_id = d.pop("conversation_id", UNSET)
 
         high_priority = d.pop("high_priority", UNSET)
 
@@ -79,9 +78,9 @@ class CreateVoteBody:
         starred = d.pop("starred", UNSET)
 
         create_vote_body = cls(
+            conversation_id=conversation_id,
             tid=tid,
             vote=vote,
-            conversation_id=conversation_id,
             high_priority=high_priority,
             lang=lang,
             starred=starred,

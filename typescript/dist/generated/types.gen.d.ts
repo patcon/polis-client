@@ -6,7 +6,46 @@ export type ConversationUuid = {
 };
 export type XidCsv = string;
 export type MathV3 = {
-    [key: string]: unknown;
+    'base-clusters'?: {
+        [key: string]: unknown;
+    };
+    'comment-priorities'?: {
+        [key: string]: unknown;
+    };
+    consensus?: {
+        [key: string]: unknown;
+    };
+    'group-aware-consensus'?: {
+        [key: string]: unknown;
+    };
+    'group-clusters'?: Array<{
+        [key: string]: unknown;
+    }>;
+    'group-votes'?: {
+        [key: string]: unknown;
+    };
+    'in-conv'?: Array<number>;
+    lastModTimestamp?: unknown;
+    lastVoteTimestamp?: number;
+    math_tick?: number;
+    'meta-tids'?: Array<number>;
+    'mod-in'?: Array<number>;
+    'mod-out'?: Array<number>;
+    n?: number;
+    'n-cmts'?: number;
+    pca?: {
+        [key: string]: unknown;
+    };
+    repness?: {
+        [key: string]: unknown;
+    };
+    tids?: Array<number>;
+    'user-vote-counts'?: {
+        [key: string]: unknown;
+    };
+    'votes-base'?: {
+        [key: string]: unknown;
+    };
 };
 export type MathV4 = {
     asBufferOfGzippedJson?: {
@@ -118,7 +157,7 @@ export type ParticipationInit = {
     nextComment?: {
         [key: string]: unknown;
     };
-    pca?: MathV4;
+    pca?: MathV4 | string;
     ptpt?: {
         [key: string]: unknown;
     } | null;
@@ -157,48 +196,47 @@ export type Comment = {
     /**
      * Unix timestamp of comment creation time
      */
-    created?: number;
+    created: number;
+    /**
+     * URL for a quoted tweet
+     *
+     * @deprecated
+     */
+    quote_src_url: string | null;
     /**
      * Whether comment is a seed comment from moderator
      */
-    is_seed?: boolean;
+    is_seed: boolean;
     /**
      * Whether comment has been marked as metadata by moderator
      */
-    is_meta?: boolean;
+    is_meta: boolean;
     /**
      * Language of submitted comment
      */
-    lang?: string;
+    lang: string;
     /**
      * Conversation-specific numeric ID of participant
      */
-    pid?: number;
-};
-export type CommentMod = Comment & {
+    pid: number;
     velocity?: number;
     /**
      * Moderation status of comment: moderated _out_ (-1), _not yet_ moderated (0), or moderated _in_ (1).
      */
     mod?: -1 | 0 | 1;
     active?: boolean;
-    conversation_id?: string;
-};
-export type CommentModVoting = CommentMod & {
     agree_count?: number;
     disagree_count?: number;
     pass_count?: number;
     count?: number;
 };
 export type ArrayOfComment = Array<Comment>;
-export type ArrayOfCommentMod = Array<CommentMod>;
-export type ArrayOfCommentModVoting = Array<CommentModVoting>;
 export type AuthTokenResponse = {
     token?: string;
     token_type?: string;
     expires_in?: number;
 };
-export type ApiError = string;
+export type ApiError = unknown;
 export type GetConversationUuidData = {
     body?: never;
     path?: never;
@@ -360,7 +398,7 @@ export type GetVotesResponses = {
 export type GetVotesResponse = GetVotesResponses[keyof GetVotesResponses];
 export type CreateVoteData = {
     body: {
-        conversation_id?: string;
+        conversation_id: string;
         tid: number;
         vote: number;
         high_priority?: boolean;
@@ -450,34 +488,18 @@ export type GetCommentsResponses = {
     /**
      * An array of comment objects
      */
-    200: ArrayOfCommentModVoting | ArrayOfCommentMod | ArrayOfComment;
+    200: ArrayOfComment;
 };
 export type GetCommentsResponse = GetCommentsResponses[keyof GetCommentsResponses];
 export type CreateCommentData = {
-    body?: never;
-    path?: never;
-    query: {
-        /**
-         * Conversation ID
-         */
+    body: {
         conversation_id: string;
-        /**
-         * Content of the submitted statement
-         */
         txt: string;
-        /**
-         * Conversation-specific external participant ID
-         */
-        xid?: string;
-        /**
-         * Whether this statement is a seed statement
-         */
         is_seed?: boolean;
-        /**
-         * Implicit vote when submitting statement
-         */
         vote?: -1 | 0 | 1;
     };
+    path?: never;
+    query?: never;
     url: '/comments';
 };
 export type CreateCommentErrors = {
@@ -491,7 +513,7 @@ export type CreateCommentResponses = {
     /**
      * An array of comment objects
      */
-    200: ArrayOfCommentModVoting | ArrayOfCommentMod | ArrayOfComment;
+    200: ArrayOfComment;
 };
 export type CreateCommentResponse = CreateCommentResponses[keyof CreateCommentResponses];
 export type GetExportFileData = {

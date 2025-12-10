@@ -1,7 +1,7 @@
 from enum import IntEnum
 
 
-class CommentModMod(IntEnum):
+class CreateCommentBodyVote(IntEnum):
     VALUE_NEGATIVE_1 = -1
     VALUE_0 = 0
     VALUE_1 = 1
