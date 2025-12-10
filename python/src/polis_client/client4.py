@@ -1,4 +1,6 @@
+from polis_client.generated.api.comments import create_comment
 from polis_client.generated.api.initialization import get_initialization
+from polis_client.generated.models.create_comment_body import CreateCommentBody
 from polis_client.generated.models.create_vote_body import CreateVoteBody
 from .generated.models.math_v3 import MathV3
 from .generated.client import Client as GeneratedClient, AuthenticatedClient as GeneratedAuthenticatedClient
@@ -282,7 +284,8 @@ class PolisClient:
         return response.parsed
 
     def create_vote_raw(self, conversation_id: str, **kwargs):
-        """Ensure token before creating a vote."""
+        """
+        """
         self._update_last_conversation_id(conversation_id)
         self._maybe_refresh_token()
 
@@ -292,6 +295,31 @@ class PolisClient:
         return create_vote.sync_detailed(
             client=self._client,
             body=CreateVoteBody(conversation_id=conversation_id, **kwargs)
+        )
+
+    def create_comment(self, conversation_id: str, **kwargs):
+        """
+        """
+        response = self.create_comment_raw(conversation_id=conversation_id, **kwargs)
+
+        if not (200 <= response.status_code < 300):
+            raise PolisAPIError(response.status_code, response.content)
+
+        return response.parsed
+
+    def create_comment_raw(self, conversation_id: str, **kwargs):
+        """
+        """
+        self._update_last_conversation_id(conversation_id)
+        self._maybe_refresh_token()
+
+        if not isinstance(self._client, GeneratedAuthenticatedClient):
+            raise
+
+        return create_comment.sync_detailed(
+            client=self._client,
+            body=CreateCommentBody(conversation_id=conversation_id, **kwargs),
+            **kwargs,
         )
 
     def get_report(
