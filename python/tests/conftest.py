@@ -11,6 +11,11 @@ SERVER_PROFILES = {
         "conversation_id": "2asfdaahhy",
         "report_id": "r3ejacrc8wuakjvfrcant",
     },
+    "crownshy": {
+        "base_url": "https://poliscommunity.crown-shy.com",
+        "conversation_id": "9a8zymfrdj",
+        "report_id": "r5awdrrrfif2zz5rbisnr",
+    },
 }
 
 
