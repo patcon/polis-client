@@ -251,7 +251,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NextVote"
+                $ref: "#/components/schemas/VoteResponse"
         "400":
           description: Bad request
           content:
@@ -537,6 +537,14 @@ components:
         expiration:
           type: integer
         repness:
+          type: object
+
+    VoteResponse:
+      type: object
+      properties:
+        currentPid:
+          type: integer
+        nextComment:
           type: object
 
     NextVote:
