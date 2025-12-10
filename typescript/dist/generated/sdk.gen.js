@@ -30,7 +30,11 @@ export const getComments = (options) => (options.client ?? client).get({ url: '/
 export const createComment = (options) => (options.client ?? client).post({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/comments',
-    ...options
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 /**
  * Download report CSV export

@@ -398,7 +398,7 @@ export type GetVotesResponses = {
 export type GetVotesResponse = GetVotesResponses[keyof GetVotesResponses];
 export type CreateVoteData = {
     body: {
-        conversation_id?: string;
+        conversation_id: string;
         tid: number;
         vote: number;
         high_priority?: boolean;
@@ -492,30 +492,14 @@ export type GetCommentsResponses = {
 };
 export type GetCommentsResponse = GetCommentsResponses[keyof GetCommentsResponses];
 export type CreateCommentData = {
-    body?: never;
-    path?: never;
-    query: {
-        /**
-         * Conversation ID
-         */
+    body: {
         conversation_id: string;
-        /**
-         * Content of the submitted statement
-         */
         txt: string;
-        /**
-         * Conversation-specific external participant ID
-         */
-        xid?: string;
-        /**
-         * Whether this statement is a seed statement
-         */
         is_seed?: boolean;
-        /**
-         * Implicit vote when submitting statement
-         */
         vote?: -1 | 0 | 1;
     };
+    path?: never;
+    query?: never;
     url: '/comments';
 };
 export type CreateCommentErrors = {

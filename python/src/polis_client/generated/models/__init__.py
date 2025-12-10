@@ -5,7 +5,8 @@ from .comment import Comment
 from .comment_mod import CommentMod
 from .conversation import Conversation
 from .conversation_uuid import ConversationUuid
-from .create_comment_vote import CreateCommentVote
+from .create_comment_body import CreateCommentBody
+from .create_comment_body_vote import CreateCommentBodyVote
 from .create_vote_body import CreateVoteBody
 from .get_comments_mod import GetCommentsMod
 from .get_comments_mod_gt import GetCommentsModGt
@@ -42,7 +43,8 @@ __all__ = (
     "CommentMod",
     "Conversation",
     "ConversationUuid",
-    "CreateCommentVote",
+    "CreateCommentBody",
+    "CreateCommentBodyVote",
     "CreateVoteBody",
     "GetCommentsMod",
     "GetCommentsModGt",

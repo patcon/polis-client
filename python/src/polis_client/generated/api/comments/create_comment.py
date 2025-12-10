@@ -6,42 +6,26 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.comment import Comment
-from ...models.create_comment_vote import CreateCommentVote
-from ...types import UNSET, Response, Unset
+from ...models.create_comment_body import CreateCommentBody
+from ...types import Response
 
 
 def _get_kwargs(
     *,
-    conversation_id: str,
-    txt: str,
-    xid: str | Unset = UNSET,
-    is_seed: bool | Unset = False,
-    vote: CreateCommentVote | Unset = UNSET,
+    body: CreateCommentBody,
 ) -> dict[str, Any]:
-    params: dict[str, Any] = {}
-
-    params["conversation_id"] = conversation_id
-
-    params["txt"] = txt
-
-    params["xid"] = xid
-
-    params["is_seed"] = is_seed
-
-    json_vote: int | Unset = UNSET
-    if not isinstance(vote, Unset):
-        json_vote = vote.value
-
-    params["vote"] = json_vote
-
-    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+    headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
         "method": "post",
         "url": "/comments",
-        "params": params,
     }
 
+    _kwargs["json"] = body.to_dict()
+
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
     return _kwargs
 
 
@@ -84,11 +68,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    conversation_id: str,
-    txt: str,
-    xid: str | Unset = UNSET,
-    is_seed: bool | Unset = False,
-    vote: CreateCommentVote | Unset = UNSET,
+    body: CreateCommentBody,
 ) -> Response[Any | list[Comment]]:
     """Create comment
 
@@ -96,11 +76,7 @@ def sync_detailed(
     sollicitudin tortor sollicitudin vitae.
 
     Args:
-        conversation_id (str):
-        txt (str):
-        xid (str | Unset):
-        is_seed (bool | Unset):  Default: False.
-        vote (CreateCommentVote | Unset):
+        body (CreateCommentBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -111,11 +87,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        conversation_id=conversation_id,
-        txt=txt,
-        xid=xid,
-        is_seed=is_seed,
-        vote=vote,
+        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -128,11 +100,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    conversation_id: str,
-    txt: str,
-    xid: str | Unset = UNSET,
-    is_seed: bool | Unset = False,
-    vote: CreateCommentVote | Unset = UNSET,
+    body: CreateCommentBody,
 ) -> Any | list[Comment] | None:
     """Create comment
 
@@ -140,11 +108,7 @@ def sync(
     sollicitudin tortor sollicitudin vitae.
 
     Args:
-        conversation_id (str):
-        txt (str):
-        xid (str | Unset):
-        is_seed (bool | Unset):  Default: False.
-        vote (CreateCommentVote | Unset):
+        body (CreateCommentBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -156,22 +120,14 @@ def sync(
 
     return sync_detailed(
         client=client,
-        conversation_id=conversation_id,
-        txt=txt,
-        xid=xid,
-        is_seed=is_seed,
-        vote=vote,
+        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    conversation_id: str,
-    txt: str,
-    xid: str | Unset = UNSET,
-    is_seed: bool | Unset = False,
-    vote: CreateCommentVote | Unset = UNSET,
+    body: CreateCommentBody,
 ) -> Response[Any | list[Comment]]:
     """Create comment
 
@@ -179,11 +135,7 @@ async def asyncio_detailed(
     sollicitudin tortor sollicitudin vitae.
 
     Args:
-        conversation_id (str):
-        txt (str):
-        xid (str | Unset):
-        is_seed (bool | Unset):  Default: False.
-        vote (CreateCommentVote | Unset):
+        body (CreateCommentBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -194,11 +146,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        conversation_id=conversation_id,
-        txt=txt,
-        xid=xid,
-        is_seed=is_seed,
-        vote=vote,
+        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -209,11 +157,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    conversation_id: str,
-    txt: str,
-    xid: str | Unset = UNSET,
-    is_seed: bool | Unset = False,
-    vote: CreateCommentVote | Unset = UNSET,
+    body: CreateCommentBody,
 ) -> Any | list[Comment] | None:
     """Create comment
 
@@ -221,11 +165,7 @@ async def asyncio(
     sollicitudin tortor sollicitudin vitae.
 
     Args:
-        conversation_id (str):
-        txt (str):
-        xid (str | Unset):
-        is_seed (bool | Unset):  Default: False.
-        vote (CreateCommentVote | Unset):
+        body (CreateCommentBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -238,10 +178,6 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
-            conversation_id=conversation_id,
-            txt=txt,
-            xid=xid,
-            is_seed=is_seed,
-            vote=vote,
+            body=body,
         )
     ).parsed

@@ -231,7 +231,7 @@ paths:
           application/json:
             schema:
               type: object
-              required: [tid, vote]
+              required: [conversation_id, tid, vote]
               properties:
                 conversation_id:
                   type: string
@@ -367,42 +367,23 @@ paths:
       description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
         interdum tristique neque, id sollicitudin tortor sollicitudin vitae.
       operationId: createComment
-      parameters:
-        - name: conversation_id
-          in: query
-          description: Conversation ID
-          required: true
-          example: 2demo
-          schema:
-            type: string
-            pattern: ^[0-9][a-z0-9]+$
-        - name: txt
-          in: query
-          description: Content of the submitted statement
-          required: true
-          example: I feel a certain way about this topic.
-          schema:
-            type: string
-        - name: xid
-          in: query
-          description: Conversation-specific external participant ID
-          required: false
-          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
-          schema:
-            type: string
-        - name: is_seed
-          in: query
-          description: Whether this statement is a seed statement
-          required: false
-          schema:
-            type: boolean
-            default: false
-        - name: vote
-          in: query
-          description: Implicit vote when submitting statement
-          schema:
-            type: integer
-            enum: [-1, 0, 1]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [conversation_id, txt]
+              properties:
+                conversation_id:
+                  type: string
+                txt:
+                  type: string
+                is_seed:
+                  type: boolean
+                vote:
+                  type: integer
+                  enum: [-1, 0, 1]
       responses:
         "200":
           description: An array of comment objects
