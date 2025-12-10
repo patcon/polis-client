@@ -32,7 +32,7 @@ export declare class PolisClient {
     getConversationXids(conversationId: string): Promise<string | undefined>;
     getMath(conversationId: string, extraQuery?: ExtraMathQuery): Promise<import("./generated/types.gen.js").MathV3 | undefined>;
     getVotes(conversationId: string, extraQuery?: ExtraVotesQuery): Promise<import("./generated/types.gen.js").ArrayOfVote | undefined>;
-    createVote(conversationId: string, body: VoteBody): Promise<import("./generated/types.gen.js").NextVote | undefined>;
+    createVote(conversationId: string, body: VoteBody): Promise<import("./generated/types.gen.js").VoteResponse | undefined>;
     getInitialization(conversationId: string, extraQuery?: ExtraInitializationQuery): Promise<import("./generated/types.gen.js").ParticipationInit | undefined>;
 }
 export {};

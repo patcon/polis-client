@@ -68,6 +68,13 @@ export type MathV4 = {
     };
 };
 
+export type VoteResponse = {
+    currentPid?: number;
+    nextComment?: {
+        [key: string]: unknown;
+    };
+};
+
 export type NextVote = {
     txt?: string;
     tid?: number;
@@ -471,7 +478,7 @@ export type CreateVoteResponses = {
     /**
      * An array of comment objects
      */
-    200: NextVote;
+    200: VoteResponse;
 };
 
 export type CreateVoteResponse = CreateVoteResponses[keyof CreateVoteResponses];

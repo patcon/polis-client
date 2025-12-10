@@ -36,6 +36,8 @@ from .participation_init_user import ParticipationInitUser
 from .participation_init_votes_item import ParticipationInitVotesItem
 from .report import Report
 from .vote import Vote
+from .vote_response import VoteResponse
+from .vote_response_next_comment import VoteResponseNextComment
 
 __all__ = (
     "AuthTokenResponse",
@@ -74,4 +76,6 @@ __all__ = (
     "ParticipationInitVotesItem",
     "Report",
     "Vote",
+    "VoteResponse",
+    "VoteResponseNextComment",
 )
