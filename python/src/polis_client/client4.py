@@ -1,3 +1,4 @@
+from polis_client.generated.api.initialization import get_initialization
 from .generated.models.math_v3 import MathV3
 from .generated.client import Client as GeneratedClient
 from .generated.api.comments import get_comments
@@ -9,6 +10,7 @@ from .generated.api.votes import get_votes
 from .generated.models.comment import Comment
 from .generated.models.conversation import Conversation
 from .generated.models.report import Report
+from .generated.models.participation_init import ParticipationInit
 from .generated.models.vote import Vote
 from .generated.models.get_export_file_filename import GetExportFileFilename
 from .generated.types import Response
@@ -211,6 +213,30 @@ class PolisClient:
         return get_report.sync_detailed(
             client=self._client,
             report_id=report_id,
+            **kwargs,
+        )
+
+    def get_initialization(
+        self,
+        conversation_id: str,
+        **kwargs,
+    ) -> Optional[ParticipationInit]:
+        response = self.get_initialization_raw(conversation_id=conversation_id, **kwargs)
+
+        if not (200 <= response.status_code < 300):
+            raise PolisAPIError(response.status_code, response.content)
+
+        return response.parsed
+
+    def get_initialization_raw(
+        self,
+        conversation_id: str,
+        **kwargs,
+    ) -> Response[ParticipationInit]:
+        """Get the participationInit response for a conversation."""
+        return get_initialization.sync_detailed(
+            client=self._client,
+            conversation_id=conversation_id,
             **kwargs,
         )
 

@@ -17,6 +17,7 @@ def expected_data(server_profile):
     math_file = snapshot_path / f"{server_name}.math.{convo_id}.expected.json"
     reports_file = snapshot_path / f"{server_name}.reports.{report_id}.expected.json"
     votes_file = snapshot_path / f"{server_name}.votes.{convo_id}.0.expected.json"
+    init_file = snapshot_path / f"{server_name}.participationInit.{convo_id}.expected.json"
 
     return {
         "comments": json.loads(comments_file.read_text()),
@@ -24,6 +25,7 @@ def expected_data(server_profile):
         "math": json.loads(math_file.read_text()),
         "reports": json.loads(reports_file.read_text()),
         "votes": json.loads(votes_file.read_text()),
+        "participationInit": json.loads(init_file.read_text()),
     }
 
 @pytest.mark.live_api
@@ -176,24 +178,30 @@ def test_live_api_get_full_export_bad_report_id(client):
     with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_full_export(report_id="non-existent")
 
-# @pytest.mark.live_api
-# def test_live_api_get_initialization_success():
-#     client = PolisClient()
-#     result = client.get_initialization(conversation_id="2demo")
+@pytest.mark.live_api
+def test_live_api_get_initialization_success(client, server_profile, expected_data):
+    convo_id = server_profile["conversation_id"]
 
-#     expected_keys = [
-#         'acceptLanguage',
-#         'conversation',
-#         'famous',
-#         'nextComment',
-#         'pca',
-#         'ptpt',
-#         'user',
-#         'votes',
-#     ]
+    # Drop the nextComment key, since it varies each request.
+    expected_init = expected_data["participationInit"]
+    # expected_data["participationInit"]["nextComment"] = {}
+    # expected_data["participationInit"]["acceptLanguage"] = "en-US"
 
-#     assert len(expected_keys) == len(result.to_dict().keys())
-#     assert sorted(result.to_dict().keys()) == sorted(expected_keys)
+    result = client.get_initialization(conversation_id=convo_id)
+    actual_init = result.to_dict()
+    # actual_init["nextComment"] = {}
+
+    assert len(expected_init.keys()) == len(actual_init.keys())
+    assert sorted(expected_init.keys()) == sorted(actual_init.keys())
+    # Why we disable:
+    # - Floating point values seem to update
+    # - nextComment varies
+    # assert expected_init == actual_init
+
+@pytest.mark.live_api
+def test_live_api_get_initialization_nonexistent_convo_id(client):
+    with pytest.raises(PolisAPIError, match="400: Bad Request"):
+        client.get_initialization(conversation_id="non-existent")
 
 # @pytest.mark.live_api
 # def test_live_api_get_full_export_success():
