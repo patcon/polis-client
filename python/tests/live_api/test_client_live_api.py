@@ -1,7 +1,7 @@
 from polis_client.generated.models.comment import Comment
 from polis_client.generated.models.conversation import Conversation
 import pytest
-from polis_client.client4 import PolisAPIError, PolisClient
+from polis_client.client4 import PolisAPIError
 
 @pytest.fixture
 def expected_data(server_profile):
