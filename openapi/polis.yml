@@ -746,7 +746,10 @@ components:
         nextComment:
           type: object
         pca:
-          $ref: "#/components/schemas/MathV4"
+          oneOf:
+            - $ref: "#/components/schemas/MathV4"
+            # Old Polis servers.
+            - type: string
         ptpt:
           type: object
           nullable: true
