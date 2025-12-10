@@ -253,6 +253,8 @@ class PolisClient:
             - votes.csv
             - participant-votes.csv
             - comment-groups.csv
+            - comment-clusters.csv (maybe)
+            - participant-importance.csv (maybe)
         """
 
         response = self.get_export_file_raw(
