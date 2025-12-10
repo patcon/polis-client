@@ -1,4 +1,4 @@
-from polis_client.generated.models.math_v3 import MathV3
+from .generated.models.math_v3 import MathV3
 from .generated.client import Client as GeneratedClient
 from .generated.api.comments import get_comments
 from .generated.api.conversations import get_conversation
@@ -12,24 +12,11 @@ from .generated.models.report import Report
 from .generated.models.vote import Vote
 from .generated.models.get_export_file_filename import GetExportFileFilename
 from .generated.types import Response
+from .errors import PolisAPIError
 from typing import Any, List, Optional
 
 
 _ALLOWED_EXPORT_FILES: set[str] = {e.value for e in GetExportFileFilename}
-
-class PolisAPIError(Exception):
-    """Raised when the Polis API returns an error status code."""
-
-    def __init__(self, status_code: int, content: bytes, message: Optional[str] = None):
-        self.status_code = status_code
-        self.content = content
-
-        if message is None:
-            content_str = content.decode('utf-8')
-            message = f"Polis API returned status {status_code}: {content_str}"
-
-        super().__init__(message)
-
 
 class PolisClient:
     """Simple Polis API client wrapper around generated client code."""
