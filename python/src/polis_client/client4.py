@@ -1,29 +1,43 @@
 from polis_client.generated.api.initialization import get_initialization
+from polis_client.generated.models.create_vote_body import CreateVoteBody
 from .generated.models.math_v3 import MathV3
-from .generated.client import Client as GeneratedClient
+from .generated.client import Client as GeneratedClient, AuthenticatedClient as GeneratedAuthenticatedClient
 from .generated.api.comments import get_comments
 from .generated.api.conversations import get_conversation
 from .generated.api.exports import get_export_file
 from .generated.api.math import get_math
 from .generated.api.reports import get_report
-from .generated.api.votes import get_votes
+from .generated.api.votes import get_votes, create_vote
 from .generated.models.comment import Comment
 from .generated.models.conversation import Conversation
 from .generated.models.report import Report
 from .generated.models.participation_init import ParticipationInit
 from .generated.models.vote import Vote
 from .generated.models.get_export_file_filename import GetExportFileFilename
-from .generated.types import Response
+from .generated.types import UNSET, Response, Unset
 from .errors import PolisAPIError
 from typing import Any, List, Optional
+import time
+import base64
+import json
 
 
 _ALLOWED_EXPORT_FILES: set[str] = {e.value for e in GetExportFileFilename}
 
+def _decode_jwt(token: str) -> dict:
+    """Decode JWT without verifying signature (we only need exp, xid, conversation_id)."""
+    try:
+        payload_b64 = token.split(".")[1]
+        padded = payload_b64 + "=" * (-len(payload_b64) % 4)
+        data = base64.urlsafe_b64decode(padded)
+        return json.loads(data)
+    except Exception:
+        return {}
+
 class PolisClient:
     """Simple Polis API client wrapper around generated client code."""
 
-    def __init__(self, base_url: str = "https://pol.is"):
+    def __init__(self, base_url: str = "https://pol.is", xid: str | Unset = UNSET, token: Optional[str] = None):
         """
         Initialize the Polis client.
 
@@ -35,12 +49,85 @@ class PolisClient:
         """
         # Normalize: remove trailing slash
         base = base_url.rstrip("/")
-
         # If it already ends with /api/v3, keep it as-is
         if not base.endswith("/api/v3"):
             base = f"{base}/api/v3"
 
-        self._client = GeneratedClient(base_url=base)
+        self.base_url = base
+        self._xid = xid
+        self._token = token
+        self._last_conversation_id: Optional[str] = None
+        self._client: GeneratedClient | GeneratedAuthenticatedClient = GeneratedClient(base_url=base)
+
+        self._initialize_from_token()
+
+    def _update_last_conversation_id(self, conversation_id: str):
+        if conversation_id and self._last_conversation_id != conversation_id:
+            self._last_conversation_id = conversation_id
+
+    def _initialize_from_token(self):
+        """
+        If a token is provided, decode it and extract stable fields
+        such as xid and conversation_id. This runs only during __init__.
+        """
+        if not self._token:
+            return
+
+        try:
+            payload = _decode_jwt(self._token)
+        except Exception:
+            return  # Token may be an opaque string or not a JWT yet
+
+        xid = payload.get("xid")
+        if xid:
+            self._xid = xid
+
+        conversation_id = payload.get("conversation_id")
+        if conversation_id:
+            self._last_conversation_id = conversation_id
+
+    def _maybe_refresh_token(self):
+        """
+        Refresh token only if:
+        - we have self._xid
+        - we have self._last_conversation_id
+        - token missing or expired
+        """
+
+        # Cannot refresh yet
+        if not self._xid or not self._last_conversation_id:
+            self._client = GeneratedClient(base_url=self.base_url)
+            return
+
+        # Determine if expired
+        token_is_expired = True
+        if self._token:
+            payload = _decode_jwt(self._token)
+            exp = payload.get("exp")
+            token_is_expired = not exp or time.time() > exp
+
+        if token_is_expired:
+            # Fetch new token using get_initialization
+            init_response = get_initialization.sync_detailed(
+                client=self._client,
+                conversation_id=self._last_conversation_id,
+                xid=self._xid,
+            )
+            init = init_response.parsed
+
+            auth_obj = getattr(init, "auth", None)
+            self._token = getattr(auth_obj, "token", None) if auth_obj else None
+
+        # Still no token → unauthenticated mode
+        if not self._token:
+            self._client = GeneratedClient(base_url=self.base_url)
+            return
+
+        # Token present → authenticated client
+        self._client = GeneratedAuthenticatedClient(
+            base_url=self.base_url,
+            token=self._token,
+        )
 
     def get_comments(self, **kwargs) -> Optional[List[Comment]]:
         """Get comments for a conversation, returning parsed Comment objects or raising on error.
@@ -78,6 +165,8 @@ class PolisClient:
         Returns:
             Response object with status_code, headers, content, and parsed data
         """
+        self._update_last_conversation_id(conversation_id)
+
         return get_comments.sync_detailed(
             client=self._client,
             conversation_id=conversation_id,
@@ -116,6 +205,8 @@ class PolisClient:
         Returns:
             Response object with status_code, headers, content, and parsed data
         """
+        self._update_last_conversation_id(conversation_id)
+
         return get_conversation.sync_detailed(
             client=self._client,
             conversation_id=conversation_id,
@@ -134,6 +225,8 @@ class PolisClient:
         return response.parsed
 
     def get_math_raw(self, conversation_id: str, **kwargs) -> Response[Any | MathV3]:
+        self._update_last_conversation_id(conversation_id)
+
         return get_math.sync_detailed(
             client=self._client,
             conversation_id=conversation_id,
@@ -170,10 +263,35 @@ class PolisClient:
         **kwargs,
     ) -> Response[Any | List[Vote]]:
         """Get votes for a conversation, returning full Response object."""
+        self._update_last_conversation_id(conversation_id)
+
         return get_votes.sync_detailed(
             client=self._client,
             conversation_id=conversation_id,
             **kwargs,
+        )
+
+    def create_vote(self, conversation_id: str, **kwargs):
+        """
+        """
+        response = self.create_vote_raw(conversation_id=conversation_id, **kwargs)
+
+        if not (200 <= response.status_code < 300):
+            raise PolisAPIError(response.status_code, response.content)
+
+        return response.parsed
+
+    def create_vote_raw(self, conversation_id: str, **kwargs):
+        """Ensure token before creating a vote."""
+        self._update_last_conversation_id(conversation_id)
+        self._maybe_refresh_token()
+
+        if not isinstance(self._client, GeneratedAuthenticatedClient):
+            raise
+
+        return create_vote.sync_detailed(
+            client=self._client,
+            body=CreateVoteBody(conversation_id=conversation_id, **kwargs)
         )
 
     def get_report(
@@ -234,9 +352,12 @@ class PolisClient:
         **kwargs,
     ) -> Response[ParticipationInit]:
         """Get the participationInit response for a conversation."""
+        self._update_last_conversation_id(conversation_id)
+
         return get_initialization.sync_detailed(
             client=self._client,
             conversation_id=conversation_id,
+            xid=self._xid,
             **kwargs,
         )
 
