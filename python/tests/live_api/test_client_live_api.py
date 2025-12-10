@@ -1,41 +1,35 @@
 from polis_client.generated.models.comment import Comment
 from polis_client.generated.models.conversation import Conversation
 import pytest
+import json
+from pathlib import Path
 from polis_client.client4 import PolisAPIError
 
 @pytest.fixture
 def expected_data(server_profile):
-    return server_profile["expected_data"]
+    snapshot_path = Path(__file__).parent / "__snapshots__"
+    server_name = server_profile["name"]
+    convo_id = server_profile["conversation_id"]
+    report_id = server_profile["report_id"]
 
-@pytest.fixture
-def math_keys():
+    comments_file = snapshot_path / f"{server_name}.comments.{convo_id}.expected.json"
+    conversation_file = snapshot_path / f"{server_name}.conversation.{convo_id}.expected.json"
+    math_file = snapshot_path / f"{server_name}.math.{convo_id}.expected.json"
+    reports_file = snapshot_path / f"{server_name}.reports.{report_id}.expected.json"
+    votes_file = snapshot_path / f"{server_name}.votes.{convo_id}.0.expected.json"
+
     return {
-        "base-clusters",
-        "comment-priorities",
-        "consensus",
-        "group-aware-consensus",
-        "group-clusters",
-        "group-votes",
-        "in-conv",
-        "lastModTimestamp",
-        "lastVoteTimestamp",
-        "math_tick",
-        "meta-tids",
-        "mod-in",
-        "mod-out",
-        "n",
-        "n-cmts",
-        "pca",
-        "repness",
-        "tids",
-        "user-vote-counts",
-        "votes-base",
+        "comments": json.loads(comments_file.read_text()),
+        "conversation": json.loads(conversation_file.read_text()),
+        "math": json.loads(math_file.read_text()),
+        "reports": json.loads(reports_file.read_text()),
+        "votes": json.loads(votes_file.read_text()),
     }
 
 @pytest.mark.live_api
 def test_live_api_get_comments_success(client, server_profile, expected_data):
     convo_id = server_profile["conversation_id"]
-    expected_first_comment = expected_data[convo_id]["first_comment"]
+    expected_first_comment = expected_data["comments"][0]
 
     comments = client.get_comments(conversation_id=convo_id)
 
@@ -55,7 +49,7 @@ def test_live_api_get_comments_nonexistent_convo_id(client):
 @pytest.mark.live_api
 def test_live_api_get_conversation_success(client, server_profile, expected_data):
     convo_id = server_profile["conversation_id"]
-    expected_conversation = expected_data[convo_id]["conversation"]
+    expected_conversation = expected_data["conversation"]
 
     convo = client.get_conversation(conversation_id=convo_id)
 
@@ -68,15 +62,15 @@ def test_live_api_get_conversation_nonexistent_convo_id(client):
         client.get_conversation(conversation_id="non-existent")
 
 @pytest.mark.live_api
-def test_live_api_get_math_success(client, server_profile, math_keys):
+def test_live_api_get_math_success(client, server_profile, expected_data):
     convo_id = server_profile["conversation_id"]
-    expected_math_keys = math_keys
+    expected_math = expected_data["math"]
 
     math = client.get_math(conversation_id=convo_id)
 
     assert math is not None
-    if math:
-        assert sorted(expected_math_keys) == sorted(math.to_dict())
+    assert sorted(expected_math.keys()) == sorted(math.to_dict().keys())
+    assert sorted(expected_math) == sorted(math.to_dict())
 
 @pytest.mark.live_api
 def test_live_api_get_math_nonexistent_convo_id(client):
@@ -93,7 +87,7 @@ def test_live_api_get_votes_no_pid_success(client, server_profile):
 @pytest.mark.live_api
 def test_live_api_get_votes_success(client, server_profile, expected_data):
     convo_id = server_profile["conversation_id"]
-    expected_first_vote = expected_data[convo_id]["first_vote"]
+    expected_first_vote = expected_data["votes"][0]
 
     votes = client.get_votes(conversation_id=convo_id, pid=0)
 
@@ -115,7 +109,7 @@ def test_live_api_get_votes_nonexistent_pid(client, server_profile):
 @pytest.mark.live_api
 def test_live_api_get_report_success(client, server_profile, expected_data):
     report_id = server_profile["report_id"]
-    expected_report = expected_data[report_id]["report"]
+    expected_report = expected_data["reports"][0]
 
     report = client.get_report(report_id=report_id)
 
