@@ -42,7 +42,7 @@ def _decode_jwt(token: str) -> dict:
 class PolisClient:
     """Simple Polis API client wrapper around generated client code."""
 
-    def __init__(self, base_url: str = "https://pol.is", xid: str | Unset = UNSET, token: Optional[str] = None):
+    def __init__(self, base_url: str = "https://pol.is", xid: Optional[str] = None, token: Optional[str] = None):
         """
         Initialize the Polis client.
 
@@ -59,7 +59,7 @@ class PolisClient:
             base = f"{base}/api/v3"
 
         self.base_url = base
-        self._xid = xid
+        self._xid: str | Unset = UNSET if xid is None else xid
         self._token = token
         self._last_conversation_id: Optional[str] = None
         self._client: GeneratedClient | GeneratedAuthenticatedClient = GeneratedClient(base_url=base)
@@ -370,6 +370,8 @@ class PolisClient:
         conversation_id: str,
         **kwargs,
     ) -> Optional[ParticipationInit]:
+        """
+        """
         response = self.get_initialization_raw(conversation_id=conversation_id, **kwargs)
 
         if not (200 <= response.status_code < 300):
