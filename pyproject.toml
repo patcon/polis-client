@@ -7,7 +7,10 @@ authors = [
     { name = "Patrick Connolly", email = "patrick.c.connolly@gmail.com" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "attrs>=25.4.0",
+    "httpx>=0.28.1",
+]
 
 [project.scripts]
 polis-client = "polis_client:main"
