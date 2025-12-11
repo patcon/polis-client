@@ -12,9 +12,6 @@ dependencies = [
     "httpx>=0.28.1",
 ]
 
-[project.scripts]
-polis-client = "polis_client:main"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
