@@ -21,6 +21,10 @@ votes = polis.get_votes(conversation_id="2demo", pid=10)
 if votes:
     print(votes[0].to_dict())
 
+all_votes = polis.get_all_votes_slow(conversation_id="4cvkai2ctw")
+if all_votes:
+    print(f"Fetched all {len(all_votes)} votes...")
+
 
 print("Testing the authenticated client...")
 polis_auth = PolisClient(xid="foobar")

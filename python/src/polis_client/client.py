@@ -394,26 +394,6 @@ class PolisClient:
             **kwargs,
         )
 
-    def get_xids(self, conversation_id: str):
-        """
-        Fetch conversation_uuid, then get XIDs.
-        Ensures token is initialized if xid is set.
-        """
-        self._update_last_conversation_id(conversation_id)
-        self._maybe_refresh_token()
-
-        conv_data = get_conversation_uuid.sync(client=self._client, conversation_id=conversation_id)
-        conversation_uuid = getattr(conv_data, "conversation_uuid", None)
-        if not conversation_uuid:
-            raise ValueError(f"No conversation_uuid found for {conversation_id}")
-
-        xids_csv = get_conversation_xids_by_uuid.sync(client=self._client, conversation_uuid=conversation_uuid)
-
-        reader = csv.DictReader(io.StringIO(xids_csv))
-        xid_rows = list(reader)
-
-        return xid_rows
-
     def get_export_file_raw(
         self,
         report_id: str,
@@ -474,6 +454,9 @@ class PolisClient:
 
         return response.parsed
 
+
+    # Convenience functions
+
     def get_full_export(self, report_id: str, **kwargs) -> dict[str, str]:
         """
         Download all CSV export files for a given report_id.
@@ -498,3 +481,60 @@ class PolisClient:
             )
 
         return exports
+
+    def get_xids(self, conversation_id: str):
+        """
+        A convenience function to get any xids associated with a conversation.
+
+        This is a compound method that makes two API requests:
+        get_conversation_uuid and get_conversation_xids_by_uuid
+
+        It returns of list of dicts like so:
+
+        ```
+        [
+            {"participant": "<pid>", "xid": "foobar"},
+            {"participant": "<pid>", "xid": "foobar"},
+            ...
+        ]
+        ```
+        """
+        self._update_last_conversation_id(conversation_id)
+        self._maybe_refresh_token()
+
+        conv_data = get_conversation_uuid.sync(client=self._client, conversation_id=conversation_id)
+        conversation_uuid = getattr(conv_data, "conversation_uuid", None)
+        if not conversation_uuid:
+            raise ValueError(f"No conversation_uuid found for {conversation_id}")
+
+        xids_csv = get_conversation_xids_by_uuid.sync(client=self._client, conversation_uuid=conversation_uuid)
+
+        reader = csv.DictReader(io.StringIO(xids_csv))
+        xid_rows = list(reader)
+
+        return xid_rows
+
+    def get_all_votes_slow(self, conversation_id: str):
+        """
+        A convenience function to get all votes for a conversation.
+
+        This is a compound method that makes an API request for each participant,
+        so it can be quite intensive on large conversations.
+
+        If you have a report ID, you should instead fetch all votes with a single
+        request to get_export_file(filename="votes.csv", ...).
+        """
+        math = self.get_math(conversation_id)
+        if not math:
+            raise
+
+        n_participants = math.to_dict()["n"]
+        all_votes = []
+
+        for pid in range(n_participants):
+            # Assuming you have a method like get_votes_for_participant
+            participant_votes = self.get_votes(conversation_id, pid=pid)
+            if participant_votes:
+                all_votes.extend(participant_votes)
+
+        return all_votes
