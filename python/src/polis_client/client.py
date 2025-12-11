@@ -502,6 +502,10 @@ class PolisClient:
         self._update_last_conversation_id(conversation_id)
         self._maybe_refresh_token()
 
+        if not self._token:
+            # TODO: Raise a better exception, because we must be authenticated for this.
+            raise
+
         conv_data = get_conversation_uuid.sync(client=self._client, conversation_id=conversation_id)
         conversation_uuid = getattr(conv_data, "conversation_uuid", None)
         if not conversation_uuid:
