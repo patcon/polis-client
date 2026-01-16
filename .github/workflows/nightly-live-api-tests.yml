@@ -5,6 +5,7 @@ on:
     # Runs every night at 2:00 AM UTC
     - cron: "0 2 * * *"
   workflow_dispatch: {}  # optional: allows manual runs
+  pull_request:
 
 jobs:
   test-live-api:
