@@ -28,6 +28,8 @@ from .math_v4_consensus import MathV4Consensus
 from .math_v4_repness import MathV4Repness
 from .next_vote import NextVote
 from .next_vote_translations_item import NextVoteTranslationsItem
+from .participant_response import ParticipantResponse
+from .participant_response_mod import ParticipantResponseMod
 from .participation_init import ParticipationInit
 from .participation_init_famous import ParticipationInitFamous
 from .participation_init_next_comment import ParticipationInitNextComment
@@ -68,6 +70,8 @@ __all__ = (
     "MathV4Repness",
     "NextVote",
     "NextVoteTranslationsItem",
+    "ParticipantResponse",
+    "ParticipantResponseMod",
     "ParticipationInit",
     "ParticipationInitFamous",
     "ParticipationInitNextComment",

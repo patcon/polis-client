@@ -75,6 +75,22 @@ export type VoteResponse = {
     };
 };
 
+export type ParticipantResponse = {
+    pid?: number;
+    uid?: number;
+    zid?: number;
+    vote_count?: number;
+    last_interaction?: string;
+    subscribed?: number;
+    last_notified?: string;
+    nsli?: number;
+    /**
+     * Moderation status of comment: moderated _out_ (-1), _not yet_ moderated (0), or moderated _in_ (1).
+     */
+    mod?: -1 | 0 | 1;
+    created?: string;
+};
+
 export type NextVote = {
     txt?: string;
     tid?: number;
@@ -261,6 +277,31 @@ export type AuthTokenResponse = {
 };
 
 export type ApiError = unknown;
+
+export type GetParticipantData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Alphnumeric ID for conversation
+         */
+        conversation_id: string;
+        /**
+         * Conversation-specific external participant ID.
+         */
+        xid?: string;
+    };
+    url: '/participants';
+};
+
+export type GetParticipantResponses = {
+    /**
+     * Conversation participant object.
+     */
+    200: ParticipantResponse;
+};
+
+export type GetParticipantResponse = GetParticipantResponses[keyof GetParticipantResponses];
 
 export type GetConversationUuidData = {
     body?: never;
