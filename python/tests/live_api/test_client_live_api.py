@@ -208,6 +208,8 @@ def test_live_api_get_initialization_nonexistent_convo_id(client):
 
 # TODO: Add live_api tests for get_participant method.
 
+# TODO: Add live_api tests for participationInit with an xid.
+
 # @pytest.mark.live_api
 # def test_live_api_get_full_export_success():
 #     client = PolisClient()
