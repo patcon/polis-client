@@ -206,6 +206,8 @@ def test_live_api_get_initialization_nonexistent_convo_id(client):
     with pytest.raises(PolisAPIError, match="400: Bad Request"):
         client.get_initialization(conversation_id="non-existent")
 
+# TODO: Add live_api tests for get_participant method.
+
 # @pytest.mark.live_api
 # def test_live_api_get_full_export_success():
 #     client = PolisClient()

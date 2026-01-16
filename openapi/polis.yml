@@ -23,6 +23,35 @@ servers:
       server:
         default: https://pol.is
 paths:
+  /participants:
+    get:
+      tags:
+        - users
+      operationId: getParticipant
+      parameters:
+        - name: conversation_id
+          in: query
+          description: Alphnumeric ID for conversation
+          required: true
+          example: 2demo
+          schema:
+            type: string
+            pattern: ^[0-9][a-z0-9]+$
+        - name: xid
+          in: query
+          description: Conversation-specific external participant ID.
+          required: false
+          example: b2bcbd1b-43f7-4640-af05-7ae5aedb8ea5
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Conversation participant object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParticipantResponse"
+      security: []
   /conversationUuid:
     get:
       tags:
@@ -546,6 +575,36 @@ components:
           type: integer
         nextComment:
           type: object
+
+    ParticipantResponse:
+      type: object
+      properties:
+        pid:
+          type: integer
+        uid:
+          type: integer
+        zid:
+          type: integer
+        vote_count:
+          type: integer
+        last_interaction:
+          type: string
+        subscribed:
+          type: integer
+        last_notified:
+          type: string
+        nsli:
+          type: integer
+        mod:
+          type: integer
+          description: "Moderation status of comment: moderated _out_ (-1), _not yet_
+            moderated (0), or moderated _in_ (1)."
+          enum:
+            - -1
+            - 0
+            - 1
+        created:
+          type: string
 
     NextVote:
       type: object
