@@ -11,9 +11,11 @@ from .generated.api.exports import get_export_file
 from .generated.api.math import get_math
 from .generated.api.reports import get_report
 from .generated.api.votes import get_votes, create_vote
+from .generated.api.users import get_participant
 from .generated.models.comment import Comment
 from .generated.models.conversation import Conversation
 from .generated.models.report import Report
+from .generated.models.participant_response import ParticipantResponse
 from .generated.models.participation_init import ParticipationInit
 from .generated.models.vote import Vote
 from .generated.models.get_export_file_filename import GetExportFileFilename
@@ -179,6 +181,29 @@ class PolisClient:
             include_voting_patterns=include_voting_patterns,
             **kwargs,
         )
+
+    def get_participant(self, conversation_id: str, xid: str | Unset = UNSET, **kwargs) -> Optional[ParticipantResponse]:
+        """Get conversation participant details.
+
+        Args:
+            conversation_id: conversation ID on which participant is scoped
+            xid: external ID of the participant
+
+        Returns:
+            Participant object if successful.
+        """
+        response = get_participant.sync_detailed(
+            client=self._client,
+            conversation_id=conversation_id,
+            xid=xid,
+            **kwargs,
+        )
+
+        # Check if status code is not 2XX
+        if not (200 <= response.status_code < 300):
+            raise PolisAPIError(response.status_code, response.content)
+
+        return response.parsed
 
     def get_conversation(self, conversation_id: str, **kwargs) -> Optional[Conversation]:
         """Get conversation details, returning parsed Conversation object or raising on error.
