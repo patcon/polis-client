@@ -27,7 +27,7 @@ test: test-py ## Run all tests
 test-py: ## Run Python tests
 	$(UV_RUN) pytest
 
-test-live-api:
+test-live-api: ## Run Python live_api tests
 	$(UV_RUN) uv run pytest -m live_api
 
 debug-ts:
