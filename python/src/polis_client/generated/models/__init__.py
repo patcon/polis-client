@@ -33,7 +33,7 @@ from .participant_response_mod import ParticipantResponseMod
 from .participation_init import ParticipationInit
 from .participation_init_famous import ParticipationInitFamous
 from .participation_init_next_comment import ParticipationInitNextComment
-from .participation_init_ptpt_type_0 import ParticipationInitPtptType0
+from .participation_init_ptpt import ParticipationInitPtpt
 from .participation_init_user import ParticipationInitUser
 from .participation_init_votes_item import ParticipationInitVotesItem
 from .report import Report
@@ -75,7 +75,7 @@ __all__ = (
     "ParticipationInit",
     "ParticipationInitFamous",
     "ParticipationInitNextComment",
-    "ParticipationInitPtptType0",
+    "ParticipationInitPtpt",
     "ParticipationInitUser",
     "ParticipationInitVotesItem",
     "Report",

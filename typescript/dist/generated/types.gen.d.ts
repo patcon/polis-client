@@ -179,9 +179,7 @@ export type ParticipationInit = {
         [key: string]: unknown;
     };
     pca?: MathV4 | string;
-    ptpt?: {
-        [key: string]: unknown;
-    } | null;
+    ptpt?: unknown & ParticipantResponse;
     user?: {
         [key: string]: unknown;
     };

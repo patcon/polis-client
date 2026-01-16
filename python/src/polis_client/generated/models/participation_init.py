@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from ..models.math_v4 import MathV4
     from ..models.participation_init_famous import ParticipationInitFamous
     from ..models.participation_init_next_comment import ParticipationInitNextComment
-    from ..models.participation_init_ptpt_type_0 import ParticipationInitPtptType0
+    from ..models.participation_init_ptpt import ParticipationInitPtpt
     from ..models.participation_init_user import ParticipationInitUser
     from ..models.participation_init_votes_item import ParticipationInitVotesItem
 
@@ -31,7 +31,7 @@ class ParticipationInit:
         famous (ParticipationInitFamous | Unset):
         next_comment (ParticipationInitNextComment | Unset):
         pca (MathV4 | str | Unset):
-        ptpt (None | ParticipationInitPtptType0 | Unset):
+        ptpt (ParticipationInitPtpt | Unset):
         user (ParticipationInitUser | Unset):
         votes (list[ParticipationInitVotesItem] | Unset):
         auth (AuthTokenResponse | Unset):
@@ -42,7 +42,7 @@ class ParticipationInit:
     famous: ParticipationInitFamous | Unset = UNSET
     next_comment: ParticipationInitNextComment | Unset = UNSET
     pca: MathV4 | str | Unset = UNSET
-    ptpt: None | ParticipationInitPtptType0 | Unset = UNSET
+    ptpt: ParticipationInitPtpt | Unset = UNSET
     user: ParticipationInitUser | Unset = UNSET
     votes: list[ParticipationInitVotesItem] | Unset = UNSET
     auth: AuthTokenResponse | Unset = UNSET
@@ -50,7 +50,6 @@ class ParticipationInit:
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.math_v4 import MathV4
-        from ..models.participation_init_ptpt_type_0 import ParticipationInitPtptType0
 
         accept_language = self.accept_language
 
@@ -74,13 +73,9 @@ class ParticipationInit:
         else:
             pca = self.pca
 
-        ptpt: dict[str, Any] | None | Unset
-        if isinstance(self.ptpt, Unset):
-            ptpt = UNSET
-        elif isinstance(self.ptpt, ParticipationInitPtptType0):
+        ptpt: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.ptpt, Unset):
             ptpt = self.ptpt.to_dict()
-        else:
-            ptpt = self.ptpt
 
         user: dict[str, Any] | Unset = UNSET
         if not isinstance(self.user, Unset):
@@ -130,7 +125,7 @@ class ParticipationInit:
         from ..models.participation_init_next_comment import (
             ParticipationInitNextComment,
         )
-        from ..models.participation_init_ptpt_type_0 import ParticipationInitPtptType0
+        from ..models.participation_init_ptpt import ParticipationInitPtpt
         from ..models.participation_init_user import ParticipationInitUser
         from ..models.participation_init_votes_item import ParticipationInitVotesItem
 
@@ -173,22 +168,12 @@ class ParticipationInit:
 
         pca = _parse_pca(d.pop("pca", UNSET))
 
-        def _parse_ptpt(data: object) -> None | ParticipationInitPtptType0 | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                ptpt_type_0 = ParticipationInitPtptType0.from_dict(data)
-
-                return ptpt_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | ParticipationInitPtptType0 | Unset, data)
-
-        ptpt = _parse_ptpt(d.pop("ptpt", UNSET))
+        _ptpt = d.pop("ptpt", UNSET)
+        ptpt: ParticipationInitPtpt | Unset
+        if isinstance(_ptpt, Unset):
+            ptpt = UNSET
+        else:
+            ptpt = ParticipationInitPtpt.from_dict(_ptpt)
 
         _user = d.pop("user", UNSET)
         user: ParticipationInitUser | Unset
