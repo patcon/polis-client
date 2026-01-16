@@ -799,8 +799,10 @@ components:
             # Old Polis servers.
             - type: string
         ptpt:
-          type: object
-          nullable: true
+          allOf:
+            - nullable: true
+            - $ref: "#/components/schemas/ParticipantResponse"
+
         user:
           type: object
         votes:
