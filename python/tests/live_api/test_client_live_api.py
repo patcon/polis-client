@@ -31,9 +31,12 @@ def expected_data(server_profile):
 @pytest.mark.live_api
 def test_live_api_get_comments_success(client, server_profile, expected_data):
     convo_id = server_profile["conversation_id"]
-    expected_first_comment = expected_data["comments"][0]
+    expected_comments = expected_data["comments"]
+    expected_comments = sorted(expected_comments, key=lambda d: d["tid"])
+    expected_first_comment = expected_comments[0]
 
     comments = client.get_comments(conversation_id=convo_id)
+    comments = sorted(comments, key=lambda c: c.tid)
 
     assert comments is not None
     if comments:
