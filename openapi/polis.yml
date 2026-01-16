@@ -37,6 +37,8 @@ paths:
           schema:
             type: string
             pattern: ^[0-9][a-z0-9]+$
+        # This seems to require a token on newer Polis servers,
+        # but can get same data from participationInit endpoint's ptpt key
         - name: xid
           in: query
           description: Conversation-specific external participant ID.
