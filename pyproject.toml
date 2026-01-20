@@ -1,6 +1,6 @@
 [project]
 name = "polis-client"
-version = "0.1.1"
+version = "0.1.2"
 description = "Client library for interacting with API of any Pol.is server"
 readme = "python/README.md"
 authors = [
