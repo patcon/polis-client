@@ -1,16 +1,35 @@
 [project]
 name = "polis-client"
 version = "0.1.1"
-description = "Add your description here"
+description = "Client library for interacting with API of any Pol.is server"
 readme = "python/README.md"
 authors = [
     { name = "Patrick Connolly", email = "patrick.c.connolly@gmail.com" }
 ]
 requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["polis", "api", "client", "democracy"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 dependencies = [
     "attrs>=25.4.0",
     "httpx>=0.28.1",
 ]
+
+[project.urls]
+Homepage = "https://github.com/patcon/polis-client"
+Documentation = "https://github.com/patcon/polis-client/blob/main/python/examples.ipynb"
+Repository = "https://github.com/patcon/polis-client"
+Issues = "https://github.com/patcon/polis-client/issues"
 
 [build-system]
 requires = ["hatchling"]
@@ -24,10 +43,9 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-source-directory = "python"
 packages = ["python/src/polis_client"]
 
-[tool.pytest]
+[tool.pytest.ini_options]
 markers = [
     "live_api: mark a test for live API testing."
 ]
