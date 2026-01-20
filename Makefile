@@ -33,6 +33,13 @@ test-live-api: ## Run Python live_api tests
 debug-ts:
 	cd typescript && npm run debug-ts
 
+build-py: regenerate-py ## Build a wheel for publishing to PyPI
+	rm -rf dist/
+	uv build
+
+publish-py: ## Publish built package to PyPI
+	uv publish
+
 # These make tasks allow the default help text to work properly.
 %:
 	@true
