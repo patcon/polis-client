@@ -11,8 +11,10 @@ doing much of the work of that library's current "data loader".
 ## Installation
 
 ```
-pip install git+https://github.com/patcon/polis-client
+pip install polis-client
 ```
+
+
 
 ## Usage
 
